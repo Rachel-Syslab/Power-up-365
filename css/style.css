@@ -2739,3 +2739,29 @@ html[data-theme="light"] .danger-input { border-color: rgba(192,40,79,.45); }
 @keyframes nf-look { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
 @media (prefers-reduced-motion: reduce) { .nf-hero { animation: none; } }
 .nf-page .btn-row { justify-content: center; }
+
+/* Calendrier du QG : bandeau du jour, pluie d'emojis, message du gardien */
+.ev-banner { display: flex; align-items: center; gap: 12px; margin: 14px auto 0; padding: 10px 16px; border-radius: 14px; border: 1px solid rgba(245,196,81,.5); background: linear-gradient(90deg, rgba(245,196,81,.14), rgba(124,147,255,.12)); font-size: 15px; line-height: 1.4; }
+.ev-emoji { font-size: 28px; line-height: 1; flex: none; }
+.ev-fx { position: fixed; inset: 0; z-index: 3000; pointer-events: none; overflow: hidden; }
+.ev-fx i { position: absolute; top: -50px; font-style: normal; opacity: 0; animation-name: ev-fall; animation-timing-function: linear; animation-fill-mode: forwards; }
+@keyframes ev-fall { 0% { transform: translate(0, 0) rotate(0); opacity: 0; } 8% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translate(var(--dx), 112vh) rotate(300deg); opacity: 0; } }
+.ev-toast { z-index: 3150; }
+@media (max-width: 560px) { .ev-banner { margin-left: 16px; margin-right: 16px; } }
+
+/* Menu défilant sur téléphone : flèche jaune qui montre qu'il y a une suite, masquée quand on est au bout */
+@media (max-width: 760px) {
+  .nav { -webkit-mask-image: none; mask-image: none; padding-right: 0; }
+  .nav::after { content: "\00BB"; position: sticky; right: 0; flex: 0 0 auto; align-self: stretch; display: flex; align-items: center; justify-content: flex-end; padding: 0 6px 0 22px; margin-left: -4px; font-size: 26px; font-weight: 800; line-height: 1; color: var(--gold); background: linear-gradient(90deg, transparent, var(--topbar) 45%); animation: nav-nudge 1.4s ease-in-out infinite; pointer-events: none; }
+  .nav.no-more::after { display: none; }
+}
+@keyframes nav-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@media (prefers-reduced-motion: reduce) { .nav::after { animation: none; } }
+
+/* Messages des gardiens (commandes tapées, jours spéciaux) : au milieu de l'écran pour rester lisibles et ne pas chevaucher les notifications du bas */
+.hero-toast { right: auto; bottom: auto; left: 50%; top: 50%; width: min(420px, calc(100vw - 32px)); max-width: none; padding: 16px 18px; border-color: rgba(159,242,184,.45); box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 0 40px rgba(159,242,184,.18), 0 16px 48px rgba(0,0,0,.65); animation: ht-pop .28s ease-out forwards; cursor: pointer; transform: translate(-50%, -50%); }
+.hero-toast.out { opacity: 0; transition: opacity .35s; }
+.hero-toast .ht-next { max-width: none; }
+@keyframes ht-pop { from { opacity: 0; transform: translate(-50%, -46%) scale(.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+html[data-theme="light"] .hero-toast { background: #F7FAFF; color: #14193A; border-color: rgba(31,138,76,.5); }
+html[data-theme="light"] .hero-toast code { color: #15703D; }
