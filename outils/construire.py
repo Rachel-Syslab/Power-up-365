@@ -42,4 +42,5 @@ def sub(m):
 out = re.sub(r'<script src="([^"]+)"></script>\n?', sub, html).replace('href="css/style.css"', 'href="css/style.min.css"')
 open(os.path.join(DIST, "index.html"), "w", encoding="utf-8").write(out)
 for s in SONS_PUBLICS: shutil.copy(os.path.join(ROOT, "sons", s), os.path.join(DIST, "sons", s))
+if os.path.exists(os.path.join(ROOT, "apercu.jpg")): shutil.copy(os.path.join(ROOT, "apercu.jpg"), os.path.join(DIST, "apercu.jpg"))  # image d'aperçu du lien (Open Graph)
 print("dist/ prêt :", len(scripts), "scripts réunis en 2 (+ dictionnaires anglais dans js/i18n/)")
