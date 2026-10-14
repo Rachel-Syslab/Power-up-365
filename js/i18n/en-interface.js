@@ -624,6 +624,8 @@ PU_I18N.add({
   "Sûr·e ? Clique encore pour tout effacer": "Sure? Click again to erase everything",
   "Remettre ma progression à zéro": "Reset my progress",
   "Zone sensible": "Sensitive zone",
+  "Progression effacée": "Progress erased",
+  "Nouveau départ, recrue : le QG t'attend !": "Fresh start, recruit: HQ is waiting for you!",
   "Tape EFFACER pour confirmer": "Type ERASE to confirm",
   "Attention :": "Warning:",
   "cette action efface définitivement ta progression sur cet appareil (points d'expérience, rang, boss vaincus, badges, fonds et capes débloqués). Ton pseudo et ton avatar sont conservés. Impossible de revenir en arrière.": "this permanently erases your progress on this device (experience points, rank, defeated bosses, badges, unlocked backgrounds and capes). Your nickname and avatar are kept. This cannot be undone.",
