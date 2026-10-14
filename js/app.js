@@ -2557,11 +2557,25 @@
     return {
       nav: "",
       render: function () {
+        if (window.PU_LANG === "en") return '<main class="container page"><span class="eyebrow">Transparency</span><h1 class="h-l">Privacy</h1>' +
+          '<p class="lead">Power Up is an educational project built as part of a TSSR (IT systems and networks technician) training course. The site asks for no account and no email address, and sends no game data to any server.</p>' +
+          '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">What is saved, and where</h2>' +
+          '<p>Your progress (experience points, rank, defeated bosses, nickname and hero, news you have read) and your settings (sound, volume, theme, light animations mode, styles) are saved <b>only in your browser</b>, using local storage (localStorage). They stay on your device: nobody else can read them, and they never go through any server of the site.</p>' +
+          '<p>To erase your data, you have two options:</p>' +
+          '<ul style="padding-left:20px;line-height:1.7"><li>the <b>\u201cReset my progress\u201d</b> button in your profile (below \u201cSave my hero\u201d). It erases your progress (experience points, rank, defeated bosses, badges, capes, secrets, statistics) but keeps your nickname, your avatar and your visibility settings. Your news reading and your settings (sound, theme\u2026) are kept too;</li><li>clearing the site data in your browser settings: this erases <b>everything</b>, including your nickname, your settings and your news reading.</li></ul>' +
+          '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">What the site does not use</h2>' +
+          '<ul style="padding-left:20px;line-height:1.7"><li>no cookies, no trackers, no visitor statistics;</li><li>no advertising and no embedded social networks;</li><li>no external resources: scripts, fonts and sounds are hosted with the site, and a security policy (CSP) prevents it from contacting other servers.</li></ul>' +
+          '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Idea box</h2>' +
+          '<p>It opens your own email app with a prepared message, or copies the text to your clipboard. The site sends nothing by itself: it is up to you whether to send it or not.</p>' +
+          '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Hosting and external links</h2>' +
+          '<p>The site is hosted by Cloudflare. Like any host, it may keep technical connection logs (IP address, date, page requested) to keep the service running and secure. I do not use these logs. Some pages link to external sites (Microsoft Learn, CNIL, OWASP\u2026): once you are there, their own policy applies.</p>' +
+          '<div class="btn-row"><a class="btn btn-primary" href="#/">Back to home</a></div></main>';
         return '<main class="container page"><span class="eyebrow">Transparence</span><h1 class="h-l">Confidentialité</h1>' +
           '<p class="lead">Power Up est un projet pédagogique réalisé dans le cadre d\'une formation TSSR. Le site ne demande ni compte ni adresse e-mail, et n\'envoie aucune donnée de jeu à un serveur.</p>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Ce qui est enregistré, et où</h2>' +
           '<p>Ta progression (points d\'expérience, rang, boss vaincus, pseudo et héros, lectures de la veille) et tes réglages (son, volume, thème, mode léger, styles) sont enregistrés <b>uniquement dans ton navigateur</b>, grâce au stockage local (localStorage). Ils restent sur ton appareil : personne d\'autre ne peut les lire, et ils ne passent par aucun serveur du site.</p>' +
-          '<p>Pour tout effacer, vide les données du site dans les réglages de ton navigateur. Ta progression sera alors remise à zéro.</p>' +
+          '<p>Pour effacer tes données, tu as deux possibilités :</p>' +
+          '<ul style="padding-left:20px;line-height:1.7"><li>le bouton <b>« Remettre ma progression à zéro »</b>, dans ton profil (sous « Enregistrer mon héros »). Il efface ta progression (points d\'expérience, rang, boss vaincus, badges, capes, secrets, statistiques) mais garde ton pseudo, ton avatar et tes réglages de visibilité. Tes lectures de la veille et tes réglages (son, thème…) restent aussi ;</li><li>vider les données du site dans les réglages de ton navigateur : cela efface <b>tout</b>, y compris ton pseudo, tes réglages et tes lectures de la veille.</li></ul>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Ce que le site n\'utilise pas</h2>' +
           '<ul style="padding-left:20px;line-height:1.7"><li>aucun cookie, aucun pisteur, aucune statistique de fréquentation ;</li><li>aucune publicité et aucun réseau social intégré ;</li><li>aucune ressource externe : les scripts, les polices et les sons sont hébergés avec le site, et une politique de sécurité (CSP) empêche de contacter d\'autres serveurs.</li></ul>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Boîte à idées</h2>' +
@@ -2595,6 +2609,7 @@
     V._focusKey = null;
     app.innerHTML = header(V.nav) + V.render() + footer();
     if (V._scroll) { window.scrollTo(0, 0); V._scroll = false; }
+    var navA = app.querySelector(".nav a.active"); if (navA && navA.parentNode && navA.parentNode.scrollWidth > navA.parentNode.clientWidth) { var nv = navA.parentNode; nv.scrollLeft += (navA.getBoundingClientRect().left - nv.getBoundingClientRect().left) - (nv.clientWidth - navA.offsetWidth) / 2; }
     if (V._scrollTo) { var tgt = document.getElementById(V._scrollTo + "-title"); V._scrollTo = null; if (tgt) setTimeout(function () { tgt.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); var sec = tgt.closest("section"); if (sec) { sec.classList.add("flash-section"); setTimeout(function () { sec.classList.remove("flash-section"); }, 1800); } }, 60); }
     if (Date.now() < logoFxUntil) powerOnLogo();
     try { checkUnlocks(); } catch (e) { }
