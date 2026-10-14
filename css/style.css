@@ -2765,3 +2765,7 @@ html[data-theme="light"] .danger-input { border-color: rgba(192,40,79,.45); }
 @keyframes ht-pop { from { opacity: 0; transform: translate(-50%, -46%) scale(.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 html[data-theme="light"] .hero-toast { background: #F7FAFF; color: #14193A; border-color: rgba(31,138,76,.5); }
 html[data-theme="light"] .hero-toast code { color: #15703D; }
+
+.ev-link { color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
+.ev-link:hover, .ev-link:focus-visible { border-color: var(--gold); transform: translateY(-1px); }
+.ev-more { display: inline-block; margin-left: 4px; color: var(--gold); font-weight: 700; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
