@@ -973,6 +973,41 @@
     t.innerHTML = '<span class="ico">' + capeSvg(currentCape(), capeHeat()) + "</span><span><b>" + esc(title) + "</b>" + esc(text) + (link ? ' · <a class="toast-link" href="#/profil" data-toast-go data-open-step="step3">Choisir ma cape →</a>' : "") + "</span>";
     document.body.appendChild(t); setTimeout(function () { t.remove(); }, 5200); sfx("cape");
   }
+  /* Nouveautés : pastille dorée sur tout ce qui vient d'être débloqué (fond, cape, cadre, badge) tant qu'on ne l'a pas vu ni choisi.
+     La première fois, tout ce qui est déjà débloqué est considéré comme vu (pas de pastilles pour l'existant). */
+  var NEWS = [];
+  function newKeys() {
+    var open = [];
+    bgList().forEach(function (x) { if (x.open) open.push("bg:" + x.id); });
+    capeList().forEach(function (x) { if (x.open) open.push("cape:" + x.id); });
+    frameList().forEach(function (x) { if (x.open) open.push("frame:" + x.id); });
+    earnedBadges().forEach(function (n) { open.push("badge:" + n); });
+    if (!P.newSeen) { P.newSeen = open.slice(); saveProfile(); return []; }
+    return open.filter(function (k) { return P.newSeen.indexOf(k) === -1; });
+  }
+  function refreshNews() { try { NEWS = newKeys(); } catch (e) { NEWS = []; } }
+  function isNew(k) { return NEWS.indexOf(k) !== -1; }
+  function newCount(kind) { return NEWS.filter(function (k) { return k.indexOf(kind + ":") === 0; }).length; }
+  var NEW_DOT = '<i class="new-dot" aria-hidden="true"></i><span class="sr-only">Nouveau</span>';
+  function newAttr(k) { return isNew(k) ? ' data-new="' + esc(k) + '"' : ""; }
+  function newDot(k) { return isNew(k) ? NEW_DOT : ""; }
+  /* pastille d'une étape du profil (nombre de nouveautés dans cette étape) */
+  function stepNewBadge(kind) { var n = newCount(kind); return n ? '<span class="nav-badge step-new" data-step-new="' + kind + '"><span class="sr-only">, </span>' + n + '<span class="sr-only"> nouveau' + (n > 1 ? "x" : "") + "</span></span>" : ""; }
+  function seeNew(el) {
+    var k = el.getAttribute("data-new"); if (!k) return;
+    if (!P.newSeen) P.newSeen = [];
+    if (P.newSeen.indexOf(k) === -1) { P.newSeen.push(k); saveProfile(); }
+    el.removeAttribute("data-new");
+    var d = el.querySelector(".new-dot"); if (d) { var sr = d.nextElementSibling; if (sr && sr.classList.contains("sr-only")) sr.remove(); d.remove(); }
+    refreshNews();
+    document.querySelectorAll("[data-step-new]").forEach(function (b) { var n = newCount(b.getAttribute("data-step-new")); if (!n) b.remove(); else b.firstChild.nextSibling.nodeValue = n; b.lastChild.textContent = " nouveau" + (n > 1 ? "x" : ""); });
+    document.querySelectorAll("[data-fold-new]").forEach(function (b) { if (!newCount(b.getAttribute("data-fold-new"))) b.remove(); });
+    if (!NEWS.length) document.querySelectorAll(".chip-dot, .chip-dot + .sr-only").forEach(function (x) { x.remove(); });
+  }
+  ["click", "mouseover", "focusin"].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { var el = e.target && e.target.closest && e.target.closest("[data-new]"); if (el) seeNew(el); }, true);
+  });
+
   /* Nouveaux badges et nouvelles capes : notification discrète, une seule fois */
   function checkUnlocks() {
     var b = earnedBadges(), c = capeList().filter(function (x) { return x.open; }).map(function (x) { return x.id; });
@@ -1131,14 +1166,14 @@
     return n ? '<span class="nav-badge"><span class="sr-only">, </span>' + (n > 99 ? "99+" : n) + '<span class="sr-only"> non lues</span></span>' : "";
   }
   function header(active) {
-    var r = rankInfo(P.xp);
+    var r = rankInfo(P.xp); refreshNews();
     function link(href, id, label) { return '<a href="' + href + '"' + (active === id ? ' class="active" aria-current="page"' : "") + ">" + label + "</a>"; }
     return '<header class="topbar"><div class="container">' +
       '<a class="logo" href="#/">' + I.logo + 'POWER <span>UP</span></a>' +
       '<nav class="nav" aria-label="Navigation principale">' +
       link("#/", "qg", "QG") + link("#/entrainement", "train", "Entraînement") + link("#/classe", "ranked", "Mode classé") + link("#/mission", "mission", "Boss") + link("#/veille", "veille", "Veille" + navBadge()) + link("#/collectif", "collectif", 'Collectif<span class="nav-soon" aria-label=", bientôt">bientôt</span>') + (!DEV_PAGES ? "" : link("#/maintenance", "sons", "Maintenance")) +
       "</nav>" + soundButton() +
-      '<a class="profile-chip" href="#/profil" style="text-decoration:none;color:inherit" aria-label="Mon profil"><span class="avatar">' + myAvatar(34) + "</span><span><b>" + esc(P.pseudo || "Crée ton héros") + "</b><small>" + esc(r.name) + " · " + P.xp + " XP</small></span></a>" +
+      '<a class="profile-chip" href="#/profil" style="text-decoration:none;color:inherit" aria-label="Mon profil' + (NEWS.length ? " (nouveauté débloquée)" : "") + '"><span class="avatar">' + myAvatar(34) + (NEWS.length ? '<i class="new-dot chip-dot" aria-hidden="true"></i>' : "") + "</span><span><b>" + esc(P.pseudo || "Crée ton héros") + "</b><small>" + esc(r.name) + " · " + P.xp + " XP</small></span></a>" +
       '<button type="button" class="quit-btn" data-quit-ask title="Quitter le QG" aria-label="Quitter le QG"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6.3 7.2a8 8 0 1 0 11.4 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>' +
       "</div></header>";
   }
@@ -2164,11 +2199,11 @@
         var heat = capeHeat(), cur = currentCape();
         var capes = capeList().map(function (c) {
           var sel = c.id === cur.id;
-          return '<button type="button" class="cape-pick' + (c.open ? "" : " locked") + (sel ? " selected" : "") + '"' + (c.open ? ' data-action="cape" data-id="' + c.id + '"' : ' disabled aria-disabled="true"') + ' data-key="cape-' + c.id + '" aria-pressed="' + sel + '" title="' + esc(c.open ? c.name : c.how) + '" style="--cape:' + c.color + '">' + capeSvg(c, 0) + "<span>" + esc(c.name) + "</span>" + (c.open ? "" : "<small>" + esc(c.how) + "</small>") + "</button>";
+          return '<button type="button" class="cape-pick' + (c.open ? "" : " locked") + (sel ? " selected" : "") + '"' + newAttr("cape:" + c.id) + (c.open ? ' data-action="cape" data-id="' + c.id + '"' : ' disabled aria-disabled="true"') + ' data-key="cape-' + c.id + '" aria-pressed="' + sel + '" title="' + esc(c.open ? c.name : c.how) + '" style="--cape:' + c.color + '">' + capeSvg(c, 0) + "<span>" + esc(c.name) + "</span>" + (c.open ? "" : "<small>" + esc(c.how) + "</small>") + newDot("cape:" + c.id) + "</button>";
         }).join("");
         var curF = currentFrame(), framesHtml = frameList().map(function (f) {
           var sel = f.id === curF.id;
-          return '<button type="button" class="frame-pick' + (f.open ? "" : " locked") + (sel ? " selected" : "") + '"' + (f.open ? ' data-action="frame" data-id="' + f.id + '"' : ' disabled aria-disabled="true"') + ' data-key="frame-' + f.id + '" aria-pressed="' + sel + '" style="--fc:' + f.color + '">' + capeWrap(window.avatarSvg ? window.avatarSvg(self.avatar, 56) : "", 56, null, f.id) + "<span>" + esc(f.name) + "</span>" + (f.open ? "" : "<small>" + esc(f.how) + "</small>") + "</button>";
+          return '<button type="button" class="frame-pick' + (f.open ? "" : " locked") + (sel ? " selected" : "") + '"' + newAttr("frame:" + f.id) + (f.open ? ' data-action="frame" data-id="' + f.id + '"' : ' disabled aria-disabled="true"') + ' data-key="frame-' + f.id + '" aria-pressed="' + sel + '" style="--fc:' + f.color + '">' + capeWrap(window.avatarSvg ? window.avatarSvg(self.avatar, 56) : "", 56, null, f.id) + "<span>" + esc(f.name) + "</span>" + (f.open ? "" : "<small>" + esc(f.how) + "</small>") + newDot("frame:" + f.id) + "</button>";
         }).join("");
         var earned = earnedBadges(), favs = (P.favBadges || []).filter(function (n) { return earned.indexOf(n) !== -1; }), allB = [], byName = {};
         computeBadges().forEach(function (fm) { fm.items.forEach(function (b) { var x = { b: b, col: b.c || fm.color }; byName[b.n] = x; allB.push(x); }); });
@@ -2182,12 +2217,12 @@
         var showLocked = !!openPG["badges-locked"];
         var favPick = function (x) { var pos = favs.indexOf(x.b.n), on = pos !== -1, got = x.b.on;
           if (!got) return '<div class="fav-pick not-yet" tabindex="0" style="--c:' + bCol(x) + '">' + medalSvg(x.col, x.b.i, x.b.s, x.b.t, 44) + "<span>" + esc(x.b.n) + "</span>" + bTip(x) + "</div>";
-          return '<button type="button" class="fav-pick' + (on ? " selected" : "") + '" data-action="fav" data-id="' + esc(x.b.n) + '" data-key="fav-' + esc(x.b.n) + '" aria-pressed="' + on + '" aria-label="' + (on ? "Retirer de ma carte : " : "Afficher sur ma carte : ") + esc(x.b.n) + '" style="--c:' + bCol(x) + '">' + medalSvg(x.col, x.b.i, x.b.s, x.b.t, 44) + "<span>" + esc(x.b.n) + "</span>" + (on ? '<em class="fav-pos">' + (pos + 1) + "</em>" : "") + bTip(x) + "</button>"; };
+          return '<button type="button" class="fav-pick' + (on ? " selected" : "") + '"' + newAttr("badge:" + x.b.n) + ' data-action="fav" data-id="' + esc(x.b.n) + '" data-key="fav-' + esc(x.b.n) + '" aria-pressed="' + on + '" aria-label="' + (on ? "Retirer de ma carte : " : "Afficher sur ma carte : ") + esc(x.b.n) + '" style="--c:' + bCol(x) + '">' + medalSvg(x.col, x.b.i, x.b.s, x.b.t, 44) + "<span>" + esc(x.b.n) + "</span>" + (on ? '<em class="fav-pos">' + (pos + 1) + "</em>" : "") + newDot("badge:" + x.b.n) + bTip(x) + "</button>"; };
         var list = allB.filter(function (x) { return x.b.on || showLocked; });
         var earnedHtml = '<div class="feat-row" data-feat-row role="list" aria-label="Badges affichés sur ta carte">' + slots + '</div>' +
-          '<details class="vit-more fav-more" data-pg="fav-more"' + (openPG["fav-more"] ? " open" : "") + '><summary>Voir tous tes badges obtenus (' + earned.length + ') <span class="pg-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>' +
+          '<details class="vit-more fav-more" data-pg="fav-more"' + (openPG["fav-more"] ? " open" : "") + '><summary>Voir tous tes badges obtenus (' + earned.length + ')' + (newCount("badge") ? ' <i class="new-dot inline" data-fold-new="badge" aria-hidden="true"></i>' : "") + ' <span class="pg-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>' +
           '<label class="locked-toggle"><input type="checkbox" data-action="badgesLocked" data-key="bl-toggle"' + (showLocked ? " checked" : "") + '> Afficher aussi les badges pas encore obtenus</label><div class="fav-grid">' + list.map(favPick).join("") + "</div></details>";
-        function step(n, title, current, body) { return '<details class="custom-step" data-pg="step' + n + '"' + (openPG["step" + n] ? " open" : "") + '><summary><span class="eyebrow">' + n + " · " + title + '</span><span class="step-cur">' + esc(current) + '</span><span class="pg-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="step-body">' + body + "</div></details>"; }
+        function step(n, title, current, body, kind) { return '<details class="custom-step" data-pg="step' + n + '"' + (openPG["step" + n] ? " open" : "") + '><summary><span class="eyebrow">' + n + " · " + title + '</span><span class="step-cur">' + esc(current) + '</span>' + (kind ? stepNewBadge(kind) : "") + '<span class="pg-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="step-body">' + body + "</div></details>"; }
         var heatBar = ""; for (var hk = 1; hk <= 5; hk++) heatBar += '<i class="' + (hk <= heat ? "on" : "") + '"></i>';
         return '<main class="container page"><div class="stack" style="gap:10px;margin-bottom:28px"><span class="eyebrow">Mon profil</span><h1 class="h-l">Crée ton héros</h1><p class="lead">Choisis un pseudo et un avatar parmi les gardiens du QG (Captain Reboot se débloque au grade maximum). Ils apparaissent dans le QG et serviront plus tard pour les défis d\'équipe.</p></div>' +
           '<div class="profile-layout">' +
@@ -2201,19 +2236,19 @@
           step(2, "Ton avatar", (avatarInfo(this.avatar) || {}).name || "", '<div class="avatar-grid" role="group" aria-label="Choix de l\'avatar">' + grid + "</div>") +
           step(3, "Ta cape", cur.name + " · " + HEAT_LABELS[heat], '<p class="muted step-help">Le vestiaire : une cape par grade atteint et par boss vaincu. Ton choix est enregistré tout de suite.</p><div class="cape-grid" role="group" aria-label="Vestiaire des capes">' + capes + "</div>" +
             (heat >= 5 ? '<div class="fire-row"><span><b>🔥 Cape en feu</b><small>Ta cape flamboyante s\'embrase, animée, partout sur le site.</small></span><button type="button" class="snd-switch' + (capeFireOn() ? " on" : "") + '" data-fire-toggle role="switch" aria-checked="' + capeFireOn() + '"><span class="knob"></span><span class="sr-only">Activer la cape en feu</span></button></div>'
-              : '<div class="fire-row locked"><span><b>🔒 Cape en feu</b><small>Se débloque avec une cape flamboyante : joue 5 jours de suite.</small></span></div>')) +
-          step(4, "Ton cadre", curF.name, '<p class="muted step-help">Plus ton grade est haut, plus ton cadre est travaillé. Choisis parmi ceux que tu as débloqués.</p><div class="frame-grid" role="group" aria-label="Choix du cadre">' + framesHtml + "</div>") +
-          step(5, "Tes badges", favs.length ? favs.length + " affiché" + (favs.length > 1 ? "s" : "") + " sur ta carte" : "aucun affiché", '<p class="muted step-help">Clique un badge pour l\'ajouter à ta carte de héros (3 emplacements), clique-le à nouveau pour le retirer. Glisse les badges affichés pour changer leur ordre.</p>' + (earned.length ? earnedHtml : '<p class="muted" style="margin:0">Tu n\'as pas encore de badge : joue pour en gagner !</p>')) +
+              : '<div class="fire-row locked"><span><b>🔒 Cape en feu</b><small>Se débloque avec une cape flamboyante : joue 5 jours de suite.</small></span></div>'), "cape") +
+          step(4, "Ton cadre", curF.name, '<p class="muted step-help">Plus ton grade est haut, plus ton cadre est travaillé. Choisis parmi ceux que tu as débloqués.</p><div class="frame-grid" role="group" aria-label="Choix du cadre">' + framesHtml + "</div>", "frame") +
+          step(5, "Tes badges", favs.length ? favs.length + " affiché" + (favs.length > 1 ? "s" : "") + " sur ta carte" : "aucun affiché", '<p class="muted step-help">Clique un badge pour l\'ajouter à ta carte de héros (3 emplacements), clique-le à nouveau pour le retirer. Glisse les badges affichés pour changer leur ordre.</p>' + (earned.length ? earnedHtml : '<p class="muted" style="margin:0">Tu n\'as pas encore de badge : joue pour en gagner !</p>'), "badge") +
           step(6, "Le fond de ta carte", currentBg().name, (function () {
             var all = bgList(), cur = currentBg(), fav = P.bgFav || [];
-            all.sort(function (x, y) { var fx = fav.indexOf(x.id), fy = fav.indexOf(y.id); if ((fx !== -1) !== (fy !== -1)) return fx !== -1 ? -1 : 1; if (fx !== -1) return fx - fy; if ((x.id === cur.id) !== (y.id === cur.id)) return x.id === cur.id ? -1 : 1; if (!!x.prestige !== !!y.prestige) return x.prestige ? 1 : -1; if (x.open !== y.open) return x.open ? -1 : 1; return 0; });
+            all.sort(function (x, y) { if (isNew("bg:" + x.id) !== isNew("bg:" + y.id)) return isNew("bg:" + x.id) ? -1 : 1; var fx = fav.indexOf(x.id), fy = fav.indexOf(y.id); if ((fx !== -1) !== (fy !== -1)) return fx !== -1 ? -1 : 1; if (fx !== -1) return fx - fy; if ((x.id === cur.id) !== (y.id === cur.id)) return x.id === cur.id ? -1 : 1; if (!!x.prestige !== !!y.prestige) return x.prestige ? 1 : -1; if (x.open !== y.open) return x.open ? -1 : 1; return 0; });
             var tile = function (g) { var sel = g.id === cur.id, isFav = fav.indexOf(g.id) !== -1;
-              return '<div class="bg-pick' + (g.open ? "" : " locked") + (sel ? " selected" : "") + (g.prestige ? " is-prestige" : "") + '"><button type="button" class="bg-main"' + (g.open ? ' data-action="bg" data-id="' + g.id + '"' : ' disabled aria-disabled="true"') + ' data-key="bg-' + g.id + '" aria-pressed="' + sel + '"><span class="bg-thumb ' + bgClass(g) + '">' + (g.open ? bgLayers(g) : '<span class="bg-lock" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 11V8a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/></svg></span>') + "</span><span>" + esc(g.name) + "</span>" + (g.open ? "" : "<small>" + esc(g.how) + "</small>") + "</button>" +
-                '<button type="button" class="bg-fav' + (isFav ? " on" : "") + '" data-action="bgFav" data-id="' + g.id + '" data-key="bgf-' + g.id + '" aria-pressed="' + isFav + '" aria-label="' + (isFav ? "Retirer des favoris : " : "Ajouter aux favoris : ") + esc(g.name) + '" title="' + (isFav ? "Retirer des favoris" : "Mettre en favori") + '">' + (isFav ? "★" : "☆") + "</button></div>"; };
+              return '<div class="bg-pick' + (g.open ? "" : " locked") + (sel ? " selected" : "") + (g.prestige ? " is-prestige" : "") + '"' + newAttr("bg:" + g.id) + '><button type="button" class="bg-main"' + (g.open ? ' data-action="bg" data-id="' + g.id + '"' : ' disabled aria-disabled="true"') + ' data-key="bg-' + g.id + '" aria-pressed="' + sel + '"><span class="bg-thumb ' + bgClass(g) + '">' + (g.open ? bgLayers(g) : '<span class="bg-lock" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 11V8a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/></svg></span>') + "</span><span>" + esc(g.name) + "</span>" + (g.open ? "" : "<small>" + esc(g.how) + "</small>") + "</button>" +
+                '<button type="button" class="bg-fav' + (isFav ? " on" : "") + '" data-action="bgFav" data-id="' + g.id + '" data-key="bgf-' + g.id + '" aria-pressed="' + isFav + '" aria-label="' + (isFav ? "Retirer des favoris : " : "Ajouter aux favoris : ") + esc(g.name) + '" title="' + (isFav ? "Retirer des favoris" : "Mettre en favori") + '">' + (isFav ? "★" : "☆") + "</button>" + newDot("bg:" + g.id) + "</div>"; };
             var top = all.slice(0, 5), rest = all.slice(5);
             return '<p class="muted step-help">Clique un fond : ta carte à gauche change tout de suite. L\'étoile ☆ met un fond en favori, il remonte en tête de liste.</p><div class="bg-grid" role="group" aria-label="Fonds de la carte de héros">' + top.map(tile).join("") + "</div>" +
-              (rest.length ? '<details class="vit-more fav-more" data-pg="bg-more"' + (openPG["bg-more"] ? " open" : "") + '><summary>Voir les ' + rest.length + ' autres fonds <span class="pg-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="bg-grid">' + rest.map(tile).join("") + "</div></details>" : "");
-          })()) +
+              (rest.length ? '<details class="vit-more fav-more" data-pg="bg-more"' + (openPG["bg-more"] ? " open" : "") + '><summary>Voir les ' + rest.length + ' autres fonds' + (rest.some(function (g) { return isNew("bg:" + g.id); }) ? ' <i class="new-dot inline" data-fold-new="bg" aria-hidden="true"></i>' : "") + ' <span class="pg-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="bg-grid">' + rest.map(tile).join("") + "</div></details>" : "");
+          })(), "bg") +
           '<div class="btn-row" style="align-items:center;margin-top:18px"><button type="submit" class="btn btn-primary" data-key="save">Enregistrer mon héros</button>' + (this.saved ? '<span class="saved-ok" role="status">✓ Enregistré !</span>' : "") + '<button type="button" class="btn btn-ghost btn-small" data-action="reset" style="margin-left:auto">' + (this.confirmReset ? "Sûr·e ? Clique encore pour tout effacer" : "Remettre ma progression à zéro") + '</button></div>' +
           "</form></div>" + this.renderStats() + renderVitrine() + renderSecrets() + "</main>";
       },
