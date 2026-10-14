@@ -144,6 +144,7 @@ PU_I18N.add({
   "Fêtard·e du QG": "HQ party animal",
   "Fêter 5 événements du calendrier au QG": "Celebrate 5 calendar events at the HQ",
   "Jours spéciaux": "Special days",
+  "En savoir plus ↗": "Learn more ↗",
   "Le calendrier du QG": "The HQ calendar",
   "Prochain rendez-vous": "Next date",
   "Nouvel événement au calendrier · +10 XP": "New calendar event · +10 XP",
