@@ -1008,6 +1008,21 @@
     document.addEventListener(ev, function (e) { var el = e.target && e.target.closest && e.target.closest("[data-new]"); if (el) seeNew(el); }, true);
   });
 
+  /* Nouveaux fonds de carte : notification discrète (comme les badges et les capes), une seule fois ; attend qu'une autre bulle soit passée */
+  function toastWhenFree(make, tries) { if (document.querySelector(".rb-toast") && (tries || 0) < 14) { setTimeout(function () { toastWhenFree(make, (tries || 0) + 1); }, 1000); return; } make(); }
+  function checkBgUnlocks() {
+    var l = bgList().filter(function (x) { return x.open; }), ids = l.map(function (x) { return x.id; });
+    if (!P.bgsSeen) { P.bgsSeen = ids; saveProfile(); return; }
+    var nw = l.filter(function (x) { return P.bgsSeen.indexOf(x.id) === -1; });
+    if (!nw.length) return;
+    P.bgsSeen = ids; saveProfile();
+    setTimeout(function () { toastWhenFree(function () {
+      var t = document.createElement("div"); t.className = "rb-toast badge-toast"; t.setAttribute("role", "status");
+      t.innerHTML = '<span class="ico">★</span><span><b>Nouveau fond de carte' + (nw.length > 1 ? "s" : "") + " !</b>" + esc(nw.map(function (x) { return x.name; }).join(" · ")) + ' · <a class="toast-link" href="#/profil" data-toast-go data-open-step="step6">Voir mes fonds →</a></span>';
+      document.body.appendChild(t); setTimeout(function () { t.remove(); }, 6500); sfx("badge");
+    }); }, 900);
+  }
+
   /* Nouveaux badges et nouvelles capes : notification discrète, une seule fois */
   function checkUnlocks() {
     var b = earnedBadges(), c = capeList().filter(function (x) { return x.open; }).map(function (x) { return x.id; });
@@ -2119,7 +2134,7 @@
       nav: "veille",
       cat: params.cat || "all",
       actions: {
-        cat: function (d) { V.cat = d.id; V.showAll = false; },
+        cat: function (d) { V.cat = d.id; V.showAll = false; V._scrollNews = true; },
         more: function () { V.showAll = !V.showAll; V._focusKey = "news-more"; },
         readAll: function () { veilleData().items.forEach(function (it) { if (V.cat === "all" || it.category === V.cat) { veilleRead[it.url] = 1; delete veilleProg[it.url]; } }); saveRead(); saveProg(); }
       },
@@ -2137,7 +2152,7 @@
         var cards = shown.map(function (it) { return veilleCard(it); }).join("");
         var moreBtn = list.length > LIMIT ? '<div class="news-more"><button type="button" class="btn btn-ghost" data-action="more" data-key="news-more" aria-expanded="' + !!this.showAll + '">' + (this.showAll ? "Réduire la liste ↑" : "Voir toutes les actus (" + list.length + ") ↓") + "</button></div>" : "";
         var nuCat = unreadCount(this.cat), catNow = this.cat, npCat = veilleData().items.filter(function (it) { return isInProgress(it) && (catNow === "all" || it.category === catNow); }).length;
-        var toolbar = '<div class="news-toolbar"><span class="muted">' + (nuCat ? '<span class="dot-live" aria-hidden="true"></span> ' + nuCat + " actu" + (nuCat > 1 ? "s" : "") + " non lue" + (nuCat > 1 ? "s" : "") : "Tout est lu, bravo !") + (npCat ? ' · <span class="prog-ico" aria-hidden="true"></span> ' + npCat + " en cours" : "") + "</span>" + (nuCat ? '<button type="button" class="btn btn-ghost btn-small" data-action="readAll">Tout marquer comme lu</button>' : "") + "</div>";
+        var toolbar = '<div class="news-toolbar"><span class="muted">' + (catNow !== "all" && VEILLE_CATS[catNow] ? '<b class="tb-cat" style="color:' + VEILLE_CATS[catNow].color + '">' + esc(VEILLE_CATS[catNow].label) + "</b> · " : "") + (nuCat ? '<span class="dot-live" aria-hidden="true"></span> ' + nuCat + " actu" + (nuCat > 1 ? "s" : "") + " non lue" + (nuCat > 1 ? "s" : "") : "Tout est lu, bravo !") + (npCat ? ' · <span class="prog-ico" aria-hidden="true"></span> ' + npCat + " en cours" : "") + "</span>" + (nuCat ? '<button type="button" class="btn btn-ghost btn-small" data-action="readAll">Tout marquer comme lu</button>' : "") + "</div>";
         var help = '<details class="upd-help"><summary class="btn btn-ghost btn-small"><span aria-hidden="true">↻</span> Mettre à jour</summary><div class="upd-pop stack" style="gap:10px">' +
           "<p>Dans le dossier du site, ouvre le dossier <code>veille</code> et double-clique sur <code>mettre-a-jour-veille.bat</code>. Le script récupère les dernières actualités des sources officielles, puis il suffit de rafraîchir cette page (F5).</p>" +
           "<p>Pour une mise à jour automatique chaque matin, lance une fois <code>activer-mise-a-jour-quotidienne.bat</code>.</p>" +
@@ -2583,6 +2598,8 @@
     if (V._scrollTo) { var tgt = document.getElementById(V._scrollTo + "-title"); V._scrollTo = null; if (tgt) setTimeout(function () { tgt.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); var sec = tgt.closest("section"); if (sec) { sec.classList.add("flash-section"); setTimeout(function () { sec.classList.remove("flash-section"); }, 1800); } }, 60); }
     if (Date.now() < logoFxUntil) powerOnLogo();
     try { checkUnlocks(); } catch (e) { }
+    try { checkBgUnlocks(); } catch (e) { }
+    if (V._scrollNews) { V._scrollNews = false; var nt = document.querySelector(".news-toolbar"); if (nt && window.innerWidth <= 820) setTimeout(function () { var tb = document.querySelector(".topbar"), top = nt.getBoundingClientRect().top + window.pageYOffset - (tb ? tb.offsetHeight : 0) - 12; window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? "auto" : "smooth" }); }, 60); }
     if (capeWelcomeGap) { var g = capeWelcomeGap; capeWelcomeGap = 0; setTimeout(function () { capeToast("Ta cape est restée au chaud !", g + " jours sans toi… Bon retour au QG, héros. Joue quelques jours d'affilée pour la réchauffer."); }, 1200); }
     if (key) {
       var el = app.querySelector('[data-key="' + key + '"]');
