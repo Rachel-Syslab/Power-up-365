@@ -2721,3 +2721,21 @@ html[data-theme="light"] .danger-input { border-color: rgba(192,40,79,.45); }
 .wipe-toast { border-color: rgba(76,195,122,.7); box-shadow: 0 0 30px rgba(76,195,122,.35), 0 10px 30px rgba(0,0,0,.5); }
 .wipe-toast .ico { background: linear-gradient(180deg, #6FE3A0, #2FA866); }
 .wipe-toast b { color: #6FE3A0; margin-bottom: 2px; }
+
+/* Secret : écran bleu de la mort */
+.bsod { position: fixed; inset: 0; z-index: 3300; background: #0A6CD1; color: #fff; display: flex; align-items: center; justify-content: center; padding: 24px; font-family: "Segoe UI", system-ui, sans-serif; cursor: pointer; animation: bsod-in .2s steps(2) forwards; }
+.bsod.out { opacity: 0; transition: opacity .4s; }
+.bsod-in { max-width: 640px; width: 100%; }
+.bsod-face { font-size: clamp(80px, 22vw, 150px); line-height: 1; margin-bottom: 18px; }
+.bsod-t { font-size: clamp(17px, 4.6vw, 24px); line-height: 1.4; margin: 0 0 18px; }
+.bsod-p { font-size: clamp(16px, 4vw, 20px); margin: 0 0 22px; }
+.bsod-row { display: flex; gap: 16px; align-items: flex-start; }
+.bsod-qr { flex: 0 0 auto; width: 74px; height: 74px; background: conic-gradient(#fff 25%, #0A6CD1 0 50%, #fff 0 75%, #0A6CD1 0) 0 0 / 18px 18px; border: 5px solid #fff; }
+.bsod-s { font-size: 13px; line-height: 1.55; margin: 0; word-break: break-word; }
+@keyframes bsod-in { from { opacity: 0; } to { opacity: 1; } }
+/* Secret : page 404 */
+.nf-page { text-align: center; }
+.nf-hero { margin: 18px auto; animation: nf-look 3s ease-in-out infinite; }
+@keyframes nf-look { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@media (prefers-reduced-motion: reduce) { .nf-hero { animation: none; } }
+.nf-page .btn-row { justify-content: center; }
