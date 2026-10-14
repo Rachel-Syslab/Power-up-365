@@ -1,0 +1,49 @@
+# Déploiement automatique de Power Up 365 sur Cloudflare Pages.
+# Se lance à chaque dépôt de fichiers sur la branche "main" (ou à la main depuis l'onglet Actions).
+name: Déploiement
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Droits minimaux : le robot peut seulement lire le dépôt.
+permissions:
+  contents: read
+
+jobs:
+  construire-et-publier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer les fichiers du dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer esbuild (compression des scripts et du CSS)
+        run: npm install -g esbuild@0.28.2
+
+      - name: Construire le site (dossier dist)
+        run: python3 outils/construire.py
+
+      - name: Contrôles de sécurité avant publication
+        run: |
+          test -f dist/index.html || { echo "dist/index.html manquant"; exit 1; }
+          test -f dist/_headers || { echo "dist/_headers manquant : les en-têtes de sécurité ne seraient pas appliqués"; exit 1; }
+          if grep -rqE "fonts\.(googleapis|gstatic)\.com" dist/index.html dist/css/style.min.css; then
+            echo "Une ressource Google Fonts est encore appelée"; exit 1
+          fi
+          if ls dist/sons | grep -qiE "fight|iron|voix|bienvenue|bientot"; then
+            echo "Un son non autorisé est dans le dossier public"; exit 1
+          fi
+          echo "Contrôles OK"
+
+      - name: Publier sur Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=powerup365 --branch=main
