@@ -2716,13 +2716,8 @@ html[data-theme="light"] .danger-zone > summary { color: #C0284F; }
 html[data-theme="light"] .danger-warn { color: #9B1C3C; background: rgba(192,40,79,.08); border-color: rgba(192,40,79,.4); }
 html[data-theme="light"] .danger-input { border-color: rgba(192,40,79,.45); }
 
-/* Remise à zéro : onde dorée + poussière d'étoiles qui s'envole */
-.wipe-fx { position: fixed; inset: 0; z-index: 3050; pointer-events: none; overflow: hidden; }
-.wipe-ring { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 3px solid rgba(245,196,81,.9); box-shadow: 0 0 40px rgba(245,196,81,.7), inset 0 0 30px rgba(245,196,81,.5); animation: wipe-ring 1.3s ease-out forwards; }
-.wipe-dot { position: absolute; bottom: -12px; width: var(--s); height: var(--s); border-radius: 50%; background: #F5C451; box-shadow: 0 0 10px rgba(245,196,81,.9); opacity: 0; animation-name: wipe-up; animation-timing-function: ease-out; animation-fill-mode: forwards; }
-.wipe-dot:nth-child(3n) { background: #7C93FF; box-shadow: 0 0 10px rgba(124,147,255,.9); }
-@keyframes wipe-ring { 0% { transform: scale(.3); opacity: 1; } 100% { transform: scale(46); opacity: 0; } }
-@keyframes wipe-up { 0% { transform: translate(0, 0) scale(1); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--dx), -105vh) scale(.4); opacity: 0; } }
+/* Remise à zéro : calque plein écran pour l'effet de pixels (canvas) */
+.wipe-fx { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 3050; pointer-events: none; }
 .wipe-toast { border-color: rgba(76,195,122,.7); box-shadow: 0 0 30px rgba(76,195,122,.35), 0 10px 30px rgba(0,0,0,.5); }
 .wipe-toast .ico { background: linear-gradient(180deg, #6FE3A0, #2FA866); }
 .wipe-toast b { color: #6FE3A0; margin-bottom: 2px; }
