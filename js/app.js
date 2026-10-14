@@ -651,9 +651,9 @@
     halloween: "https://fr.wikipedia.org/wiki/Halloween", noel: "https://fr.wikipedia.org/wiki/No%C3%ABl", nouvelan: "https://fr.wikipedia.org/wiki/Nouvel_An",
     valentin: "https://fr.wikipedia.org/wiki/Saint-Valentin", poisson: "https://fr.wikipedia.org/wiki/Poisson_d%27avril", paques: "https://fr.wikipedia.org/wiki/P%C3%A2ques",
     pi: "https://fr.wikipedia.org/wiki/Pi", backup: "https://www.worldbackupday.com", patch: "https://msrc.microsoft.com/update-guide",
-    motdepasse: "https://www.cnil.fr/fr/tag/Mots%2Bde%2BPasse", musique: "https://fr.wikipedia.org/wiki/F%C3%AAte_de_la_musique",
+    motdepasse: "https://www.cnil.fr/fr/generer-un-mot-de-passe-solide", musique: "https://fr.wikipedia.org/wiki/F%C3%AAte_de_la_musique",
     quatorze: "https://fr.wikipedia.org/wiki/F%C3%AAte_nationale_fran%C3%A7aise",
-    cybermois: "https://www.enisa.europa.eu/topics/cybersecurity-education/awareness-campaigns/european-cyber-security-month"
+    cybermois: "https://www.enisa.europa.eu/topics/cyber-hygiene/european-cybersecurity-month"
   };
   function eventsOn(d) { var m = d.getMonth() + 1, day = d.getDate(), wd = d.getDay(), hr = d.getHours(); return EVENTS.filter(function (x) { return x.win(d, m, day, wd, hr); }); }
   function eventsFound() { return EVENTS.filter(function (x) { return P.events && P.events[x.id]; }).length; }
