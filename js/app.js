@@ -594,7 +594,10 @@
     { id: "terminal", title: "Appel en ligne de commande", done: "Tu as appelé Sudo et Miss Ping par leur commande, et ils t'ont répondu tous les deux.", hint: "Deux gardiens portent le nom d'une commande. Tape leurs deux noms au clavier (ou dans le champ pseudo sur mobile)." },
     { id: "password", title: "Le pire mot de passe", done: "Tu as tapé un des mots de passe les plus utilisés au monde : Phishbuster a déclenché l'alarme.", hint: "Phishbuster monte la garde. Tape au clavier (ou dans le champ pseudo) un des pires mots de passe du monde, les six premiers chiffres, ou la première rangée de ton clavier AZERTY…" },
     { id: "sobre", title: "Lumières éteintes", done: "Green Byte a passé le QG en mode sobriété : moins de couleurs, moins d'animations, moins d'énergie.", hint: "Tout en bas de la page, une petite feuille fait pousser les économies d'énergie. Clique-la trois fois de suite." },
-    { id: "birthday", title: "Joyeux anniversaire !", done: "Tu as souhaité son anniversaire à un gardien le bon jour.", hint: "Certains gardiens ont aussi une date d'anniversaire précise (les autres, on ne connaît que leur année). Consulte leurs fiches… et reviens le bon jour." }
+    { id: "birthday", title: "Joyeux anniversaire !", done: "Tu as souhaité son anniversaire à un gardien le bon jour.", hint: "Certains gardiens ont aussi une date d'anniversaire précise (les autres, on ne connaît que leur année). Consulte leurs fiches… et reviens le bon jour." },
+    { id: "rmrf", title: "Permission refusée", done: "Tu as tenté la pire commande de Linux, rm -rf /. Sudo a refusé, et c'est heureux pour le QG.", hint: "Sudo connaît une commande que personne ne devrait jamais lancer en root… Tape-la au clavier (ou dans le champ pseudo). Attention aux espaces !" },
+    { id: "bsod", title: "L'écran bleu", done: "Tu as déclenché le célèbre écran bleu de la mort, version QG.", hint: "Chaque utilisateur de Windows l'a déjà croisé. Son sigle fait quatre lettres : tape-le au clavier." },
+    { id: "e404", title: "Gardien introuvable", done: "Tu as visité une adresse qui n'existe pas dans le QG : Uptime a cherché, sans succès.", hint: "Dans la barre d'adresse du navigateur, change la fin de l'adresse du site pour une page qui n'existe pas (par exemple #/zzz)." }
   ];
   function secretsFound() { return SECRETS.filter(function (x) { return P.secrets && P.secrets[x.id]; }).length; }
   function todayMD() { var d = new Date(); return ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
@@ -1148,6 +1151,31 @@
     var m = typed.match(BAD_PW); if (m) { typed = ""; passwordAlarm(m[1]); return; }
     if (/sudo$/.test(typed)) { typed = ""; heroReply("sudo", "[sudo] Permission accordée. Tu es root… pour 5 secondes. Utilise ce pouvoir avec sagesse !", "sudo"); }
     else if (/ping$/.test(typed)) { typed = ""; heroReply("echo", "PONG ! Réponse de QG : temps = 12 ms. Tout le monde est bien connecté !", "ping"); }
+    else if (/rm -rf \/$/.test(typed)) { typed = ""; heroSay("sudo", "rm: impossible de supprimer « / » : permission refusée. Bien essayé ! Sans le QG, qui t'entraînerait ?", "rmrf"); }
+    else if (/bsod$/.test(typed)) { typed = ""; blueScreen(); }
+    else if (/whoami$/.test(typed)) { typed = ""; heroSay("sentinelle", "Tu es " + (P.pseudo || "une recrue anonyme") + ", grade « " + rankInfo(P.xp).name + " ». Identité vérifiée, accès au QG autorisé.", ""); }
+    else if (/exit$/.test(typed)) { typed = ""; heroSay("volt", "exit : impossible de quitter le QG, tu es bien trop fort·e. Le bouton rouge en haut à droite, lui, marche.", ""); }
+  }
+  /* Réponse d'un gardien à une commande tapée au clavier ; un identifiant de secret débloque le secret correspondant */
+  function heroSay(heroId, text, secretId) {
+    document.querySelectorAll(".hero-toast").forEach(function (x) { x.remove(); });
+    var h = window.heroById(heroId), el = document.createElement("div"); el.className = "hero-toast"; el.setAttribute("role", "status");
+    el.innerHTML = '<span class="ht-face">' + window.heroSvg(h, 48) + "</span><div><b>" + esc(h.name) + "</b><code>" + esc(text) + "</code></div>";
+    document.body.appendChild(el); sfx("open"); setTimeout(function () { el.remove(); }, 5200);
+    if (secretId) setTimeout(function () { unlockSecret(secretId); }, 900);
+  }
+  /* --- Secret : l'écran bleu de la mort --- */
+  var blueOn = false;
+  function blueScreen() {
+    if (blueOn) return; blueOn = true;
+    var el = document.createElement("div"); el.className = "bsod"; el.setAttribute("role", "alert");
+    var codes = ["PLUS_DE_CAFE_DANS_LA_MACHINE", "ERREUR_ENTRE_LA_CHAISE_ET_LE_CLAVIER", "TROP_DE_ONGLETS_OUVERTS", "MOT_DE_PASSE_NOTE_SUR_UN_POST_IT", "REDEMARRAGE_JAMAIS_FAIT_DEPUIS_3_MOIS"];
+    el.innerHTML = '<div class="bsod-in"><div class="bsod-face">:(</div><p class="bsod-t">Ton QG a rencontré un problème et doit redémarrer. On collecte quelques infos d\'erreur, puis on le redémarre pour toi.</p>' +
+      '<p class="bsod-p"><span class="bsod-n">0</span> % effectués</p><div class="bsod-row"><span class="bsod-qr" aria-hidden="true"></span><p class="bsod-s">Pour plus d\'informations, cherche sur le web : BSOD<br>Si tu appelles le support, donne-lui cette info :<br>Code d\'arrêt : <b>' + codes[(Math.random() * codes.length) | 0] + '</b></p></div></div>';
+    document.body.appendChild(el); sfx("shutdown");
+    var n = el.querySelector(".bsod-n"), v = 0, t = setInterval(function () { v = Math.min(100, v + 4 + Math.ceil(Math.random() * 14)); n.textContent = v; if (v >= 100) { clearInterval(t); setTimeout(close, 700); } }, 260);
+    function close() { if (!el.parentNode) return; clearInterval(t); el.classList.add("out"); setTimeout(function () { el.remove(); blueOn = false; unlockSecret("bsod"); }, 400); }
+    el.addEventListener("click", close);
   }
   document.addEventListener("keydown", function (e) {
     var k = (e.key || "").toLowerCase();
@@ -1157,7 +1185,7 @@
     if (tag === "TEXTAREA" || (tag === "INPUT" && tg.id === "type-answer")) return;
     if (k.length === 1) { typed = (typed + k).slice(-12); if (tag !== "INPUT") checkTyped(); }
   });
-  document.addEventListener("input", function (e) { var tg = e.target; if (tg && tg.tagName === "INPUT" && tg.id !== "type-answer") { var v = String(tg.value || "").toLowerCase(); if (/(sudo|ping)$/.test(v) || BAD_PW.test(v)) { typed = v.slice(-12); checkTyped(); } } });
+  document.addEventListener("input", function (e) { var tg = e.target; if (tg && tg.tagName === "INPUT" && tg.id !== "type-answer") { var v = String(tg.value || "").toLowerCase(); if (/(sudo|ping|bsod|whoami|exit|rm -rf \/)$/.test(v) || BAD_PW.test(v)) { typed = v.slice(-12); checkTyped(); } } });
 
   /* =========================================================
      BOÎTE À IDÉES : remarques, suggestions, bugs
@@ -2665,6 +2693,21 @@
     };
   }
 
+  /* Page « adresse introuvable » : Uptime cherche partout (secret) */
+  function NotFoundView() {
+    return {
+      nav: "",
+      render: function () {
+        var h = window.heroById("uptime");
+        setTimeout(function () { unlockSecret("e404"); }, 1200);
+        return '<main class="container page nf-page"><span class="eyebrow">Erreur 404</span><h1 class="h-l">Gardien introuvable</h1>' +
+          '<div class="nf-hero">' + (h ? window.heroSvg(h, 150) : "") + '</div>' +
+          '<p class="lead">Uptime a fouillé tous les serveurs du QG : cette page n\'existe pas. Elle a peut-être été déplacée, ou elle n\'a jamais existé. Les meilleurs admins ont tous un jour tapé une mauvaise adresse.</p>' +
+          '<div class="btn-row"><a class="btn btn-primary" href="#/">Retour au QG</a></div></main>';
+      }
+    };
+  }
+
   function route() {
     var r = parseHash();
     if (r.path === "/entrainement") V = TrainView(r.params);
@@ -2677,6 +2720,7 @@
     else if ((r.path === "/sons" || r.path === "/maintenance") && DEV_PAGES) V = SoundsView();
     else if (r.path === "/demo" && DEV_PAGES) V = DemoView();
     else if (r.path.indexOf("/mission/") === 0 && window.BOSS_MISSIONS && window.BOSS_MISSIONS[r.path.slice(9)]) V = BossView(r.path.slice(9));
+    else if (r.path !== "/" && r.path !== "") V = NotFoundView();
     else V = QGView();
     V._scroll = true;
     render();
