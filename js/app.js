@@ -2199,8 +2199,9 @@
         cape: function (d) { V.keepDraft(); var c = capeList().filter(function (x) { return x.id === d.id && x.open; })[0]; if (!c) return; P.cape = d.id === "g" + rankIndex(P.xp) ? null : d.id; saveProfile(); sfx("cape"); V._focusKey = "cape-" + d.id; },
         reset: function () {
           V.keepDraft();
-          if (!V.confirmReset) { V.confirmReset = true; return; }
-          var keep = { pseudo: P.pseudo, avatar: P.avatar, pub: P.pub }; P = defaultProfile(); P.pseudo = keep.pseudo; P.avatar = keep.avatar; P.pub = keep.pub; ensureStats(); saveProfile(); V.confirmReset = false;
+          var w = document.getElementById("reset-word");
+          if (!w || !/^(effacer|erase)$/i.test(String(w.value).trim())) return;
+          var keep = { pseudo: P.pseudo, avatar: P.avatar, pub: P.pub }; P = defaultProfile(); P.pseudo = keep.pseudo; P.avatar = keep.avatar; P.pub = keep.pub; ensureStats(); saveProfile(); V.confirmReset = false; V.dangerOpen = false;
         }
       },
       render: function () {
@@ -2264,7 +2265,8 @@
             return '<p class="muted step-help">Clique un fond : ta carte à gauche change tout de suite. L\'étoile ☆ met un fond en favori, il remonte en tête de liste.</p><div class="bg-grid" role="group" aria-label="Fonds de la carte de héros">' + top.map(tile).join("") + "</div>" +
               (rest.length ? '<details class="vit-more fav-more" data-pg="bg-more"' + (openPG["bg-more"] ? " open" : "") + '><summary>Voir les ' + rest.length + ' autres fonds' + (rest.some(function (g) { return isNew("bg:" + g.id); }) ? ' <i class="new-dot inline" data-fold-new="bg" aria-hidden="true"></i>' : "") + ' <span class="pg-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="bg-grid">' + rest.map(tile).join("") + "</div></details>" : "");
           })(), "bg") +
-          '<div class="btn-row" style="align-items:center;margin-top:18px"><button type="submit" class="btn btn-primary" data-key="save">Enregistrer mon héros</button>' + (this.saved ? '<span class="saved-ok" role="status">✓ Enregistré !</span>' : "") + '<button type="button" class="btn btn-ghost btn-small" data-action="reset" style="margin-left:auto">' + (this.confirmReset ? "Sûr·e ? Clique encore pour tout effacer" : "Remettre ma progression à zéro") + '</button></div>' +
+          '<div class="btn-row" style="align-items:center;margin-top:18px"><button type="submit" class="btn btn-primary" data-key="save">Enregistrer mon héros</button>' + (this.saved ? '<span class="saved-ok" role="status">✓ Enregistré !</span>' : "") + '</div>' +
+          '<details class="danger-zone" data-danger' + (this.dangerOpen ? " open" : "") + '><summary>Zone sensible</summary><div class="danger-body"><p class="danger-warn" role="alert"><b>Attention :</b> cette action efface définitivement ta progression sur cet appareil (points d\'expérience, rang, boss vaincus, badges, fonds et capes débloqués). Ton pseudo et ton avatar sont conservés. Impossible de revenir en arrière.</p><label class="danger-label" for="reset-word">Tape EFFACER pour confirmer</label><input type="text" id="reset-word" class="danger-input" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" inputmode="text"><button type="button" class="btn btn-danger btn-small" data-action="reset" data-reset-btn disabled>Remettre ma progression à zéro</button></div></details>' +
           "</form></div>" + this.renderStats() + renderVitrine() + renderSecrets() + "</main>";
       },
       statList: function () {
@@ -2516,6 +2518,13 @@
     };
     return view;
   }
+  /* Zone sensible du profil : le bouton rouge ne s'active qu'une fois le mot tapé ; on ne refait pas l'affichage pour ne pas perdre la saisie */
+  document.addEventListener("input", function (e) {
+    var t = e.target; if (!t || t.id !== "reset-word") return;
+    var b = document.querySelector("[data-reset-btn]"); if (b) b.disabled = !/^(effacer|erase)$/i.test(String(t.value).trim());
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Enter" && e.target && e.target.id === "reset-word") e.preventDefault(); });
+  document.addEventListener("toggle", function (e) { var d = e.target; if (d && d.matches && d.matches("[data-danger]") && V) V.dangerOpen = d.open; }, true);
   document.addEventListener("input", function (e) { if (e.target && e.target.id === "bonus-text" && V && "bonusText" in V) V.bonusText = e.target.value; });
 
   /* ---------- Aperçu : une question d'essai qui déclenche l'effet de promotion (sans toucher à l'XP réelle) ---------- */
@@ -2562,7 +2571,7 @@
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">What is saved, and where</h2>' +
           '<p>Your progress (experience points, rank, defeated bosses, nickname and hero, news you have read) and your settings (sound, volume, theme, light animations mode, styles) are saved <b>only in your browser</b>, using local storage (localStorage). They stay on your device: nobody else can read them, and they never go through any server of the site.</p>' +
           '<p>To erase your data, you have two options:</p>' +
-          '<ul style="padding-left:20px;line-height:1.7"><li>the <b>\u201cReset my progress\u201d</b> button in your profile (below \u201cSave my hero\u201d). It erases your progress (experience points, rank, defeated bosses, badges, capes, secrets, statistics) but keeps your nickname, your avatar and your visibility settings. Your news reading and your settings (sound, theme\u2026) are kept too;</li><li>clearing the site data in your browser settings: this erases <b>everything</b>, including your nickname, your settings and your news reading.</li></ul>' +
+          '<ul style="padding-left:20px;line-height:1.7"><li>the <b>\u201cReset my progress\u201d</b> button in the \u201cSensitive zone\u201d of your profile (you must type ERASE to unlock it). It erases your progress (experience points, rank, defeated bosses, badges, capes, secrets, statistics) but keeps your nickname, your avatar and your visibility settings. Your news reading and your settings (sound, theme\u2026) are kept too;</li><li>clearing the site data in your browser settings: this erases <b>everything</b>, including your nickname, your settings and your news reading.</li></ul>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">What the site does not use</h2>' +
           '<ul style="padding-left:20px;line-height:1.7"><li>no cookies, no trackers, no visitor statistics;</li><li>no advertising and no embedded social networks;</li><li>no external resources: scripts, fonts and sounds are hosted with the site, and a security policy (CSP) prevents it from contacting other servers.</li></ul>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Idea box</h2>' +
@@ -2575,7 +2584,7 @@
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Ce qui est enregistré, et où</h2>' +
           '<p>Ta progression (points d\'expérience, rang, boss vaincus, pseudo et héros, lectures de la veille) et tes réglages (son, volume, thème, mode léger, styles) sont enregistrés <b>uniquement dans ton navigateur</b>, grâce au stockage local (localStorage). Ils restent sur ton appareil : personne d\'autre ne peut les lire, et ils ne passent par aucun serveur du site.</p>' +
           '<p>Pour effacer tes données, tu as deux possibilités :</p>' +
-          '<ul style="padding-left:20px;line-height:1.7"><li>le bouton <b>« Remettre ma progression à zéro »</b>, dans ton profil (sous « Enregistrer mon héros »). Il efface ta progression (points d\'expérience, rang, boss vaincus, badges, capes, secrets, statistiques) mais garde ton pseudo, ton avatar et tes réglages de visibilité. Tes lectures de la veille et tes réglages (son, thème…) restent aussi ;</li><li>vider les données du site dans les réglages de ton navigateur : cela efface <b>tout</b>, y compris ton pseudo, tes réglages et tes lectures de la veille.</li></ul>' +
+          '<ul style="padding-left:20px;line-height:1.7"><li>le bouton <b>« Remettre ma progression à zéro »</b>, dans la « Zone sensible » de ton profil (il faut taper EFFACER pour le débloquer). Il efface ta progression (points d\'expérience, rang, boss vaincus, badges, capes, secrets, statistiques) mais garde ton pseudo, ton avatar et tes réglages de visibilité. Tes lectures de la veille et tes réglages (son, thème…) restent aussi ;</li><li>vider les données du site dans les réglages de ton navigateur : cela efface <b>tout</b>, y compris ton pseudo, tes réglages et tes lectures de la veille.</li></ul>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Ce que le site n\'utilise pas</h2>' +
           '<ul style="padding-left:20px;line-height:1.7"><li>aucun cookie, aucun pisteur, aucune statistique de fréquentation ;</li><li>aucune publicité et aucun réseau social intégré ;</li><li>aucune ressource externe : les scripts, les polices et les sons sont hébergés avec le site, et une politique de sécurité (CSP) empêche de contacter d\'autres serveurs.</li></ul>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Boîte à idées</h2>' +
