@@ -646,6 +646,15 @@
     { id: "nuit", emoji: "🌙", hero: "uptime", fx: ["🌙", "⭐", "🦉"], title: "Nuit blanche", banner: "Il est tard : les admins ne dorment jamais.", say: "Il est entre 2 h et 5 h du matin et tu révises sur Power Up ? Les admins ne dorment jamais… mais ils boivent de l'eau, eux. Va dormir !", done: "Tu es venu·e au QG en pleine nuit.", win: function (d, m, day, wd, hr) { return hr>=2&&hr<5; } },
     { id: "cybermois", emoji: "🛡️", hero: "sentinelle", fx: ["🛡️", "🔒"], title: "Mois de la cybersécurité", banner: "Octobre, c'est le mois européen de la cybersécurité.", say: "Octobre est le mois européen de la cybersécurité ! Un bon réflexe ce mois-ci : active la double authentification partout où c'est possible.", done: "Tu es venu·e au QG pendant le mois de la cybersécurité.", win: function (d, m, day, wd, hr) { return m===10; } }
   ];
+  /* Pour en savoir plus : un lien par événement quand il existe une bonne source (ouvert dans un nouvel onglet) */
+  var EVENT_LINKS = {
+    halloween: "https://fr.wikipedia.org/wiki/Halloween", noel: "https://fr.wikipedia.org/wiki/No%C3%ABl", nouvelan: "https://fr.wikipedia.org/wiki/Nouvel_An",
+    valentin: "https://fr.wikipedia.org/wiki/Saint-Valentin", poisson: "https://fr.wikipedia.org/wiki/Poisson_d%27avril", paques: "https://fr.wikipedia.org/wiki/P%C3%A2ques",
+    pi: "https://fr.wikipedia.org/wiki/Pi", backup: "https://www.worldbackupday.com", patch: "https://msrc.microsoft.com/update-guide",
+    motdepasse: "https://www.cnil.fr/fr/tag/Mots%2Bde%2BPasse", musique: "https://fr.wikipedia.org/wiki/F%C3%AAte_de_la_musique",
+    quatorze: "https://fr.wikipedia.org/wiki/F%C3%AAte_nationale_fran%C3%A7aise",
+    cybermois: "https://www.enisa.europa.eu/topics/cybersecurity-education/awareness-campaigns/european-cyber-security-month"
+  };
   function eventsOn(d) { var m = d.getMonth() + 1, day = d.getDate(), wd = d.getDay(), hr = d.getHours(); return EVENTS.filter(function (x) { return x.win(d, m, day, wd, hr); }); }
   function eventsFound() { return EVENTS.filter(function (x) { return P.events && P.events[x.id]; }).length; }
   /* Aperçu en local seulement : index.html?evt=noel force un événement (jamais sur le site public) */
@@ -687,8 +696,9 @@
     });
   }
   function eventBanner() {
-    var l = todayEvents(); if (!l.length) return ""; var ev = l[0];
-    return '<div class="ev-banner" role="note"><span class="ev-emoji" aria-hidden="true">' + ev.emoji + "</span><span><b>" + esc(ev.title) + "</b> · " + esc(ev.banner) + "</span></div>";
+    var l = todayEvents(); if (!l.length) return ""; var ev = l[0], url = EVENT_LINKS[ev.id];
+    var inner = '<span class="ev-emoji" aria-hidden="true">' + ev.emoji + "</span><span class=\"ev-text\"><b>" + esc(ev.title) + "</b> · " + esc(ev.banner) + (url ? ' <span class="ev-more">En savoir plus ↗</span>' : "") + "</span>";
+    return url ? '<a class="ev-banner ev-link" href="' + url + '" target="_blank" rel="noopener noreferrer">' + inner + "</a>" : '<div class="ev-banner" role="note">' + inner + "</div>";
   }
   function renderCalendar() {
     var found = eventsFound(), nx = nextEvent();
@@ -1191,7 +1201,12 @@
   /* --- Secret 3 : taper « sudo » ou « ping » → le héros répond --- */
   var typed = "";
   /* Fait disparaître un message de gardien en fondu (et au toucher) */
-  function dismissToast(el, ms) { function go() { if (!el.parentNode) return; el.classList.add("out"); setTimeout(function () { el.remove(); }, 380); } el.addEventListener("click", go); setTimeout(go, ms); }
+  function dismissToast(el, ms) {
+    ms = Math.max(ms, 4500 + (el.textContent || "").length * 50); var t;
+    function go() { clearTimeout(t); if (!el.parentNode) return; el.classList.add("out"); setTimeout(function () { el.remove(); }, 380); }
+    function arm() { clearTimeout(t); t = setTimeout(go, ms); }
+    el.addEventListener("click", go); el.addEventListener("mouseenter", function () { clearTimeout(t); }); el.addEventListener("mouseleave", arm); arm();
+  }
   function heroReply(heroId, text, cmd) {
     P.secretsProgress = P.secretsProgress || {}; P.secretsProgress[cmd] = 1; saveProfile();
     var both = P.secretsProgress.sudo && P.secretsProgress.ping, already = P.secrets && P.secrets.terminal;
