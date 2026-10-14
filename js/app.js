@@ -401,6 +401,16 @@
       o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.85);
       [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.55 + i * 0.05, 0.9, "triangle", 0.04); });
     },
+    /* Remise à zéro : souffle qui s'éteint en descendant, puis petit carillon clair de « nouveau départ » */
+    wipe: function () {
+      var ac = audio(); if (!ac) return;
+      noiseBurst(0, 0.7, 0.08, "lowpass", 1800);
+      var t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain(); o.type = "sine";
+      o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(90, t + 0.6);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05 * volume * 1.4, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.65);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.7);
+      [659, 880, 1319].forEach(function (f, i) { tone(f, 0.7 + i * 0.12, 0.5, "triangle", 0.04); });
+    },
     /* Plantage de Captain Reboot : glitchs numériques puis extinction qui descend en fréquence */
     shutdown: function () {
       var ac = audio(); if (!ac) return;
@@ -1426,6 +1436,18 @@
   document.addEventListener("dragend", function (e) { var t = e.target.closest && e.target.closest(".feat-slot"); if (t) t.classList.remove("dragging"); document.querySelectorAll(".feat-slot.over").forEach(function (x) { x.classList.remove("over"); }); featDrag = null; });
   document.addEventListener("dragover", function (e) { var t = e.target.closest && e.target.closest(".feat-slot.on"); if (!t || featDrag === null) return; e.preventDefault(); document.querySelectorAll(".feat-slot.over").forEach(function (x) { if (x !== t) x.classList.remove("over"); }); t.classList.add("over"); });
   document.addEventListener("drop", function (e) { var t = e.target.closest && e.target.closest(".feat-slot.on"); if (!t || featDrag === null) return; e.preventDefault(); var to = +t.getAttribute("data-feat"), f = P.favBadges || []; if (to !== featDrag && f[featDrag] && f[to]) { var m = f.splice(featDrag, 1)[0]; f.splice(to, 0, m); saveProfile(); sfx("toggle"); } featDrag = null; render(); });
+  /* Effet de remise à zéro : onde de lumière, poussière d'étoiles qui s'envole, son et message (simple message si les animations sont réduites) */
+  function wipeDone() {
+    sfx("wipe");
+    var t = document.createElement("div"); t.className = "rb-toast wipe-toast"; t.setAttribute("role", "status");
+    t.innerHTML = '<span class="ico">✓</span><span><b>Progression effacée</b>Nouveau départ, recrue : le QG t\'attend !</span>';
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 4600);
+    if (liteOn()) return;
+    var fx = document.createElement("div"); fx.className = "wipe-fx"; fx.setAttribute("aria-hidden", "true");
+    var h = '<i class="wipe-ring"></i>';
+    for (var i = 0; i < 28; i++) h += '<i class="wipe-dot" style="left:' + (4 + Math.random() * 92).toFixed(1) + '%;--dx:' + Math.round(-40 + Math.random() * 80) + 'px;--s:' + (4 + Math.random() * 7).toFixed(1) + 'px;animation-delay:' + (Math.random() * 0.5).toFixed(2) + 's;animation-duration:' + (1.3 + Math.random() * 0.9).toFixed(2) + 's"></i>';
+    fx.innerHTML = h; document.body.appendChild(fx); setTimeout(function () { fx.remove(); }, 2600);
+  }
   function toastMsg(txt) { var t = document.createElement("div"); t.className = "rb-toast"; t.setAttribute("role", "status"); t.innerHTML = '<span class="ico">!</span><span>' + esc(txt) + "</span>"; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3500); }
   var BACKUP_KEY = "powerup365.profile.backup";
   function hasBackup() { try { return !!localStorage.getItem(BACKUP_KEY); } catch (e) { return false; } }
@@ -2201,7 +2223,7 @@
           V.keepDraft();
           var w = document.getElementById("reset-word");
           if (!w || !/^(effacer|erase)$/i.test(String(w.value).trim())) return;
-          var keep = { pseudo: P.pseudo, avatar: P.avatar, pub: P.pub }; P = defaultProfile(); P.pseudo = keep.pseudo; P.avatar = keep.avatar; P.pub = keep.pub; ensureStats(); saveProfile(); V.confirmReset = false; V.dangerOpen = false;
+          var keep = { pseudo: P.pseudo, avatar: P.avatar, pub: P.pub }; P = defaultProfile(); P.pseudo = keep.pseudo; P.avatar = keep.avatar; P.pub = keep.pub; ensureStats(); saveProfile(); V.confirmReset = false; V.dangerOpen = false; setTimeout(wipeDone, 60);
         }
       },
       render: function () {
