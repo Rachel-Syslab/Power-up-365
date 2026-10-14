@@ -197,6 +197,7 @@ PU_I18N.add({
   "Pilier": "Pillar",
   "Au programme · plus de {0} questions": "On the menu · more than {0} questions",
   "Au programme": "On the menu",
+  "Nouveau": "New",
   "S'entraîner sur ce pilier": "Train on this pillar",
   "Validé": "Done",
   "Vaincre le niveau {0} du Grand Blackout": "Defeat level {0} of the Great Blackout",
