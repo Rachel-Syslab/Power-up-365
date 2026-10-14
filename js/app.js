@@ -619,6 +619,88 @@
     var after = rankIndex(P.xp); if (after > before) setTimeout(function () { rankCeremony(true, after); }, 1500);
     return true;
   }
+  /* =========================================================
+     CALENDRIER DU QG : événements et jours spéciaux (Halloween, Noël, Patch Tuesday…)
+     Chaque jour spécial : bandeau sur l'accueil, pluie d'emojis, message d'un gardien, +10 XP la première fois
+     ========================================================= */
+  function easterDate(y) {
+    var a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451), mo = Math.floor((h + l - 7 * m + 114) / 31), da = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(y, mo - 1, da);
+  }
+  function easterNear(d) { var e = easterDate(d.getFullYear()), t = new Date(d.getFullYear(), d.getMonth(), d.getDate()), diff = Math.round((t - e) / 86400000); return diff >= -2 && diff <= 1; }
+  var EVENTS = [
+    { id: "halloween", emoji: "🎃", hero: "volt", fx: ["🎃", "👻", "🦇", "🕸️"], title: "Halloween", banner: "Halloween au QG : Captain Reboot s'est déguisé en fantôme.", say: "Bouh ! Cette nuit, les seuls fantômes du QG sont les mails de phishing. Ne clique sur aucun lien suspect !", done: "Tu es venu·e au QG pour Halloween.", win: function (d, m, day, wd, hr) { return (m===10&&day>=25)||(m===11&&day===1); } },
+    { id: "noel", emoji: "🎄", hero: "nimbus", fx: ["❄️", "🎄", "⭐", "🎁"], title: "Noël", banner: "Noël au QG : Docteur Backup a sauvegardé la liste du Père Noël.", say: "Joyeux Noël ! J'ai sauvegardé la liste du Père Noël, avec une copie hors site. Règle 3-2-1 : même les lutins la respectent.", done: "Tu es venu·e au QG pour Noël.", win: function (d, m, day, wd, hr) { return m===12&&day>=20&&day<=26; } },
+    { id: "nouvelan", emoji: "🎆", hero: "uptime", fx: ["🎆", "🎉", "✨", "🥂"], title: "Nouvel An", banner: "Nouvel An au QG : Uptime fête 365 jours de disponibilité.", say: "Bonne année ! 365 jours à 99,99 % de disponibilité. Cette année, je vise le 100 %… et toi, ton prochain grade.", done: "Tu es venu·e au QG pour le Nouvel An.", win: function (d, m, day, wd, hr) { return (m===12&&day===31)||(m===1&&day<=2); } },
+    { id: "valentin", emoji: "💘", hero: "echo", fx: ["💘", "💖", "💌", "💕"], title: "Saint-Valentin", banner: "Saint-Valentin au QG : Miss Ping t'envoie un petit message.", say: "PING ! Réponse : <3 Temps = 1 battement de cœur. Joyeuse Saint-Valentin, et n'oublie pas de répondre à tes mails.", done: "Tu es venu·e au QG pour la Saint-Valentin.", win: function (d, m, day, wd, hr) { return m===2&&day>=12&&day<=14; } },
+    { id: "poisson", emoji: "🐟", hero: "volt", fx: ["🐟", "🐠", "🎣"], title: "Poisson d'avril", banner: "Poisson d'avril : rien n'est truqué ici… à part ce poisson.", say: "Poisson d'avril ! Ce n'était pas du phishing, juste un poisson. D'ailleurs, vérifie toujours l'expéditeur : en vrai, personne ne rigole avec ça.", done: "Tu es venu·e au QG pour le 1er avril.", win: function (d, m, day, wd, hr) { return m===4&&day===1; } },
+    { id: "paques", emoji: "🥚", hero: "sylva", fx: ["🥚", "🐣", "🐰", "🌷"], title: "Pâques", banner: "Pâques au QG : Green Byte a caché des œufs, sans gaspillage.", say: "Joyeuses Pâques ! J'ai caché des œufs dans tout le QG, mais sans emballage ni vidéo : 100 % sobre. Cherche aussi les secrets…", done: "Tu es venu·e au QG pour Pâques.", win: function (d, m, day, wd, hr) { return easterNear(d); } },
+    { id: "pi", emoji: "🥧", hero: "calcula", fx: ["🥧", "π", "3,14"], title: "Jour de Pi", banner: "Jour de Pi : Excelsa calcule avec une précision infinie.", say: "=PI() renvoie 3,14159265358979. Dans Excel comme dans la vie, la précision, c'est important. Bon jour de Pi !", done: "Tu es venu·e au QG le jour de Pi.", win: function (d, m, day, wd, hr) { return m===3&&day===14; } },
+    { id: "backup", emoji: "💾", hero: "nimbus", fx: ["💾", "☁️", "🛟"], title: "Journée de la sauvegarde", banner: "Journée mondiale de la sauvegarde : Docteur Backup a une question pour toi.", say: "Journée mondiale de la sauvegarde ! Question : quand as-tu sauvegardé tes fichiers pour la dernière fois ? Règle 3-2-1 : 3 copies, 2 supports, 1 hors site.", done: "Tu es venu·e au QG pour la Journée de la sauvegarde.", win: function (d, m, day, wd, hr) { return m===3&&day===31; } },
+    { id: "patch", emoji: "🩹", hero: "patch", fx: ["🩹", "🛠️", "🔧"], title: "Patch Tuesday", banner: "C'est le Patch Tuesday : Hotfix passe les mises à jour en revue.", say: "C'est le Patch Tuesday : Microsoft publie ses mises à jour de sécurité le deuxième mardi du mois. Pense à les installer… après un redémarrage !", done: "Tu es venu·e au QG un jour de Patch Tuesday.", win: function (d, m, day, wd, hr) { return wd===2&&day>=8&&day<=14; } },
+    { id: "motdepasse", emoji: "🔑", hero: "sentinelle", fx: ["🔑", "🔒", "🛡️"], title: "Journée du mot de passe", banner: "Journée mondiale du mot de passe : Phishbuster fait le ménage.", say: "Journée mondiale du mot de passe ! Aujourd'hui, change un mot de passe faible, utilise une phrase de passe longue et active la double authentification.", done: "Tu es venu·e au QG pour la Journée du mot de passe.", win: function (d, m, day, wd, hr) { return m===5&&wd===4&&day<=7; } },
+    { id: "may4", emoji: "⚔️", hero: "sudo", fx: ["⭐", "✨", "🌌"], title: "Star Wars Day", banner: "4 mai : que le root soit avec toi.", say: "Que le root soit avec toi ! (Mais n'utilise pas sudo à la légère : un grand pouvoir implique de grandes responsabilités.)", done: "Tu es venu·e au QG le 4 mai.", win: function (d, m, day, wd, hr) { return m===5&&day===4; } },
+    { id: "musique", emoji: "🎵", hero: "echo", fx: ["🎵", "🎶", "🎧"], title: "Fête de la musique", banner: "Fête de la musique : Miss Ping met le son (réglable dans ⚙️).", say: "C'est la Fête de la musique ! Ma playlist du jour : le bruit du ping qui répond. Baisse le volume si ton open space dort.", done: "Tu es venu·e au QG pour la Fête de la musique.", win: function (d, m, day, wd, hr) { return m===6&&day===21; } },
+    { id: "quatorze", emoji: "🎇", hero: "ignis", fx: ["🎇", "🎆", "🇫🇷"], title: "14 juillet", banner: "14 juillet : Lady Firewall autorise exceptionnellement les feux d'artifice.", say: "Feu d'artifice autorisé ! Aujourd'hui, une exception à mes règles : tout le reste du trafic suspect reste bloqué.", done: "Tu es venu·e au QG un 14 juillet.", win: function (d, m, day, wd, hr) { return m===7&&day===14; } },
+    { id: "vendredi13", emoji: "🐈‍⬛", hero: "uptime", fx: ["🐈‍⬛", "🍀", "🪞"], title: "Vendredi 13", banner: "Vendredi 13 : Uptime croise les doigts.", say: "Vendredi 13 : superstition ! Les vraies pannes n'ont pas besoin de date, mais ne déploie rien en production un vendredi.", done: "Tu es venu·e au QG un vendredi 13.", win: function (d, m, day, wd, hr) { return wd===5&&day===13; } },
+    { id: "nuit", emoji: "🌙", hero: "uptime", fx: ["🌙", "⭐", "🦉"], title: "Nuit blanche", banner: "Il est tard : les admins ne dorment jamais.", say: "Il est entre 2 h et 5 h du matin et tu révises sur Power Up ? Les admins ne dorment jamais… mais ils boivent de l'eau, eux. Va dormir !", done: "Tu es venu·e au QG en pleine nuit.", win: function (d, m, day, wd, hr) { return hr>=2&&hr<5; } },
+    { id: "cybermois", emoji: "🛡️", hero: "sentinelle", fx: ["🛡️", "🔒"], title: "Mois de la cybersécurité", banner: "Octobre, c'est le mois européen de la cybersécurité.", say: "Octobre est le mois européen de la cybersécurité ! Un bon réflexe ce mois-ci : active la double authentification partout où c'est possible.", done: "Tu es venu·e au QG pendant le mois de la cybersécurité.", win: function (d, m, day, wd, hr) { return m===10; } }
+  ];
+  function eventsOn(d) { var m = d.getMonth() + 1, day = d.getDate(), wd = d.getDay(), hr = d.getHours(); return EVENTS.filter(function (x) { return x.win(d, m, day, wd, hr); }); }
+  function eventsFound() { return EVENTS.filter(function (x) { return P.events && P.events[x.id]; }).length; }
+  /* Aperçu en local seulement : index.html?evt=noel force un événement (jamais sur le site public) */
+  function forcedEvent() { if (!DEV_PAGES) return null; var m = /[?&]evt=([a-z0-9]+)/.exec(location.search || ""); return m ? EVENTS.filter(function (x) { return x.id === m[1]; })[0] || null : null; }
+  function todayEvents() { var f = forcedEvent(); return f ? [f] : eventsOn(new Date()); }
+  function nextEvent() {
+    var now = new Date(), base = new Date(now.getFullYear(), now.getMonth(), now.getDate()), active = eventsOn(now).map(function (x) { return x.id; });
+    for (var i = 1; i < 800; i++) { var d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i, 12), l = eventsOn(d).filter(function (x) { return x.id !== "nuit" && active.indexOf(x.id) === -1; }); if (l.length) return { ev: l[0], d: d, n: i }; }
+    return null;
+  }
+  var MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  function dayLabel(day, mo) { return window.PU_LANG === "en" ? MONTHS_EN[mo] + " " + day : day + " " + MONTHS_FR[mo]; }
+  var MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+  function eventFx(ev) {
+    var key = "powerup365.evfx." + ev.id + "." + todayStr(new Date()); try { if (localStorage.getItem(key)) return; localStorage.setItem(key, "1"); } catch (e) { }
+    if (liteOn()) return;
+    var box = document.createElement("div"); box.className = "ev-fx"; box.setAttribute("aria-hidden", "true"); var h = "";
+    for (var i = 0; i < 28; i++) h += '<i style="left:' + (Math.random() * 96).toFixed(1) + '%;font-size:' + (16 + Math.random() * 22).toFixed(0) + 'px;animation-delay:' + (Math.random() * 3.5).toFixed(2) + 's;animation-duration:' + (5 + Math.random() * 4).toFixed(2) + 's;--dx:' + Math.round(-50 + Math.random() * 100) + 'px">' + ev.fx[i % ev.fx.length] + "</i>";
+    box.innerHTML = h; document.body.appendChild(box); setTimeout(function () { box.remove(); }, 10000);
+  }
+  function eventToast(ev, isNew) {
+    var h = window.heroById(ev.hero), el = document.createElement("div"); el.className = "hero-toast ev-toast"; el.setAttribute("role", "status");
+    el.innerHTML = '<span class="ht-face">' + window.heroSvg(h, 48) + "</span><div><b>" + ev.emoji + " " + esc(ev.title) + " · " + esc(h.name) + "</b><code>" + esc(ev.say) + "</code>" + (isNew ? '<small class="ht-next">Nouvel événement au calendrier · +10 XP</small>' : "") + "</div>";
+    document.body.appendChild(el); sfx(isNew ? "badge" : "open"); dismissToast(el, isNew ? 9000 : 6500);
+  }
+  function checkEvents() {
+    var list = todayEvents(), t = 0; if (!list.length) return;
+    P.events = P.events || {};
+    list.forEach(function (ev) {
+      var isNew = !P.events[ev.id], force = !!forcedEvent();
+      if (!isNew && !force && !!(function () { try { return localStorage.getItem("powerup365.evt." + ev.id + "." + todayStr(new Date())); } catch (e) { return null; } })()) return;
+      setTimeout(function () {
+        var before = rankIndex(P.xp);
+        if (isNew && !force) { P.events[ev.id] = todayStr(new Date()); P.xp += 10; saveProfile(); }
+        try { localStorage.setItem("powerup365.evt." + ev.id + "." + todayStr(new Date()), "1"); } catch (e) { }
+        eventFx(ev); eventToast(ev, isNew && !force); setTimeout(render, 80);
+        var after = rankIndex(P.xp); if (after > before) setTimeout(function () { rankCeremony(true, after); }, 1800);
+      }, 5000 + t * 9500); t++;
+    });
+  }
+  function eventBanner() {
+    var l = todayEvents(); if (!l.length) return ""; var ev = l[0];
+    return '<div class="ev-banner" role="note"><span class="ev-emoji" aria-hidden="true">' + ev.emoji + "</span><span><b>" + esc(ev.title) + "</b> · " + esc(ev.banner) + "</span></div>";
+  }
+  function renderCalendar() {
+    var found = eventsFound(), nx = nextEvent();
+    var cards = EVENTS.filter(function (x) { return P.events && P.events[x.id]; }).map(function (x) {
+      var p = P.events[x.id].split("-");
+      return '<div class="secret-card found"><span class="secret-ico" aria-hidden="true">' + x.emoji + "</span><div><b>" + esc(x.title) + "</b><p>" + esc(x.done) + " <span>(" + dayLabel(+p[2], +p[1] - 1) + ")</span></p></div></div>";
+    }).join("");
+    if (nx) { var en = window.PU_LANG === "en"; cards += '<div class="secret-card"><span class="secret-ico" aria-hidden="true">' + nx.ev.emoji + '</span><div><b>Prochain rendez-vous</b><p>' + esc(nx.ev.title) + (en ? ": " + (nx.n === 1 ? "tomorrow" : "in " + nx.n + " days") + " (" + dayLabel(nx.d.getDate(), nx.d.getMonth()) + "). Come back that day, the HQ will have a little something for you." : " : " + (nx.n === 1 ? "demain" : "dans " + nx.n + " jours") + " (" + dayLabel(nx.d.getDate(), nx.d.getMonth()) + "). Reviens ce jour-là, le QG aura un petit quelque chose pour toi.") + "</p></div></div>"; }
+    return '<section class="section secrets" aria-labelledby="cal-title"><div class="section-head"><div class="stack" style="gap:8px"><span class="eyebrow" style="color:var(--gold)">Jours spéciaux</span><h2 class="h-l" id="cal-title">Le calendrier du QG</h2></div><p class="muted" style="margin:0">' + found + " / " + EVENTS.length + (window.PU_LANG === "en" ? " events celebrated · +10 XP for each new one" : " événements fêtés · +10 XP à chaque nouveau") + "</p></div>" +
+      '<p class="muted" style="margin:0 0 14px">Halloween, Noël, Pâques, Patch Tuesday… Certains jours, le QG et ses gardiens ont un message pour toi. Reviens le bon jour pour les découvrir.</p><div class="secrets-grid">' + cards + "</div></section>";
+  }
+
   function renderSecrets() {
     var nb = nextBirthday(), found = secretsFound(), all = found === SECRETS.length;
     var cards = SECRETS.filter(function (x) { return P.secrets && P.secrets[x.id]; }).map(function (x) {
@@ -698,7 +780,8 @@
         { n: "Légende absolue", d: "Une partie Légende sans aucune erreur", i: BI.crown, s: "star", on: st.legendPerfect > 0 },
         { n: "Série de 10", d: "10 bonnes réponses d'affilée", i: BI.bolt, s: "circle", on: P.bestStreak >= 10 },
         { n: "Assidu·e", d: "Jouer 7 jours différents", i: BI.cal, s: "circle", on: st.days.length >= 7 },
-        { n: "Chasseur de secrets", d: "Trouver tous les secrets du QG", i: BI.key, s: "star", on: secretsFound() >= SECRETS.length }
+        { n: "Chasseur de secrets", d: "Trouver tous les secrets du QG", i: BI.key, s: "star", on: secretsFound() >= SECRETS.length },
+        { n: "Fêtard·e du QG", d: "Fêter 5 événements du calendrier au QG", i: BI.cal, s: "circle", on: eventsFound() >= 5, p: [Math.min(eventsFound(), 5), 5] }
       ] },
       { id: "prog", title: "Progression", color: C.prog, items: [
         { n: "Première victoire", d: "Finir une partie classée avec au moins la moitié de bonnes réponses", i: BI.trophy, s: "circle", on: (st.rankedWins || 0) > 0 },
@@ -1107,6 +1190,8 @@
   });
   /* --- Secret 3 : taper « sudo » ou « ping » → le héros répond --- */
   var typed = "";
+  /* Fait disparaître un message de gardien en fondu (et au toucher) */
+  function dismissToast(el, ms) { function go() { if (!el.parentNode) return; el.classList.add("out"); setTimeout(function () { el.remove(); }, 380); } el.addEventListener("click", go); setTimeout(go, ms); }
   function heroReply(heroId, text, cmd) {
     P.secretsProgress = P.secretsProgress || {}; P.secretsProgress[cmd] = 1; saveProfile();
     var both = P.secretsProgress.sudo && P.secretsProgress.ping, already = P.secrets && P.secrets.terminal;
@@ -1114,7 +1199,7 @@
     var h = window.heroById(heroId), el = document.createElement("div"); el.className = "hero-toast"; el.setAttribute("role", "status");
     el.innerHTML = '<span class="ht-face">' + window.heroSvg(h, 48) + "</span><div><b>" + esc(h.name) + "</b><code>" + esc(text) + "</code>" +
       (!both && !already ? '<small class="ht-next">1 commande sur 2 · Un autre gardien du QG répond aussi quand on tape son nom… Trouve-le pour débloquer le secret.</small>' : "") + "</div>";
-    document.body.appendChild(el); sfx("open"); setTimeout(function () { el.remove(); }, both || already ? 4200 : 6500);
+    document.body.appendChild(el); sfx("open"); dismissToast(el, both || already ? 4200 : 6500);
     if (both) setTimeout(function () { unlockSecret("terminal"); }, 900);
   }
   /* --- Secret : le pire mot de passe → alarme de Phishbuster --- */
@@ -1161,7 +1246,7 @@
     document.querySelectorAll(".hero-toast").forEach(function (x) { x.remove(); });
     var h = window.heroById(heroId), el = document.createElement("div"); el.className = "hero-toast"; el.setAttribute("role", "status");
     el.innerHTML = '<span class="ht-face">' + window.heroSvg(h, 48) + "</span><div><b>" + esc(h.name) + "</b><code>" + esc(text) + "</code></div>";
-    document.body.appendChild(el); sfx("open"); setTimeout(function () { el.remove(); }, 5200);
+    document.body.appendChild(el); sfx("open"); dismissToast(el, 5200);
     if (secretId) setTimeout(function () { unlockSecret(secretId); }, 900);
   }
   /* --- Secret : l'écran bleu de la mort --- */
@@ -1814,7 +1899,7 @@
           return '<button type="button" class="world' + (extra || "") + '" data-world="' + href + '" aria-haspopup="dialog"' + (color ? ' style="--wc:' + color + '"' : "") + '><div style="display:flex;justify-content:space-between;align-items:center"><span class="num">' + num + "</span>" + icon + "</div><h3>" + title + '</h3><span class="apps">' + apps + "</span><p>" + text + '</p><span class="boss">Boss : ' + boss + '</span><span class="world-more">Découvrir le contenu →</span></button>';
         }
 
-        return '<main class="container">' +
+        return '<main class="container">' + eventBanner() +
           '<section class="hero"><div class="stack">' +
           '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="tag">QG · Saison 1</span><span class="muted" style="font-size:14px">Seul·e, on va vite. Ensemble, on va loin.</span></div>' +
           '<h1 class="h-xl">Active tes<br><span class="neon power-word" style="color:var(--blue-2)" tabindex="0">super-pouvoirs</span><br>Microsoft 365 <span class="and-co">&amp; co.</span></h1>' +
@@ -2364,7 +2449,7 @@
           })(), "bg") +
           '<div class="btn-row" style="align-items:center;margin-top:18px"><button type="submit" class="btn btn-primary" data-key="save">Enregistrer mon héros</button>' + (this.saved ? '<span class="saved-ok" role="status">✓ Enregistré !</span>' : "") + '</div>' +
           '<details class="danger-zone" data-danger' + (this.dangerOpen ? " open" : "") + '><summary>Zone sensible</summary><div class="danger-body"><p class="danger-warn" role="alert"><b>Attention :</b> cette action efface définitivement ta progression sur cet appareil (points d\'expérience, rang, boss vaincus, badges, fonds et capes débloqués). Ton pseudo et ton avatar sont conservés. Impossible de revenir en arrière.</p><label class="danger-label" for="reset-word">Tape EFFACER pour confirmer</label><input type="text" id="reset-word" class="danger-input" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" inputmode="text"><button type="button" class="btn btn-danger btn-small" data-action="reset" data-reset-btn disabled>Remettre ma progression à zéro</button></div></details>' +
-          "</form></div>" + this.renderStats() + renderVitrine() + renderSecrets() + "</main>";
+          "</form></div>" + this.renderStats() + renderVitrine() + renderSecrets() + renderCalendar() + "</main>";
       },
       statList: function () {
         ensureStats();
@@ -2726,6 +2811,10 @@
     render();
   }
 
+  /* Flèche jaune du menu sur téléphone : masquée quand il n'y a plus rien à faire défiler */
+  function navMore() { var n = document.querySelector(".nav"); if (!n) return; n.classList.toggle("no-more", n.scrollWidth - n.clientWidth - n.scrollLeft < 6); }
+  document.addEventListener("scroll", function (e) { if (e.target && e.target.classList && e.target.classList.contains("nav")) navMore(); }, true);
+  window.addEventListener("resize", navMore);
   function render() {
     var active = document.activeElement, key = V._focusKey || (active && active.getAttribute && active.getAttribute("data-key"));
     V._focusKey = null;
@@ -2733,6 +2822,7 @@
     if (V._scroll) { window.scrollTo(0, 0); V._scroll = false; }
     var navA = app.querySelector(".nav a.active"); if (navA && navA.parentNode && navA.parentNode.scrollWidth > navA.parentNode.clientWidth) { var nv = navA.parentNode; nv.scrollLeft += (navA.getBoundingClientRect().left - nv.getBoundingClientRect().left) - (nv.clientWidth - navA.offsetWidth) / 2; }
     if (V._scrollTo) { var tgt = document.getElementById(V._scrollTo + "-title"); V._scrollTo = null; if (tgt) setTimeout(function () { tgt.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); var sec = tgt.closest("section"); if (sec) { sec.classList.add("flash-section"); setTimeout(function () { sec.classList.remove("flash-section"); }, 1800); } }, 60); }
+    navMore();
     if (Date.now() < logoFxUntil) powerOnLogo();
     try { checkUnlocks(); } catch (e) { }
     try { checkBgUnlocks(); } catch (e) { }
@@ -2908,6 +2998,7 @@
 
   window.addEventListener("hashchange", route);
   route();
+  try { checkEvents(); } catch (e) { }
 
   /* =========================================================
      INTRO : Captain Reboot accueille à l'ouverture du site (une fois par session), effet d'ouverture au clic
