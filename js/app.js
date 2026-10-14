@@ -411,6 +411,12 @@
       o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.7);
       [659, 880, 1319].forEach(function (f, i) { tone(f, 0.7 + i * 0.12, 0.5, "triangle", 0.04); });
     },
+    /* Recomposition du QG : arpège montant qui se range, puis note claire de fin */
+    rebuild: function () {
+      var ac = audio(); if (!ac) return;
+      [392, 523, 659, 784, 1047, 1319].forEach(function (f, i) { tone(f, i * 0.09, 0.22, "square", 0.025); });
+      [1047, 1319, 1568].forEach(function (f) { tone(f, 0.7, 0.9, "triangle", 0.035); });
+    },
     /* Plantage de Captain Reboot : glitchs numériques puis extinction qui descend en fréquence */
     shutdown: function () {
       var ac = audio(); if (!ac) return;
@@ -1436,18 +1442,59 @@
   document.addEventListener("dragend", function (e) { var t = e.target.closest && e.target.closest(".feat-slot"); if (t) t.classList.remove("dragging"); document.querySelectorAll(".feat-slot.over").forEach(function (x) { x.classList.remove("over"); }); featDrag = null; });
   document.addEventListener("dragover", function (e) { var t = e.target.closest && e.target.closest(".feat-slot.on"); if (!t || featDrag === null) return; e.preventDefault(); document.querySelectorAll(".feat-slot.over").forEach(function (x) { if (x !== t) x.classList.remove("over"); }); t.classList.add("over"); });
   document.addEventListener("drop", function (e) { var t = e.target.closest && e.target.closest(".feat-slot.on"); if (!t || featDrag === null) return; e.preventDefault(); var to = +t.getAttribute("data-feat"), f = P.favBadges || []; if (to !== featDrag && f[featDrag] && f[to]) { var m = f.splice(featDrag, 1)[0]; f.splice(to, 0, m); saveProfile(); sfx("toggle"); } featDrag = null; render(); });
-  /* Effet de remise à zéro : onde de lumière, poussière d'étoiles qui s'envole, son et message (simple message si les animations sont réduites) */
+  /* Effet de remise à zéro en deux temps : l'écran se désagrège en pixels qui tombent, puis le QG se recompose (pixels qui reviennent se ranger, balayage lumineux). Simple message + son si les animations sont réduites. */
   function wipeDone() {
     sfx("wipe");
-    var t = document.createElement("div"); t.className = "rb-toast wipe-toast"; t.setAttribute("role", "status");
-    t.innerHTML = '<span class="ico">✓</span><span><b>Progression effacée</b>Nouveau départ, recrue : le QG t\'attend !</span>';
-    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 4600);
-    if (liteOn()) return;
-    var fx = document.createElement("div"); fx.className = "wipe-fx"; fx.setAttribute("aria-hidden", "true");
-    var h = '<i class="wipe-ring"></i>';
-    for (var i = 0; i < 28; i++) h += '<i class="wipe-dot" style="left:' + (4 + Math.random() * 92).toFixed(1) + '%;--dx:' + Math.round(-40 + Math.random() * 80) + 'px;--s:' + (4 + Math.random() * 7).toFixed(1) + 'px;animation-delay:' + (Math.random() * 0.5).toFixed(2) + 's;animation-duration:' + (1.3 + Math.random() * 0.9).toFixed(2) + 's"></i>';
-    fx.innerHTML = h; document.body.appendChild(fx); setTimeout(function () { fx.remove(); }, 2600);
+    function toast() {
+      var t = document.createElement("div"); t.className = "rb-toast wipe-toast"; t.setAttribute("role", "status");
+      t.innerHTML = '<span class="ico">✓</span><span><b>Progression effacée</b>Nouveau départ, recrue : le QG t\'attend !</span>';
+      document.body.appendChild(t); setTimeout(function () { t.remove(); }, 4600);
+    }
+    if (liteOn() || !window.requestAnimationFrame) { toast(); return; }
+    var W = window.innerWidth, H = window.innerHeight, bs = Math.max(14, Math.round(W / 36));
+    var cols = Math.ceil(W / bs), rows = Math.ceil(H / bs), ACC = ["#F5C451", "#7C93FF", "#4CC37A", "#FFFFFF"];
+    var base = theme === "light" ? "#E4EAFF" : "#0B0E13", base2 = theme === "light" ? "#D6DFFF" : "#141A26";
+    var cv = document.createElement("canvas"); cv.className = "wipe-fx"; cv.setAttribute("aria-hidden", "true"); cv.width = W; cv.height = H;
+    document.body.appendChild(cv); var cx = cv.getContext("2d"); if (!cx) { cv.remove(); toast(); return; }
+    var cells = [], r, c, TB = 1.55, END = 3.4;
+    for (r = 0; r < rows; r++) for (c = 0; c < cols; c++) {
+      var acc = Math.random() < 0.13;
+      cells.push({ x: c * bs, y: r * bs, d: c / cols * 0.55 + Math.random() * 0.3, vx: (Math.random() - 0.5) * 60, vy: 20 + Math.random() * 120,
+        col: acc ? ACC[(Math.random() * 3) | 0] : (Math.random() < 0.5 ? base : base2),
+        rb: Math.random() < 0.2, sx: Math.random() * W, sy: H + Math.random() * H * 0.6, rd: Math.random() * 0.35, rc: ACC[(Math.random() * 4) | 0] });
+    }
+    sfxLater(TB, "rebuild"); setTimeout(toast, TB * 1000 + 300);
+    var t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now; var t = (now - t0) / 1000;
+      cx.clearRect(0, 0, W, H);
+      for (var k = 0; k < cells.length; k++) {
+        var q = cells[k], a = t - q.d;
+        if (a < 0.45 + q.d * 0) {
+          if (t < 1.7) { cx.globalAlpha = Math.min(1, t / 0.12) * (a < 0 ? 1 : 1); cx.fillStyle = q.col; cx.fillRect(q.x, q.y, bs + 1, bs + 1); }
+        }
+        if (a >= 0.45 && a < 1.5) {
+          var f = a - 0.45, y = q.y + q.vy * f + 700 * f * f, al = Math.max(0, 1 - f / 1.0);
+          if (al > 0) { cx.globalAlpha = al; cx.fillStyle = q.col; var sz = bs * (1 - f * 0.4); cx.fillRect(q.x + q.vx * f, y, sz, sz); }
+        }
+        if (q.rb && t > TB + q.rd) {
+          var u = Math.min(1, (t - TB - q.rd) / 0.75), e = 1 - Math.pow(1 - u, 3), px = q.sx + (q.x - q.sx) * e, py = q.sy + (q.y - q.sy) * e;
+          var fade = t > TB + 1.0 ? Math.max(0, 1 - (t - TB - 1.0) / 0.7) : 1;
+          if (fade > 0) { cx.globalAlpha = fade * (u < 1 ? 0.95 : 0.55 + 0.45 * Math.sin(t * 18 + k)); cx.fillStyle = q.rc; cx.fillRect(px, py, bs - 2, bs - 2); }
+        }
+      }
+      var sw = (t - TB - 0.2) / 0.85;
+      if (sw > 0 && sw < 1) {
+        var yy = H * (1 - sw), g = cx.createLinearGradient(0, yy - 90, 0, yy + 6);
+        g.addColorStop(0, "rgba(245,196,81,0)"); g.addColorStop(1, "rgba(245,196,81,0.55)");
+        cx.globalAlpha = 1; cx.fillStyle = g; cx.fillRect(0, yy - 90, W, 96); cx.fillStyle = "#FFF3C4"; cx.fillRect(0, yy, W, 3);
+      }
+      cx.globalAlpha = 1;
+      if (t < END) requestAnimationFrame(frame); else cv.remove();
+    }
+    requestAnimationFrame(frame);
   }
+  function sfxLater(sec, name) { setTimeout(function () { sfx(name); }, sec * 1000); }
   function toastMsg(txt) { var t = document.createElement("div"); t.className = "rb-toast"; t.setAttribute("role", "status"); t.innerHTML = '<span class="ico">!</span><span>' + esc(txt) + "</span>"; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3500); }
   var BACKUP_KEY = "powerup365.profile.backup";
   function hasBackup() { try { return !!localStorage.getItem(BACKUP_KEY); } catch (e) { return false; } }
