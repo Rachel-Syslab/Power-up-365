@@ -2660,6 +2660,19 @@ html.theme-soft .comic-wrap .burst { transform: rotate(-4deg); box-shadow: 4px 4
   .footer-secret, .footer-eco { flex: 1 1 100%; font-size: 14px; line-height: 1.4; align-items: flex-start; }
   .footer-secret .ft-ico, .footer-eco .ft-ico { margin-top: 2px; }
   .footer-idea { flex: 0 0 auto; margin-right: 100%; padding: 10px 18px; font-size: 15px; }
-  .footer .container > span:first-child { order: 5; flex: 0 0 auto; font-size: 13px; opacity: .85; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.14); margin-right: 14px; }
-  .footer-legal { order: 6; flex: 0 0 auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.14); text-decoration: underline; text-underline-offset: 3px; }
+  .footer .container > span:first-child { order: 5; flex: 0 0 auto; font-size: 13px; opacity: .85; padding-top: 14px; padding-right: 16px; border-top: 1px solid rgba(255,255,255,.14); }
+  .footer-legal { order: 6; flex: 1 1 auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.14); text-decoration: underline; text-underline-offset: 3px; }
 }
+
+/* Pastille « nouveau » : tout ce qui vient d'être débloqué (fond, cape, cadre, badge) jusqu'à ce qu'on l'ait vu ou choisi */
+.cape-pick, .frame-pick, .bg-pick, .fav-pick { position: relative; }
+.profile-chip .avatar { position: relative; }
+.new-dot { position: absolute; top: 6px; right: 6px; z-index: 4; width: 13px; height: 13px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, #FFF0B8, var(--gold) 55%, var(--gold-2)); box-shadow: 0 0 0 2px #0B0E13, 0 0 10px rgba(245,196,81,.95); animation: new-pulse 1.8s ease-in-out infinite; }
+.new-dot.chip-dot { top: -3px; right: -3px; width: 12px; height: 12px; }
+.new-dot.inline { position: static; display: inline-block; vertical-align: middle; margin-left: 8px; width: 11px; height: 11px; }
+.step-new { margin-left: 0; margin-right: 8px; flex: none; }
+@keyframes new-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.22); } }
+html[data-theme="light"] .new-dot { box-shadow: 0 0 0 2px #fff, 0 0 10px rgba(245,166,35,.85); }
+@media (prefers-reduced-motion: reduce) { .new-dot { animation: none; } }
+.bg-pick .new-dot { right: auto; left: 8px; top: 8px; }
