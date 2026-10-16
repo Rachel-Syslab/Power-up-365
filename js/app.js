@@ -1362,7 +1362,7 @@
     return '<header class="topbar"><div class="container">' +
       '<a class="logo" href="#/">' + I.logo + 'POWER <span>UP</span></a>' +
       '<nav class="nav" aria-label="Navigation principale">' +
-      link("#/", "qg", "QG") + link("#/entrainement", "train", "Entraînement") + link("#/classe", "ranked", "Mode classé") + link("#/mission", "mission", "Boss") + link("#/veille", "veille", "Veille" + navBadge()) + link("#/collectif", "collectif", 'Collectif<span class="nav-soon" aria-label=", défis disponibles">défis</span>') + (!DEV_PAGES ? "" : link("#/stats", "stats", "Stats") + link("#/maintenance", "sons", "Maintenance")) +
+      link("#/", "qg", "QG") + link("#/entrainement", "train", "Entraînement") + link("#/classe", "ranked", "Mode classé") + link("#/mission", "mission", "Boss") + link("#/veille", "veille", "Veille" + navBadge()) + link("#/collectif", "collectif", 'Collectif<span class="nav-soon" aria-label=", défis disponibles">défis</span>') + link("#/stats", "stats", "Mes stats") + (!DEV_PAGES ? "" : link("#/maintenance", "sons", "Maintenance")) +
       "</nav>" + soundButton() +
       '<a class="profile-chip" href="#/profil" style="text-decoration:none;color:inherit" aria-label="Mon profil' + (NEWS.length ? " (nouveauté débloquée)" : "") + '"><span class="avatar">' + myAvatar(34) + (NEWS.length ? '<i class="new-dot chip-dot" aria-hidden="true"></i>' : "") + "</span><span><b>" + esc(P.pseudo || "Crée ton héros") + "</b><small>" + esc(r.name) + " · " + P.xp + " XP</small></span></a>" +
       '<button type="button" class="quit-btn" data-quit-ask title="Quitter le QG" aria-label="Quitter le QG"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6.3 7.2a8 8 0 1 0 11.4 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>' +
@@ -1513,13 +1513,13 @@
         var tiles = '<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:22px">' +
           tile("Réponses données", st.answered, "dont " + st.correct + " justes") + tile("Réussite", acc + " %", "toutes questions") +
           tile("Temps de jeu", fmtTime(st.time), "actif à l'écran") + tile("Jours de jeu", st.days.length, "série en cours : " + dayStreak()) +
-          tile("Questions croisées", Object.keys(srs).length, "sur " + QUESTIONS.length + " dans la banque") + "</div>";
+          tile("Questions croisées", Object.keys(srs).length, DEV_PAGES ? "sur " + QUESTIONS.length + " dans la banque" : "depuis tes débuts") + "</div>";
         /* par pilier et sous-thème */
         var pillars = PILLARS.map(function (pl) {
           var a = 0, c = 0, seen = 0, tot = 0;
           pl.subs.forEach(function (id) { var x = st.themes[id]; if (x) { a += x.a; c += x.c; } });
           QUESTIONS.forEach(function (q) { if (pl.subs.indexOf(q.theme) !== -1) { tot++; if (srs[qidOf(q)]) seen++; } });
-          return '<div style="display:grid;grid-template-columns:minmax(140px,1.2fr) 3fr minmax(110px,1fr);gap:12px;align-items:center;padding:6px 0"><b style="color:' + pl.color + '">' + esc(pl.label) + "</b>" + bar(pct(seen, tot), pl.color) + '<span class="muted" style="font-size:13px">' + seen + " / " + tot + " vues · " + (a ? pct(c, a) + " % réussite" : "pas encore joué") + "</span></div>";
+          return '<div style="display:grid;grid-template-columns:minmax(140px,1.2fr) 3fr minmax(110px,1fr);gap:12px;align-items:center;padding:6px 0"><b style="color:' + pl.color + '">' + esc(pl.label) + "</b>" + bar(pct(seen, tot), pl.color) + '<span class="muted" style="font-size:13px">' + (DEV_PAGES ? seen + " / " + tot + " vues" : pct(seen, tot) + " % vu") + " · " + (a ? pct(c, a) + " % réussite" : "pas encore joué") + "</span></div>";
         }).join("");
         var rows = THEMES.filter(function (th) { return st.themes[th.id] && st.themes[th.id].a >= 1; }).map(function (th) { var x = st.themes[th.id]; return { th: th, a: x.a, c: x.c, p: pct(x.c, x.a) }; });
         rows.sort(function (x, y) { return (x.p - y.p) || (y.a - x.a); });
@@ -1537,13 +1537,13 @@
         var boxes = BOX.map(function (l, i) { return '<div style="display:grid;grid-template-columns:minmax(150px,1fr) 3fr 40px;gap:12px;align-items:center;padding:3px 0"><span>' + l + "</span>" + bar(cnt[i] * 100 / mx, i === 5 ? "var(--green-2)" : "var(--gold)") + "<b>" + cnt[i] + "</b></div>"; }).join("");
         var modes = Object.keys(st.modes).map(function (k) { return esc(MODE_LABELS[k] || k) + " : " + st.modes[k]; }).join(" · ") || "—";
         var analytics = cfg.analyticsUrl ? '<a class="btn btn-primary" href="' + esc(safeUrl(cfg.analyticsUrl)) + '" target="_blank" rel="noopener">Ouvrir les statistiques de fréquentation</a>' : '<p class="muted" style="margin:0">Pour la fréquentation du site public (visites, pages vues, pays), active Cloudflare Web Analytics, puis colle son adresse dans <code>analyticsUrl</code> (fichier <code>js/config.js</code>) : le bouton apparaîtra ici.</p>';
-        return '<main class="container page"><div class="stack" style="gap:10px;margin-bottom:24px"><span class="eyebrow" style="color:var(--gold)">Onglet local · pour Rachel</span><h1 class="h-l">Stats d\'utilisation</h1><p class="lead">Ce que ce navigateur a enregistré. Ces chiffres restent sur cet appareil et ne concernent que l\'adresse ouverte : le site en local et le site publié ont chacun les leurs.</p></div>' +
+        return '<main class="container page"><div class="stack" style="gap:10px;margin-bottom:24px"><span class="eyebrow" style="color:var(--gold)">' + (DEV_PAGES ? "Onglet local · pour Rachel" : "Ta progression") + '</span><h1 class="h-l">' + (DEV_PAGES ? "Stats d\'utilisation" : "Mes stats") + '</h1><p class="lead">' + (DEV_PAGES ? "Ce que ce navigateur a enregistré. Ces chiffres restent sur cet appareil et ne concernent que l\'adresse ouverte : le site en local et le site publié ont chacun les leurs." : "Tes réussites, tes erreurs et tes thèmes à retravailler. Ces chiffres restent dans ton navigateur : personne d\'autre ne les voit, et ils disparaissent si tu vides les données du navigateur ou changes d\'appareil.") + '</p></div>' +
           tiles +
-          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Couverture de la banque, par pilier</h2>' + pillars + "</section>" +
+          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">' + (DEV_PAGES ? "Couverture de la banque, par pilier" : "Ce que tu as déjà vu, par pilier") + '</h2>' + pillars + "</section>" +
           '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Réussite par sous-thème</h2><p class="muted" style="margin:0 0 8px">Du plus faible au plus solide : les sous-thèmes à retravailler sont en haut.</p>' + themeRows + "</section>" +
           '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Révision espacée</h2><p class="muted" style="margin:0 0 8px">' + due + " à réviser aujourd'hui · " + errs + " en erreur · modes joués : " + modes + "</p>" + boxes + "</section>" +
           '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Les 10 questions les plus ratées</h2>' + hardHtml + "</section>" +
-          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Fréquentation du site public</h2>' + analytics + "</section>" +
+          (DEV_PAGES ? '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Fréquentation du site public</h2>' + analytics + "</section>" : "") +
           '<div class="btn-row"><button type="button" class="btn btn-ghost" data-action="copy">Copier mes stats (JSON)</button></div></main>';
       }
     };
