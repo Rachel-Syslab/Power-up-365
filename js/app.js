@@ -96,6 +96,32 @@
     st.modes[mode] = (st.modes[mode] || 0) + 1;
     saveProfile();
   }
+  /* ---------- révision espacée (boîtes de Leitner) ----------
+     Chaque question a une boîte (0 à 5) et une date de prochaine révision : une erreur la ramène à
+     aujourd'hui, une réussite l'espace de plus en plus (1, 3, 7, 16 puis 35 jours). Tout reste dans le navigateur. */
+  var SRS_DAYS = [0, 1, 3, 7, 16, 35], QIDX = null;
+  function dayNum() { return Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000); }
+  function qidOf(q) {
+    if (q._id) return q._id;
+    var s = q.theme + "|" + q.q, h = 5381;
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return (q._id = (h >>> 0).toString(36));
+  }
+  function qById(id) { if (!QIDX) { QIDX = {}; QUESTIONS.forEach(function (q) { QIDX[qidOf(q)] = q; }); } return QIDX[id] || null; }
+  function srsRecord(q, good) {
+    if (!q || !q.theme || !q.q || !qById(qidOf(q))) return;
+    if (!P.srs || typeof P.srs !== "object") P.srs = {};
+    var id = qidOf(q), e = P.srs[id] || { b: 0, d: 0, m: 0, n: 0, w: 0 };
+    e.n++;
+    if (good) { e.b = Math.min(e.b + 1, 5); e.d = dayNum() + SRS_DAYS[e.b]; e.w = 0; }
+    else { e.b = 0; e.d = dayNum(); e.m++; e.w = 1; }
+    P.srs[id] = e;
+  }
+  function srsList(kind) {
+    var t = dayNum(), S = P.srs || {};
+    return QUESTIONS.filter(function (q) { var e = S[qidOf(q)]; return e && legendOpen(q) && (kind === "errors" ? e.w === 1 : e.d <= t); });
+  }
+
   var lastActive = Date.now();
   ["click", "keydown", "pointermove", "scroll", "touchstart"].forEach(function (ev) { document.addEventListener(ev, function () { lastActive = Date.now(); }, { passive: true }); });
   setInterval(function () {
@@ -285,6 +311,8 @@
     V.run.good = checkRun(V.run);
     if (V.onAnswer) V.onAnswer(V.run.good);
     recordAnswer(V.run.q.theme, V.run.good, V.nav);
+    srsRecord(V.run.q, V.run.good);
+    saveProfile();
     sfx(V.run.good ? "good" : "bad");
     V._focusKey = "next";
   }
@@ -1291,19 +1319,19 @@
      BOÎTE À IDÉES : remarques, suggestions, bugs
      (site statique : le message part par la messagerie de l'utilisateur, ou via un formulaire Microsoft Forms)
      ========================================================= */
-  function openFeedback() {
+  function openFeedback(preset) {
     var cfg = window.POWERUP_CONFIG || {}, dlg = document.querySelector(".fb-modal");
     if (!dlg) { dlg = document.createElement("dialog"); dlg.className = "fb-modal"; dlg.setAttribute("aria-labelledby", "fb-title"); document.body.appendChild(dlg);
       dlg.addEventListener("click", function (e) { if (e.target === dlg || (e.target.closest && e.target.closest("[data-fb-close]"))) dlg.close(); }); }
-    var types = ["Suggestion", "Remarque", "Bug", "Question", "Idée de question ou de boss"];
+    var types = ["Suggestion", "Remarque", "Bug", "Question", "Idée de question ou de boss", "Question à corriger"], formUrl = preset && cfg.reportFormUrl ? cfg.reportFormUrl + (cfg.reportFormUrl.indexOf("?") < 0 ? "?" : "&") + encodeURIComponent(cfg.reportFormParam || "question") + "=" + encodeURIComponent(preset.id) : cfg.feedbackFormUrl;
     dlg.innerHTML = '<form class="fb-inner" method="dialog"><button type="button" class="hm-close" data-fb-close aria-label="Fermer"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>' +
-      '<span class="eyebrow">Ton avis compte</span><h2 class="h-m" id="fb-title">Boîte à idées</h2><p class="muted" style="margin:0">Une remarque, une idée, un bug, une question à ajouter ? Écris-nous : chaque message aide à améliorer Power Up.</p>' +
-      '<fieldset class="fb-types"><legend class="sr-only">Type de message</legend>' + types.map(function (t, k) { return '<label class="fb-type"><input type="radio" name="fbtype" value="' + t + '"' + (k === 0 ? " checked" : "") + "><span>" + t + "</span></label>"; }).join("") + "</fieldset>" +
-      '<label class="fb-label" for="fb-msg">Ton message</label><textarea id="fb-msg" rows="6" placeholder="Par exemple : ce serait génial d\'avoir un boss sur Teams…"></textarea>' +
+      '<span class="eyebrow">Ton avis compte</span><h2 class="h-m" id="fb-title">' + (preset ? "Signaler une question" : "Boîte à idées") + '</h2><p class="muted" style="margin:0">' + (preset ? "Une erreur, une réponse discutable, une question trop facile ou ambiguë ? Dis-nous ce qui ne va pas : chaque signalement rend Power Up plus fiable." : "Une remarque, une idée, un bug, une question à ajouter ? Écris-nous : chaque message aide à améliorer Power Up.") + '</p>' +
+      '<fieldset class="fb-types"><legend class="sr-only">Type de message</legend>' + types.map(function (t, k) { return '<label class="fb-type"><input type="radio" name="fbtype" value="' + t + '"' + ((preset ? t === preset.type : k === 0) ? " checked" : "") + "><span>" + t + "</span></label>"; }).join("") + "</fieldset>" +
+      '<label class="fb-label" for="fb-msg">Ton message</label><textarea id="fb-msg" rows="6" placeholder="Par exemple : ce serait génial d\'avoir un boss sur Teams…">' + (preset ? esc(preset.text) : "") + '</textarea>' + (preset && formUrl ? '<p class="muted" style="margin:0;font-size:13px">Le formulaire s\'ouvre dans un nouvel onglet, chez un service externe : n\'y écris aucune donnée personnelle.</p>' : "") +
       '<p class="fb-warn" role="alert" hidden>Écris quelques mots avant d\'envoyer.</p>' +
-      '<div class="fb-actions">' + (cfg.feedbackEmail ? '<button type="button" class="btn btn-primary" data-fb-send>Envoyer par e-mail</button>' : "") + (cfg.feedbackFormUrl ? '<a class="btn ' + (cfg.feedbackEmail ? "btn-ghost" : "btn-primary") + '" href="' + esc(safeUrl(cfg.feedbackFormUrl)) + '" target="_blank" rel="noopener">Répondre via le formulaire</a>' : "") +
+      '<div class="fb-actions">' + (cfg.feedbackEmail ? '<button type="button" class="btn btn-primary" data-fb-send>Envoyer par e-mail</button>' : "") + (formUrl ? '<a class="btn ' + (cfg.feedbackEmail && !preset ? "btn-ghost" : "btn-primary") + '" href="' + esc(safeUrl(formUrl)) + '" target="_blank" rel="noopener">' + (preset ? "Signaler via le formulaire" : "Répondre via le formulaire") + "</a>" : "") +
       '<button type="button" class="btn btn-ghost" data-fb-copy>Copier mon message</button></div>' +
-      (cfg.feedbackEmail || cfg.feedbackFormUrl ? "" : '<p class="muted" style="margin:0;font-size:13px">L\'adresse de réception n\'est pas encore configurée (fichier js/config.js). En attendant, copie ton message et envoie-le à l\'équipe.</p>') + "</form>";
+      (cfg.feedbackEmail || formUrl ? "" : '<p class="muted" style="margin:0;font-size:13px">L\'adresse de réception n\'est pas encore configurée (fichier js/config.js). En attendant, copie ton message et envoie-le à l\'équipe.</p>') + "</form>";
     function payload() {
       var type = (dlg.querySelector('input[name="fbtype"]:checked') || {}).value || "Suggestion", msg = dlg.querySelector("#fb-msg").value.trim();
       return { type: type, msg: msg, full: "[" + type + "] " + msg + "\n\n— " + (P.pseudo || "Héros anonyme") + " · " + rankInfo(P.xp).name + " · page " + (location.hash || "#/") };
@@ -1318,7 +1346,11 @@
     if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
     setTimeout(function () { var t = dlg.querySelector("#fb-msg"); if (t) t.focus(); }, 50);
   }
-  document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("[data-feedback]")) openFeedback(); });
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest) return;
+    if (e.target.closest("[data-feedback]")) openFeedback();
+    else if (e.target.closest("[data-report]") && V && V.run && V.run.q) { var rq = V.run.q; openFeedback({ type: "Question à corriger", id: qidOf(rq), text: "Question : " + rq.q + "\n(Identifiant : " + qidOf(rq) + ")\n\nCe qui ne va pas : " }); }
+  });
 
   function navBadge() {
     var n = typeof unreadCount === "function" ? unreadCount() : 0;
@@ -1330,7 +1362,7 @@
     return '<header class="topbar"><div class="container">' +
       '<a class="logo" href="#/">' + I.logo + 'POWER <span>UP</span></a>' +
       '<nav class="nav" aria-label="Navigation principale">' +
-      link("#/", "qg", "QG") + link("#/entrainement", "train", "Entraînement") + link("#/classe", "ranked", "Mode classé") + link("#/mission", "mission", "Boss") + link("#/veille", "veille", "Veille" + navBadge()) + link("#/collectif", "collectif", 'Collectif<span class="nav-soon" aria-label=", bientôt">bientôt</span>') + (!DEV_PAGES ? "" : link("#/maintenance", "sons", "Maintenance")) +
+      link("#/", "qg", "QG") + link("#/entrainement", "train", "Entraînement") + link("#/classe", "ranked", "Mode classé") + link("#/mission", "mission", "Boss") + link("#/veille", "veille", "Veille" + navBadge()) + link("#/collectif", "collectif", 'Collectif<span class="nav-soon" aria-label=", défis disponibles">défis</span>') + (!DEV_PAGES ? "" : link("#/stats", "stats", "Stats") + link("#/maintenance", "sons", "Maintenance")) +
       "</nav>" + soundButton() +
       '<a class="profile-chip" href="#/profil" style="text-decoration:none;color:inherit" aria-label="Mon profil' + (NEWS.length ? " (nouveauté débloquée)" : "") + '"><span class="avatar">' + myAvatar(34) + (NEWS.length ? '<i class="new-dot chip-dot" aria-hidden="true"></i>' : "") + "</span><span><b>" + esc(P.pseudo || "Crée ton héros") + "</b><small>" + esc(r.name) + " · " + P.xp + " XP</small></span></a>" +
       '<button type="button" class="quit-btn" data-quit-ask title="Quitter le QG" aria-label="Quitter le QG"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6.3 7.2a8 8 0 1 0 11.4 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>' +
@@ -1448,6 +1480,68 @@
       '<section class="bench-grp"><h2 class="h-s">Toutes les capes</h2><div class="mg-grid">' + capes + "</div></section>" +
       '<section class="bench-grp"><h2 class="h-s">Les boss à chaque niveau</h2><div class="mg-bosses">' + bosses + "</div></section>";
   }
+  /* =========================================================
+     VUE : STATS (onglet visible seulement sur l'ordinateur du créateur ; l'adresse #/stats montre,
+     partout, les données du navigateur en cours — rien ne quitte l'appareil)
+     ========================================================= */
+  function StatsView() {
+    function bar(pct, color) { return '<span style="display:block;height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden"><i style="display:block;height:100%;width:' + Math.max(0, Math.min(100, pct)) + '%;background:' + (color || "var(--green-2)") + '"></i></span>'; }
+    function pct(c, a) { return a ? Math.round(c * 100 / a) : 0; }
+    function tile(label, val, sub) { return '<div class="side-card halftone" style="flex:1 1 150px;margin:0"><span class="muted" style="font-size:13px">' + esc(label) + '</span><div class="h-m" style="margin:4px 0 0">' + esc(val) + "</div>" + (sub ? '<span class="muted" style="font-size:13px">' + esc(sub) + "</span>" : "") + "</div>"; }
+    var MODE_LABELS = { train: "Entraînement", ranked: "Mode classé", mission: "Boss", collectif: "Défis", boss: "Boss" };
+    return {
+      nav: "stats",
+      actions: {
+        copy: function () {
+          var data = JSON.stringify({ stats: P.stats, srs: P.srs || {}, date: todayStr() });
+          var done = function () { var b = document.querySelector("[data-action=copy]"); if (b) { b.textContent = "Copié !"; setTimeout(function () { b.textContent = "Copier mes stats (JSON)"; }, 2000); } };
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(data).then(done, function () { });
+          return false;
+        }
+      },
+      render: function () {
+        ensureStats();
+        var st = P.stats, srs = P.srs || {}, cfg = window.POWERUP_CONFIG || {}, t = dayNum();
+        var acc = pct(st.correct, st.answered);
+        var tiles = '<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:22px">' +
+          tile("Réponses données", st.answered, "dont " + st.correct + " justes") + tile("Réussite", acc + " %", "toutes questions") +
+          tile("Temps de jeu", fmtTime(st.time), "actif à l'écran") + tile("Jours de jeu", st.days.length, "série en cours : " + dayStreak()) +
+          tile("Questions croisées", Object.keys(srs).length, "sur " + QUESTIONS.length + " dans la banque") + "</div>";
+        /* par pilier et sous-thème */
+        var pillars = PILLARS.map(function (pl) {
+          var a = 0, c = 0, seen = 0, tot = 0;
+          pl.subs.forEach(function (id) { var x = st.themes[id]; if (x) { a += x.a; c += x.c; } });
+          QUESTIONS.forEach(function (q) { if (pl.subs.indexOf(q.theme) !== -1) { tot++; if (srs[qidOf(q)]) seen++; } });
+          return '<div style="display:grid;grid-template-columns:minmax(140px,1.2fr) 3fr minmax(110px,1fr);gap:12px;align-items:center;padding:6px 0"><b style="color:' + pl.color + '">' + esc(pl.label) + "</b>" + bar(pct(seen, tot), pl.color) + '<span class="muted" style="font-size:13px">' + seen + " / " + tot + " vues · " + (a ? pct(c, a) + " % réussite" : "pas encore joué") + "</span></div>";
+        }).join("");
+        var rows = THEMES.filter(function (th) { return st.themes[th.id] && st.themes[th.id].a >= 1; }).map(function (th) { var x = st.themes[th.id]; return { th: th, a: x.a, c: x.c, p: pct(x.c, x.a) }; });
+        rows.sort(function (x, y) { return (x.p - y.p) || (y.a - x.a); });
+        var themeRows = rows.length ? rows.map(function (r) {
+          var low = r.a >= 5 && r.p < 60;
+          return '<div style="display:grid;grid-template-columns:minmax(160px,1.4fr) 3fr minmax(90px,.8fr) auto;gap:12px;align-items:center;padding:5px 0"><span>' + esc(r.th.label) + (low ? ' <span class="tag" style="background:var(--pink)">à retravailler</span>' : "") + "</span>" + bar(r.p, r.p >= 80 ? "var(--green-2)" : r.p >= 60 ? "var(--gold)" : "var(--pink)") + '<span class="muted" style="font-size:13px">' + r.p + " % · " + r.a + " rép.</span><a class=\"btn " + (low ? "btn-primary" : "btn-ghost") + "\" style=\"font-size:13px;padding:6px 12px\" href=\"#/entrainement?theme=" + r.th.id + "\">S'entraîner</a></div>";
+        }).join("") : '<p class="muted">Pas encore de réponses sur ce navigateur.</p>';
+        /* questions les plus ratées */
+        var hard = Object.keys(srs).filter(function (id) { return srs[id].m > 0 && qById(id); }).sort(function (x, y) { return (srs[y].m - srs[x].m) || (srs[y].m / srs[y].n - srs[x].m / srs[x].n); }).slice(0, 10);
+        var hardHtml = hard.length ? '<ol style="margin:0;padding-left:22px;line-height:1.6">' + hard.map(function (id) { var q = qById(id), e = srs[id]; return "<li>" + esc(q.q.length > 120 ? q.q.slice(0, 117) + "…" : q.q) + ' <span class="muted" style="font-size:13px">(' + esc(themeLabel(q.theme)) + " · ratée " + e.m + " fois sur " + e.n + ")</span></li>"; }).join("") + "</ol>" : '<p class="muted">Aucune erreur enregistrée pour l\'instant.</p>';
+        /* révision espacée */
+        var BOX = ["En apprentissage", "Revue dans 1 jour", "dans 3 jours", "dans 7 jours", "dans 16 jours", "Maîtrisée (35 jours)"], cnt = [0, 0, 0, 0, 0, 0], due = 0, errs = 0;
+        Object.keys(srs).forEach(function (id) { var e = srs[id]; cnt[e.b]++; if (e.d <= t) due++; if (e.w === 1) errs++; });
+        var mx = Math.max.apply(null, cnt.concat([1]));
+        var boxes = BOX.map(function (l, i) { return '<div style="display:grid;grid-template-columns:minmax(150px,1fr) 3fr 40px;gap:12px;align-items:center;padding:3px 0"><span>' + l + "</span>" + bar(cnt[i] * 100 / mx, i === 5 ? "var(--green-2)" : "var(--gold)") + "<b>" + cnt[i] + "</b></div>"; }).join("");
+        var modes = Object.keys(st.modes).map(function (k) { return esc(MODE_LABELS[k] || k) + " : " + st.modes[k]; }).join(" · ") || "—";
+        var analytics = cfg.analyticsUrl ? '<a class="btn btn-primary" href="' + esc(safeUrl(cfg.analyticsUrl)) + '" target="_blank" rel="noopener">Ouvrir les statistiques de fréquentation</a>' : '<p class="muted" style="margin:0">Pour la fréquentation du site public (visites, pages vues, pays), active Cloudflare Web Analytics, puis colle son adresse dans <code>analyticsUrl</code> (fichier <code>js/config.js</code>) : le bouton apparaîtra ici.</p>';
+        return '<main class="container page"><div class="stack" style="gap:10px;margin-bottom:24px"><span class="eyebrow" style="color:var(--gold)">Onglet local · pour Rachel</span><h1 class="h-l">Stats d\'utilisation</h1><p class="lead">Ce que ce navigateur a enregistré. Ces chiffres restent sur cet appareil et ne concernent que l\'adresse ouverte : le site en local et le site publié ont chacun les leurs.</p></div>' +
+          tiles +
+          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Couverture de la banque, par pilier</h2>' + pillars + "</section>" +
+          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Réussite par sous-thème</h2><p class="muted" style="margin:0 0 8px">Du plus faible au plus solide : les sous-thèmes à retravailler sont en haut.</p>' + themeRows + "</section>" +
+          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Révision espacée</h2><p class="muted" style="margin:0 0 8px">' + due + " à réviser aujourd'hui · " + errs + " en erreur · modes joués : " + modes + "</p>" + boxes + "</section>" +
+          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Les 10 questions les plus ratées</h2>' + hardHtml + "</section>" +
+          '<section class="side-card halftone" style="margin-bottom:22px"><h2 class="h-m">Fréquentation du site public</h2>' + analytics + "</section>" +
+          '<div class="btn-row"><button type="button" class="btn btn-ghost" data-action="copy">Copier mes stats (JSON)</button></div></main>';
+      }
+    };
+  }
+
   function SoundsView() {
     return {
       nav: "sons",
@@ -1675,15 +1769,95 @@
   /* =========================================================
      VUE : Collectif (bientôt)
      ========================================================= */
-  function CollectifView() {
+  /* ---------- Défis entre collègues : même tirage de questions pour tous, grâce à un lien à partager ----------
+     Aucun serveur : le lien contient la graine du tirage, le pilier, la longueur et le score à battre. */
+  function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function defiPick(seed, pillar, n) {
+    var pool = QUESTIONS.filter(function (q) { return matchScope(q, pillar, "all") && q.level !== "legende" && !q.trial; })
+      .sort(function (x, y) { var a = qidOf(x), b = qidOf(y); return a < b ? -1 : a > b ? 1 : 0; });
+    var rnd = mulberry(parseInt(seed, 36) || 1), idx = pool.map(function (_, i) { return i; }), out = [];
+    while (out.length < n && idx.length) out.push(pool[idx.splice(Math.floor(rnd() * idx.length), 1)[0]]);
+    return out;
+  }
+  function defiLink(c) {
+    var base = location.href.split("#")[0];
+    return base + "#/collectif?d=" + encodeURIComponent(c.seed) + "&p=" + encodeURIComponent(c.pillar) + "&n=" + c.n + (c.score != null ? "&s=" + c.score : "") + (c.from ? "&f=" + encodeURIComponent(c.from) : "");
+  }
+  function CollectifView(params) {
+    params = params || {};
+    var okP = function (p) { return p === "all" || !!pillarById(p) ? p : "all"; };
+    var ch = null;
+    if (params.d && /^[a-z0-9]{1,12}$/i.test(params.d)) {
+      ch = { seed: params.d, pillar: okP(params.p || "all"), n: [5, 10, 15].indexOf(+params.n) >= 0 ? +params.n : 10,
+        score: params.s !== undefined && params.s !== "" ? Math.max(0, parseInt(params.s, 10) || 0) : null, from: String(params.f || "").replace(/[<>"&'`]/g, "").slice(0, 20) };
+    }
+    function begin(c) {
+      var list = defiPick(c.seed, c.pillar, c.n); if (list.length < 2) return;
+      V.cur = c; V.list = list; V.i = 0; V.score = 0; V.run = newRun(list[0]); V.phase = "play"; V.copied = false; V._scroll = true;
+    }
     return {
-      nav: "collectif",
+      nav: "collectif", phase: "home", cfgP: "all", cfgN: 10, ch: ch, cur: null, list: [], i: 0, score: 0, run: null, copied: false,
+      onAnswer: function (good) { if (good) this.score++; },
+      actions: {
+        dfpillar: function (d) { V.cfgP = d.id; V._focusKey = "dfp-" + d.id; },
+        dflen: function (d) { V.cfgN = +d.id; V._focusKey = "dfn-" + d.id; },
+        dfnew: function () { begin({ seed: Math.random().toString(36).slice(2, 8), pillar: V.cfgP, n: V.cfgN, score: null, from: "" }); },
+        dfaccept: function () { if (V.ch) begin(V.ch); },
+        dfnext: function () {
+          if (V.i >= V.list.length - 1) { V.phase = "end"; V._scroll = true; sfx("end"); return; }
+          V.i++; V.run = newRun(V.list[V.i]); V._scroll = true; V._focusKey = "q";
+        },
+        dfhome: function () { V.phase = "home"; V.ch = null; V._scroll = true; },
+        dfcopy: function () {
+          var link = defiLink({ seed: V.cur.seed, pillar: V.cur.pillar, n: V.cur.n, score: V.score, from: P.pseudo || "" });
+          var done = function () { V.copied = true; render(); setTimeout(function () { V.copied = false; render(); }, 2500); };
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(done, function () { var i = document.getElementById("df-link"); if (i) { i.select(); } });
+          else { var i = document.getElementById("df-link"); if (i) { i.select(); try { document.execCommand("copy"); done(); } catch (e) { } } return false; }
+          return false;
+        }
+      },
       render: function () {
-        return '<main class="container page"><div class="collectif-alert" role="status"><span class="ca-light" aria-hidden="true"></span><div><span class="eyebrow" style="color:var(--gold)">Alerte QG · en cours de déploiement</span>' +
-          '<h1 class="h-l">Challenge collectif</h1><p class="lead">Les gardiens préparent la salle de réunion… Bientôt, tu pourras relever des défis en équipe avec tes collègues, cumuler des points ensemble et grimper au classement du QG.</p>' +
+        if (this.phase === "play") return this.renderPlay();
+        if (this.phase === "end") return this.renderEnd();
+        return this.renderHome();
+      },
+      label: function (c) { var p = pillarById(c.pillar); return c.n + " questions · " + (p ? p.label : "tous les piliers"); },
+      renderHome: function () {
+        var self = this, c = this.ch, recv = "";
+        if (c) {
+          recv = '<section class="side-card halftone" style="margin-bottom:22px;border-color:var(--gold)" aria-labelledby="df-recv"><span class="eyebrow" style="color:var(--gold)">Défi reçu</span><h2 class="h-m" id="df-recv">' + esc(c.from || "Un collègue") + " te lance un défi</h2><p class=\"lead\" style=\"margin:0 0 6px\">" + esc(this.label(c)) + (c.score != null ? " · score à battre : <b>" + c.score + " / " + c.n + "</b>" : "") + '</p><p class="muted" style="margin:0 0 14px">Les mêmes questions pour vous deux. Pas d\'XP en jeu : juste l\'honneur.</p><div class="btn-row"><button type="button" class="btn btn-primary" data-action="dfaccept" data-key="dfaccept">Relever le défi</button></div></section>';
+        }
+        var pills = [{ id: "all", label: "Tous les piliers", color: "#8EA2FF" }].concat(PILLARS).map(function (pl) {
+          return '<button type="button" class="choice' + (pl.id === self.cfgP ? " selected" : "") + '" style="--c:' + pl.color + '" data-action="dfpillar" data-id="' + pl.id + '" data-key="dfp-' + pl.id + '" aria-pressed="' + (pl.id === self.cfgP) + '"><span class="name">' + esc(pl.label) + "</span></button>";
+        }).join("");
+        var lens = [5, 10, 15].map(function (n) { return '<button type="button" class="choice' + (n === self.cfgN ? " selected" : "") + '" data-action="dflen" data-id="' + n + '" data-key="dfn-' + n + '" aria-pressed="' + (n === self.cfgN) + '"><span class="name">' + n + " questions</span></button>"; }).join("");
+        return '<main class="container page">' + recv +
+          '<section class="side-card halftone" style="margin-bottom:22px" aria-labelledby="df-new"><span class="eyebrow" style="color:var(--green-2)">Disponible maintenant</span><h1 class="h-l" id="df-new">Défie un collègue</h1><p class="lead" style="margin:0 0 14px">Choisis un pilier et une longueur, joue ta partie, puis envoie le lien : ton collègue répond aux mêmes questions et voit ton score à battre.</p>' +
+          '<h3 class="h-s">Pilier</h3><div class="choices pillars" style="margin-bottom:14px">' + pills + '</div><h3 class="h-s">Longueur</h3><div class="choices themes" style="margin-bottom:16px">' + lens + '</div>' +
+          '<div class="btn-row"><button type="button" class="btn btn-primary" data-action="dfnew" data-key="dfnew">' + I.bolt() + 'Lancer mon défi</button></div></section>' +
+          '<div class="collectif-alert" role="status"><span class="ca-light" aria-hidden="true"></span><div><span class="eyebrow" style="color:var(--gold)">Alerte QG · en cours de déploiement</span>' +
+          '<h2 class="h-m">Challenge collectif complet</h2><p class="lead">Les gardiens préparent la salle de réunion… Bientôt, tu pourras relever des défis en équipe avec tes collègues, cumuler des points ensemble et grimper au classement du QG.</p>' +
           '<ul class="ca-list"><li>Objectifs d\'équipe hebdomadaires</li><li>Classement entre collègues (avec les réglages de confidentialité de ta fiche de héros)</li><li>Boss à affronter à plusieurs</li></ul>' +
           '<div class="ca-bar" aria-hidden="true"><i></i></div><p class="muted" style="margin:0">Déploiement en cours… Reviens vite, héros !</p>' +
-          '<div class="btn-row"><a class="btn btn-primary" href="#/classe">' + I.bolt() + 'En attendant, le mode classé</a><button type="button" class="btn btn-ghost" data-feedback>Proposer une idée</button></div></div></div></main>';
+          '<div class="btn-row"><a class="btn btn-ghost" href="#/classe">En attendant, le mode classé</a><button type="button" class="btn btn-ghost" data-feedback>Proposer une idée</button></div></div></div></main>';
+      },
+      renderPlay: function () {
+        var r = this.run, q = r.q, v = r.validated, side;
+        var pct = Math.round(((this.i + (v ? 1 : 0)) / this.list.length) * 100);
+        if (!v) side = '<div class="side-card halftone"><h3 class="h-s">Défi entre collègues</h3><p class="muted" style="margin:0">' + esc(this.label(this.cur)) + (this.cur.score != null ? " · à battre : " + this.cur.score + " / " + this.cur.n : "") + ". Pas d'XP en jeu.</p></div>";
+        else side = '<div class="feedback' + (r.good ? " good" : "") + '" role="status"><div class="top"><span class="burst ' + (r.good ? "ok" : "ko") + '">' + (r.good ? "BAM !" : "OUPS !") + '</span><b>' + (r.good ? "Bonne réponse !" : "Pas tout à fait. Regarde la correction.") + "</b></div>" + heroExplain(q.theme, q.e) + '<button type="button" class="btn btn-primary" style="align-self:flex-end" data-action="dfnext" data-key="next">' + (this.i >= this.list.length - 1 ? "Voir mon score" : "Question suivante") + "</button></div>";
+        return '<main class="container page"><div class="q-meta"><span class="tag">Défi</span><span class="tag tag-outline">' + esc(FORMAT[q.format].label) + '</span><span class="muted" style="font-size:14px;flex-grow:1">Question ' + (this.i + 1) + " / " + this.list.length + '</span><div class="progress" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + pct + '%"></i></div></div>' +
+          '<div class="q-layout"><div data-key="q" tabindex="-1">' + renderRun(r) + "</div><div>" + side + "</div></div></main>";
+      },
+      renderEnd: function () {
+        var c = this.cur, n = this.list.length, sc = this.score, cmp = "";
+        if (c.score != null) cmp = sc > c.score ? "Tu bats le score à battre (" + c.score + " / " + n + ") : bravo !" : sc === c.score ? "Égalité parfaite avec le score à battre (" + c.score + " / " + n + ")." : "Score à battre : " + c.score + " / " + n + ". La revanche est possible !";
+        var link = defiLink({ seed: c.seed, pillar: c.pillar, n: c.n, score: sc, from: P.pseudo || "" });
+        return '<main class="container page"><div class="end-card halftone" style="box-shadow:14px 14px 0 var(--green)"><span class="burst big" style="background:var(--green-2)">DÉFI TERMINÉ !</span><h1 class="h-l">' + sc + " / " + n + ' bonnes réponses</h1>' + (cmp ? "<p>" + esc(cmp) + "</p>" : "") +
+          '<p>' + (c.score != null ? "Envoie ce lien pour proposer la revanche, avec ton score à battre." : "Envoie ce lien à un collègue : il jouera les mêmes questions et verra ton score à battre.") + '</p>' +
+          '<div class="btn-row" style="justify-content:center"><input id="df-link" class="df-link" type="text" readonly value="' + esc(link) + '" aria-label="Lien du défi" style="min-width:min(100%,360px);padding:10px 12px;border-radius:10px;border:2px solid var(--line,#444);background:transparent;color:inherit"><button type="button" class="btn btn-primary" data-action="dfcopy" data-key="dfcopy">' + (this.copied ? "Lien copié !" : "Copier le lien") + '</button></div>' +
+          (P.pseudo ? '<p class="muted" style="font-size:13px">Ton pseudo (' + esc(P.pseudo) + ") figure dans le lien. Aucune autre donnée n'est partagée.</p>" : "") +
+          '<div class="btn-row" style="justify-content:center"><button type="button" class="btn btn-ghost" data-action="dfhome">Retour aux défis</button></div></div></main>';
       }
     };
   }
@@ -1932,7 +2106,7 @@
           '<a class="mode-card" href="#/entrainement" style="--mc:#4CC37A"><span class="tag" style="background:var(--green-2)">Entraînement</span><blockquote class="mode-quote">« Même les plus grands héros ont eu besoin d\'une salle d\'entraînement. »<cite>Hotfix</cite></blockquote><p>Par pilier, par thème ou par niveau, à ton rythme. Aucune XP en jeu : trompe-toi, lis les explications, recommence.</p><span class="muted" style="font-size:14px">' + QUESTIONS.length + " questions · 6 formats</span></a>" +
           '<a class="mode-card" href="#/classe" style="--mc:#D9A35B"><span class="tag">Classé</span><blockquote class="mode-quote">« Avec de grands droits admin viennent de grandes responsabilités. »<cite>Sudo</cite></blockquote><p>Tous sujets confondus. Choisis ta difficulté : plus c\'est dur, plus tu grimpes vite… et plus une erreur coûte cher.</p><span class="muted" style="font-size:14px">4 difficultés · bouclier · rétrogradation</span></a>' +
           '<a class="mode-card" href="#/mission" style="--mc:#FF6B8A"><span class="tag" style="background:var(--pink)">Boss</span><blockquote class="mode-quote">« Gardiens, rassemblement ! Le QG a besoin de toi. »<cite>Captain Reboot</cite></blockquote><p>Un boss par domaine, en mise en situation réelle : tickets, journaux, commandes à taper. Maîtrise son domaine pour l\'affronter.</p><span class="muted" style="font-size:14px">' + bossesWon() + " boss vaincu" + (bossesWon() > 1 ? "s" : "") + "</span></a>" +
-          '<a class="mode-card soon" href="#/collectif" style="--mc:#8EA2FF"><span class="tag tag-outline">Bientôt</span><h3 class="h-s">Challenge collectif</h3><p>Objectifs d\'équipe et classement partagé entre collègues. Arrive dans une prochaine version.</p></a>' +
+          '<a class="mode-card soon" href="#/collectif" style="--mc:#8EA2FF"><span class="tag tag-outline">Défis dispo</span><h3 class="h-s">Challenge collectif</h3><p>Défie un collègue avec un simple lien. Objectifs d\'équipe et classement partagé : dans une prochaine version.</p></a>' +
           "</div></section>" +
 
           '<section class="section" id="mondes" aria-labelledby="worlds-title"><div class="section-head"><div class="stack" style="gap:8px"><span class="eyebrow">Les gardiens</span><h2 class="h-l" id="worlds-title">Chacun veille sur son domaine</h2></div><p class="muted" style="max-width:420px;margin:0">Chaque pilier a son gardien et son boss. Clique pour découvrir son contenu et des ressources pour aller plus loin.</p></div>' +
@@ -1974,12 +2148,18 @@
       },
       actions: {
         /* Parcours pas à pas : pilier → sous-thème → niveau, avec un fil d'Ariane cliquable */
-        mode: function (d) { V.mode = d.id; V.pillar = "all"; V.theme = "all"; V.level = "all"; V.step = "pillar"; V._focusKey = "mode-" + d.id; },
-        pillar: function (d) { V.pillar = d.id; V.theme = "all"; V.level = "all"; var pl = pillarById(d.id); V.step = pl && pl.subs.length > 1 ? "theme" : "level"; V._scroll = true; V._focusKey = "stephead"; },
-        theme: function (d) { V.theme = d.id; V.level = "all"; V.step = "level"; V._scroll = true; V._focusKey = "stephead"; },
-        level: function (d) { V.level = d.id; V._focusKey = "start"; },
-        goto: function (d) { V.phase = "choose"; V.step = d.id; V._scroll = true; V._focusKey = "stephead"; },
+        mode: function (d) { V.reviewKind = null; V.mode = d.id; V.pillar = "all"; V.theme = "all"; V.level = "all"; V.step = "pillar"; V._focusKey = "mode-" + d.id; },
+        pillar: function (d) { V.reviewKind = null; V.pillar = d.id; V.theme = "all"; V.level = "all"; var pl = pillarById(d.id); V.step = pl && pl.subs.length > 1 ? "theme" : "level"; V._scroll = true; V._focusKey = "stephead"; },
+        theme: function (d) { V.reviewKind = null; V.theme = d.id; V.level = "all"; V.step = "level"; V._scroll = true; V._focusKey = "stephead"; },
+        level: function (d) { V.reviewKind = null; V.level = d.id; V._focusKey = "start"; },
+        goto: function (d) { V.reviewKind = null; V.phase = "choose"; V.step = d.id; V._scroll = true; V._focusKey = "stephead"; },
+        review: function (d) {
+          var pool = srsList(d.id); if (!pool.length) return;
+          V.reviewKind = d.id; V.pillar = "all"; V.theme = "all"; V.level = "all"; V.step = "pillar";
+          V.list = shuffle(pool).slice(0, 20); V.i = 0; V.score = 0; V.answered = 0; V.run = newRun(V.list[0]); V.phase = "play"; V._scroll = true;
+        },
         start: function () {
+          if (V.reviewKind) { V.actions.review({ id: V.reviewKind }); return; }
           var pool = V.pool(); if (!pool.length) return;
           V.list = shuffle(pool); V.i = 0; V.score = 0; V.answered = 0; V.run = newRun(V.list[0]); V.phase = "play"; V._scroll = true;
         },
@@ -1988,7 +2168,7 @@
           V.i++; V.run = newRun(V.list[V.i]); V._scroll = true; V._focusKey = "q";
         },
         finish: function () { V.phase = "end"; V._scroll = true; sfx("end"); },
-        choose: function () { V.phase = "choose"; V._scroll = true; }
+        choose: function () { V.reviewKind = null; V.phase = "choose"; V.step = "pillar"; V.pillar = "all"; V.theme = "all"; V.level = "all"; V._scroll = true; }
       },
       render: function () {
         if (this.phase === "choose") return this.renderChoose();
@@ -1997,6 +2177,7 @@
       },
       crumbs: function (current) {
         /* Fil d'Ariane : chaque étape déjà franchie est cliquable pour revenir la modifier */
+        if (this.reviewKind) return '<nav class="crumbs" aria-label="Révision"><ol><li><button type="button" class="crumb" data-action="choose" data-key="cr-0">Entraînement</button></li><li><span class="crumb current" aria-current="step">' + (this.reviewKind === "errors" ? "Mes erreurs" : "Révision du jour") + "</span></li></ol></nav>";
         var curP = pillarById(this.pillar), parts = [];
         parts.push({ label: "Entraînement", go: "pillar" });
         if (current !== "pillar") parts.push({ label: curP ? curP.label : "Tous les piliers", go: curP && curP.subs.length > 1 ? "theme" : "pillar", color: curP ? curP.color : "" });
@@ -2007,6 +2188,11 @@
         return '<nav class="crumbs" aria-label="Étapes de l\'entraînement"><ol>' + parts.map(function (c, k) {
           return '<li><button type="button" class="crumb" data-action="goto" data-id="' + c.go + '" data-key="cr-' + k + '"' + (c.color ? ' style="--cc:' + c.color + '"' : "") + ">" + (k === 0 ? '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" fill="currentColor"/></svg>' : (c.color ? '<i class="crumb-dot"></i>' : "")) + esc(c.label) + "</button>" + sep + "</li>";
         }).join("") + '<li><span class="crumb current" aria-current="step">' + esc(last) + "</span></li></ol></nav>";
+      },
+      reviewCard: function () {
+        var due = srsList("due").length, err = srsList("errors").length, seen = Object.keys(P.srs || {}).length;
+        var p = seen ? (due ? "Des questions déjà croisées sont prêtes à revenir au bon moment : une série de 20 maximum." : "Rien à réviser pour l'instant. Reviens demain : les questions réussies reviennent de plus en plus tard, les ratées dès que possible.") : "Joue quelques questions : celles que tu rates reviennent ici très vite, celles que tu réussis reviennent de plus en plus tard.";
+        return '<section class="side-card halftone review-card" aria-labelledby="rv-h" style="margin-bottom:22px"><h3 class="h-s" id="rv-h">Révision espacée</h3><p class="muted" style="margin:0 0 12px">' + esc(p) + '</p><div class="btn-row"><button type="button" class="btn btn-primary" data-action="review" data-id="due" data-key="rv-due"' + (due ? "" : " disabled") + '>Révision du jour · ' + due + '</button><button type="button" class="btn btn-ghost" data-action="review" data-id="errors" data-key="rv-err"' + (err ? "" : " disabled") + '>Mes erreurs · ' + err + '</button></div></section>';
       },
       renderChoose: function () {
         var self = this, step = this.step, curP = pillarById(this.pillar);
@@ -2041,7 +2227,7 @@
         return '<main class="container page train-wizard">' +
           (this.step === "pillar" ? '<div class="stack" style="gap:10px;margin-bottom:22px"><span class="eyebrow" style="color:var(--green-2)">Salle d\'entraînement · sans XP</span><h1 class="h-l">Entraîne-toi sans pression</h1><p class="lead">Trompe-toi autant que tu veux, lis les explications, et quand tu te sens prêt·e, passe au mode classé.</p></div>' : "") +
           (this.step === "pillar" ? "" : this.crumbs(step)) +
-          modeSwitch + '<section class="wiz-step" aria-labelledby="wiz-h"><div class="wiz-head"><span class="wiz-num">' + (this.mode === "level" && this.step === "pillar" ? "Tous les piliers" : "Étape " + num + (step === "pillar" ? "" : " sur " + total)) + '</span><h2 class="h-m" id="wiz-h" tabindex="-1" data-key="stephead">' + head + "</h2></div>" + body +
+          (step === "pillar" && this.mode === "pillar" ? this.reviewCard() : "") + modeSwitch + '<section class="wiz-step" aria-labelledby="wiz-h"><div class="wiz-head"><span class="wiz-num">' + (this.mode === "level" && this.step === "pillar" ? "Tous les piliers" : "Étape " + num + (step === "pillar" ? "" : " sur " + total)) + '</span><h2 class="h-m" id="wiz-h" tabindex="-1" data-key="stephead">' + head + "</h2></div>" + body +
           (foot ? '<div class="wiz-foot">' + foot + "</div>" : "") + "</section></main>";
       },
       renderPlay: function () {
@@ -2779,6 +2965,7 @@
           '<p class="lead">Power Up est un projet pédagogique réalisé dans le cadre d\'une formation TSSR. Le site ne demande ni compte ni adresse e-mail, et n\'envoie aucune donnée de jeu à un serveur.</p>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Ce qui est enregistré, et où</h2>' +
           '<p>Ta progression (points d\'expérience, rang, boss vaincus, pseudo et héros, lectures de la veille) et tes réglages (son, volume, thème, mode léger, styles) sont enregistrés <b>uniquement dans ton navigateur</b>, grâce au stockage local (localStorage). Ils restent sur ton appareil : personne d\'autre ne peut les lire, et ils ne passent par aucun serveur du site.</p>' +
+          '<p>Pour fonctionner <b>sans connexion</b>, le site peut aussi garder une copie de ses propres fichiers (pages, questions, images, sons) dans le cache de ton navigateur. Cette copie ne contient aucune donnée personnelle et se supprime avec les données du site dans les réglages du navigateur.</p>' +
           '<p>Pour effacer tes données, tu as deux possibilités :</p>' +
           '<ul style="padding-left:20px;line-height:1.7"><li>le bouton <b>« Remettre ma progression à zéro »</b>, dans la « Zone sensible » de ton profil (il faut taper EFFACER pour le débloquer). Il efface ta progression (points d\'expérience, rang, boss vaincus, badges, capes, secrets, statistiques) mais garde ton pseudo, ton avatar et tes réglages de visibilité. Tes lectures de la veille et tes réglages (son, thème…) restent aussi ;</li><li>vider les données du site dans les réglages de ton navigateur : cela efface <b>tout</b>, y compris ton pseudo, tes réglages et tes lectures de la veille.</li></ul>' +
           '<h2 class="h-m" style="font-size:24px;margin:28px 0 8px">Ce que le site n\'utilise pas</h2>' +
@@ -2814,7 +3001,8 @@
     else if (r.path === "/mission") V = BossMapView();
     else if (r.path === "/veille") V = VeilleView(r.params);
     else if (r.path === "/profil") { V = ProfileView(); V._scrollTo = r.params.s; }
-    else if (r.path === "/collectif") V = CollectifView();
+    else if (r.path === "/collectif") V = CollectifView(r.params);
+    else if (r.path === "/stats") V = StatsView();
     else if (r.path === "/confidentialite") V = PrivacyView();
     else if ((r.path === "/sons" || r.path === "/maintenance") && DEV_PAGES) V = SoundsView();
     else if (r.path === "/demo" && DEV_PAGES) V = DemoView();
@@ -2833,6 +3021,7 @@
     var active = document.activeElement, key = V._focusKey || (active && active.getAttribute && active.getAttribute("data-key"));
     V._focusKey = null;
     app.innerHTML = header(V.nav) + V.render() + footer();
+    if (V.run && V.run.validated && V.run.q && qById(qidOf(V.run.q))) { var fbk = app.querySelector(".feedback"); if (fbk && !fbk.querySelector("[data-report]")) fbk.insertAdjacentHTML("beforeend", '<button type="button" class="btn btn-ghost" style="align-self:flex-start;font-size:13px" data-report>⚑ Signaler cette question</button>'); }
     if (V._scroll) { window.scrollTo(0, 0); V._scroll = false; }
     var navA = app.querySelector(".nav a.active"); if (navA && navA.parentNode && navA.parentNode.scrollWidth > navA.parentNode.clientWidth) { var nv = navA.parentNode; nv.scrollLeft += (navA.getBoundingClientRect().left - nv.getBoundingClientRect().left) - (nv.clientWidth - navA.offsetWidth) / 2; }
     if (V._scrollTo) { var tgt = document.getElementById(V._scrollTo + "-title"); V._scrollTo = null; if (tgt) setTimeout(function () { tgt.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); var sec = tgt.closest("section"); if (sec) { sec.classList.add("flash-section"); setTimeout(function () { sec.classList.remove("flash-section"); }, 1800); } }, 60); }
@@ -3012,6 +3201,8 @@
 
   window.addEventListener("hashchange", route);
   route();
+  /* Mode hors ligne : sur le site publié (https) uniquement, jamais en local */
+  if ("serviceWorker" in navigator && location.protocol === "https:") window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () { }); });
   try { checkEvents(); } catch (e) { }
 
   /* =========================================================
