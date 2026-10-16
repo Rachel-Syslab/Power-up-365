@@ -29,7 +29,7 @@ self.addEventListener("fetch", function (e) {
   }
   /* Sons, polices et icônes changent très rarement : cache d'abord. Le reste (scripts, styles, données) : réseau d'abord,
      pour ne jamais mélanger une ancienne version du code avec une nouvelle, et cache si l'on est hors ligne. */
-  var stable = /\/(sons|icons|css\/fonts)\//.test(url.pathname);
+  var stable = /\/(sons|css\/fonts)\//.test(url.pathname) || /\/icon-[^\/]*\.png$/.test(url.pathname);
   if (stable) {
     e.respondWith(caches.match(req).then(function (hit) {
       return hit || fetch(req).then(function (res) {
