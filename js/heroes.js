@@ -229,7 +229,7 @@
       emblem: EM.shield("#8EA2FF")
     },
     {
-      id: "ignis", name: "Lady Firewall", title: "Gardienne du Réseau & pare-feu", world: "IT", themes: ["reseau", "adressage"], gender: "f",
+      id: "ignis", name: "Lady Firewall", title: "Gardienne du Réseau & pare-feu", world: "IT", themes: ["reseau", "adressage", "dns", "reseau365", "vpn", "vlan", "diagnostic"], gender: "f",
       power: "Filtre chaque paquet qui tente d'entrer. Tout est refusé… sauf ce qui est autorisé.",
       line: "Deny by default. Le reste se mérite.",
       win: "Pare-feu en place, réseau blindé !", lose: "Une règle trop permissive… Relis-les de haut en bas.",
@@ -253,7 +253,7 @@
       front: '<path d="M112 250 L124 250 M110 280 L124 280 M112 308 L124 308 M276 250 L288 250 M276 280 L290 280 M276 308 L288 308" stroke="#A6E3B8" stroke-width="4"/><g stroke="#0B0E13" stroke-width="4" stroke-linejoin="round"><path d="M200 78 L186 52 L200 22 L214 52 Z" fill="#7CC596"/><path d="M172 84 L150 70 L144 42 L170 58 Z" fill="#A6E3B8"/><path d="M228 84 L250 70 L256 42 L230 58 Z" fill="#A6E3B8"/></g>'
     },
     {
-      id: "patch", name: "Hotfix", title: "Gardien du Support & du matériel", world: "IT", themes: ["support", "materiel"], gender: "m",
+      id: "patch", name: "Hotfix", title: "Gardien du Support & du matériel", world: "IT", themes: ["support", "materiel", "itil"], gender: "m",
       power: "Répare tout en un temps record, du Wi-Fi capricieux à l'imprimante rebelle.",
       line: "Un problème ? Déjà corrigé.", win: "Ticket résolu en un temps record !", lose: "Pas encore réparé… Relis la procédure et on recommence.",
       frame: "gear", neon: "#4FD1C5", glow: "#4FD1C5", bg1: "#0F3533", bg2: "#061312", jaw: "m",
@@ -264,7 +264,7 @@
       front: '<path d="M126 118 L274 118 L276 132 L124 132 Z" fill="#0B0E13"/><path d="M146 104 L186 104 L182 134 L150 134 Z M254 104 L214 104 L218 134 L250 134 Z" fill="#4FD1C5" stroke="#0B0E13" stroke-width="4" stroke-linejoin="round"/>'
     },
     {
-      id: "sudo", name: "Sudo", title: "Gardien du Développement & de Linux", world: "Développement", themes: ["scripting", "code", "linux"], gender: "m",
+      id: "sudo", name: "Sudo", title: "Gardien du Développement & de Linux", world: "Développement", themes: ["scripting", "code", "linux", "linuxcli"], gender: "m",
       power: "Obtient n'importe quel droit… mais ne l'utilise que quand c'est vraiment nécessaire.",
       line: "Le moindre privilège, c'est ma superpuissance.", win: "Script exécuté sans erreur. Propre !", lose: "Erreur de syntaxe… Un bon dev relit toujours son code.",
       frame: "terminal", neon: "#B98CFF", glow: "#B98CFF", bg1: "#2A1850", bg2: "#0C0716", jaw: "m",
@@ -285,7 +285,7 @@
       emblem: EM.relay("#FF9BB2")
     },
     {
-      id: "uptime", name: "Uptime", title: "Gardien des systèmes · IT", world: "IT", themes: ["systemes", "infra"], gender: "m",
+      id: "uptime", name: "Uptime", title: "Gardien des systèmes · IT", world: "IT", themes: ["systemes", "infra", "supervision", "stockage"], gender: "m",
       power: "Ne dort jamais : les serveurs restent en ligne, quoi qu'il arrive.",
       line: "99,99 % de disponibilité. Le 0,01 %, c'est ma pause café.", win: "Tous les voyants sont au vert !", lose: "Petite panne… mais on redémarre toujours plus fort.",
       frame: "arrow", neon: "#B6F35A", glow: "#B6F35A", bg1: "#2A3A0E", bg2: "#0B1005", jaw: "m",

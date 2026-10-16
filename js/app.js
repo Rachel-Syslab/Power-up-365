@@ -1944,7 +1944,6 @@
             return world("0" + (i + 1), href, "", pl.label, "Gardien" + (window.heroById(pl.hero).gender === "f" ? "ne" : "") + " : " + esc(window.heroById(pl.hero).name), pl.desc, pl.boss, pl.bonus ? " green osb" : "", pl.hero, pl.color);
           }).join("") +
           "</div></section>" +
-          (function () { var d = veilleData(); if (!d.items.length) return ""; return '<section class="section" aria-labelledby="veille-title"><div class="section-head"><div class="stack" style="gap:8px"><span class="eyebrow">Veille</span><h2 class="h-l" id="veille-title">Les dernières actus</h2></div><a class="btn btn-ghost" href="#/veille">Toute la veille</a></div><div class="news-grid">' + d.items.slice(0, 3).map(function (it) { return veilleCard(it); }).join("") + "</div></section>"; })() +
           "</main>";
       }
     };
