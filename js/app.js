@@ -1494,7 +1494,7 @@
   function StatsView() {
     function bar(pct, color) { return '<span style="display:block;height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden"><i style="display:block;height:100%;width:' + Math.max(0, Math.min(100, pct)) + '%;background:' + (color || "var(--green-2)") + '"></i></span>'; }
     function pct(c, a) { return a ? Math.round(c * 100 / a) : 0; }
-    function tile(label, val, sub) { return '<div class="side-card halftone" style="flex:1 1 150px;margin:0"><span class="muted" style="font-size:13px">' + esc(label) + '</span><div class="h-m" style="margin:4px 0 0">' + esc(val) + "</div>" + (sub ? '<span class="muted" style="font-size:13px">' + esc(sub) + "</span>" : "") + "</div>"; }
+    function tile(label, val, sub, col) { return '<div class="side-card halftone" style="flex:1 1 150px;margin:0;border-top:3px solid ' + (col || "var(--blue-3)") + '"><span class="muted" style="font-size:13px">' + esc(label) + '</span><div class="h-m" style="margin:4px 0 0;color:' + (col || "var(--blue-3)") + '">' + esc(val) + "</div>" + (sub ? '<span class="muted" style="font-size:13px">' + esc(sub) + "</span>" : "") + "</div>"; }
     var MODE_LABELS = { train: "Entraînement", ranked: "Mode classé", mission: "Boss", collectif: "Défis", boss: "Boss" };
     return {
       nav: "stats",
@@ -1511,9 +1511,9 @@
         var st = P.stats, srs = P.srs || {}, cfg = window.POWERUP_CONFIG || {}, t = dayNum();
         var acc = pct(st.correct, st.answered);
         var tiles = '<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:22px">' +
-          tile("Réponses données", st.answered, "dont " + st.correct + " justes") + tile("Réussite", acc + " %", "toutes questions") +
-          tile("Temps de jeu", fmtTime(st.time), "actif à l'écran") + tile("Jours de jeu", st.days.length, "série en cours : " + dayStreak()) +
-          tile("Questions croisées", Object.keys(srs).length, DEV_PAGES ? "sur " + QUESTIONS.length + " dans la banque" : "depuis tes débuts") + "</div>";
+          tile("Réponses données", st.answered, "dont " + st.correct + " justes", "var(--blue-3)") + tile("Réussite", acc + " %", "toutes questions", !st.answered ? "var(--text-2)" : acc >= 80 ? "var(--green-2)" : acc >= 60 ? "var(--gold)" : "var(--pink)") +
+          tile("Temps de jeu", fmtTime(st.time), "actif à l'écran", "var(--amber)") + tile("Jours de jeu", st.days.length, "série en cours : " + dayStreak(), "var(--pink)") +
+          tile("Questions croisées", Object.keys(srs).length, DEV_PAGES ? "sur " + QUESTIONS.length + " dans la banque" : "depuis tes débuts", "var(--green-2)") + "</div>";
         /* par pilier et sous-thème */
         var pillars = PILLARS.map(function (pl) {
           var a = 0, c = 0, seen = 0, tot = 0;
@@ -1529,12 +1529,13 @@
         }).join("") : '<p class="muted">Pas encore de réponses sur ce navigateur.</p>';
         /* questions les plus ratées */
         var hard = Object.keys(srs).filter(function (id) { return srs[id].m > 0 && qById(id); }).sort(function (x, y) { return (srs[y].m - srs[x].m) || (srs[y].m / srs[y].n - srs[x].m / srs[x].n); }).slice(0, 10);
-        var hardHtml = hard.length ? '<ol style="margin:0;padding-left:22px;line-height:1.6">' + hard.map(function (id) { var q = qById(id), e = srs[id]; return "<li>" + esc(q.q.length > 120 ? q.q.slice(0, 117) + "…" : q.q) + ' <span class="muted" style="font-size:13px">(' + esc(themeLabel(q.theme)) + " · ratée " + e.m + " fois sur " + e.n + ")</span></li>"; }).join("") + "</ol>" : '<p class="muted">Aucune erreur enregistrée pour l\'instant.</p>';
+        var hardHtml = hard.length ? '<ol style="margin:0;padding-left:22px;line-height:1.6">' + hard.map(function (id) { var q = qById(id), e = srs[id]; return "<li>" + esc(q.q.length > 120 ? q.q.slice(0, 117) + "…" : q.q) + ' <span class="muted" style="font-size:13px">(' + esc(themeLabel(q.theme)) + " · ratée " + e.m + " fois sur " + e.n + ")</span></li>"; }).join("") + "</ol>" : '<p style="margin:0;color:var(--green-2)"><b>Aucune erreur enregistrée pour l\'instant.</b> <span class="muted">Les questions que tu rates apparaîtront ici, avec un bouton pour les retravailler.</span></p>';
         /* révision espacée */
         var BOX = ["En apprentissage", "Revue dans 1 jour", "dans 3 jours", "dans 7 jours", "dans 16 jours", "Maîtrisée (35 jours)"], cnt = [0, 0, 0, 0, 0, 0], due = 0, errs = 0;
         Object.keys(srs).forEach(function (id) { var e = srs[id]; cnt[e.b]++; if (e.d <= t) due++; if (e.w === 1) errs++; });
         var mx = Math.max.apply(null, cnt.concat([1]));
-        var boxes = BOX.map(function (l, i) { return '<div style="display:grid;grid-template-columns:minmax(150px,1fr) 3fr 40px;gap:12px;align-items:center;padding:3px 0"><span>' + l + "</span>" + bar(cnt[i] * 100 / mx, i === 5 ? "var(--green-2)" : "var(--gold)") + "<b>" + cnt[i] + "</b></div>"; }).join("");
+        var BCOL = ["var(--pink)", "#FF8A4C", "var(--gold)", "#9BD95B", "var(--green-2)", "var(--blue-3)"];
+        var boxes = BOX.map(function (l, i) { return '<div style="display:grid;grid-template-columns:minmax(150px,1fr) 3fr 40px;gap:12px;align-items:center;padding:3px 0"><span style="color:' + BCOL[i] + '">● <span style="color:var(--text)">' + l + "</span></span>" + bar(cnt[i] * 100 / mx, BCOL[i]) + '<b style="color:' + BCOL[i] + '">' + cnt[i] + "</b></div>"; }).join("") + (Object.keys(srs).length ? "" : '<p class="muted" style="margin:10px 0 0">Les cases se remplissent au fil de tes parties : une question réussie passe à la case suivante, une erreur revient au début.</p>');
         var modes = Object.keys(st.modes).map(function (k) { return esc(MODE_LABELS[k] || k) + " : " + st.modes[k]; }).join(" · ") || "—";
         var analytics = cfg.analyticsUrl ? '<a class="btn btn-primary" href="' + esc(safeUrl(cfg.analyticsUrl)) + '" target="_blank" rel="noopener">Ouvrir les statistiques de fréquentation</a>' : '<p class="muted" style="margin:0">Pour la fréquentation du site public (visites, pages vues, pays), active Cloudflare Web Analytics, puis colle son adresse dans <code>analyticsUrl</code> (fichier <code>js/config.js</code>) : le bouton apparaîtra ici.</p>';
         return '<main class="container page"><div class="stack" style="gap:10px;margin-bottom:24px"><span class="eyebrow" style="color:var(--gold)">' + (DEV_PAGES ? "Onglet local · pour Rachel" : "Ta progression") + '</span><h1 class="h-l">' + (DEV_PAGES ? "Stats d\'utilisation" : "Mes stats") + '</h1><p class="lead">' + (DEV_PAGES ? "Ce que ce navigateur a enregistré. Ces chiffres restent sur cet appareil et ne concernent que l\'adresse ouverte : le site en local et le site publié ont chacun les leurs." : "Tes réussites, tes erreurs et tes thèmes à retravailler. Ces chiffres restent dans ton navigateur : personne d\'autre ne les voit, et ils disparaissent si tu vides les données du navigateur ou changes d\'appareil.") + '</p></div>' +
