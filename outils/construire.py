@@ -46,7 +46,8 @@ if os.path.exists(os.path.join(ROOT, "apercu.jpg")): shutil.copy(os.path.join(RO
 # --- mode hors ligne : manifeste, icônes et service worker (la liste des fichiers à mémoriser est générée ici) ---
 for f in ("manifest.webmanifest",):
     if os.path.exists(os.path.join(ROOT, f)): shutil.copy(os.path.join(ROOT, f), os.path.join(DIST, f))
-if os.path.isdir(os.path.join(ROOT, "icons")): shutil.copytree(os.path.join(ROOT, "icons"), os.path.join(DIST, "icons"))
+for f in ("icon-192.png", "icon-512.png", "icon-maskable-512.png"):
+    if os.path.exists(os.path.join(ROOT, f)): shutil.copy(os.path.join(ROOT, f), os.path.join(DIST, f))
 if os.path.exists(os.path.join(ROOT, "sw.js")):
     cache = ["./"]
     for base, _, names in os.walk(DIST):
