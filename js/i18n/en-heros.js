@@ -160,7 +160,7 @@ PU_I18N.add({
   "Phishing, malwares, identités, détection SOC, réponse à incident, durcissement et réglementation.": "Phishing, malware, identities, SOC detection, incident response, hardening and regulation.",
   "IT · systèmes & réseaux": "IT · systems & networks",
   "le Grand Crash": "the Great Crash",
-  "Réseau, Windows et Active Directory, Linux, sauvegarde, virtualisation, dépannage et matériel.": "Networking, Windows and Active Directory, Linux, backup, virtualisation, troubleshooting and hardware.",
+  "Réseau, DNS et VPN, Windows et Active Directory, Linux, sauvegarde et stockage, supervision, ITIL, dépannage et matériel.": "Networking, DNS and VPN, Windows and Active Directory, Linux, backup and storage, monitoring, ITIL, troubleshooting and hardware.",
   "le Bug fantôme": "the Phantom Bug",
   "Scripting et automatisation, web et API, Python, SQL et Git, sécurité du code.": "Scripting and automation, web and APIs, Python, SQL and Git, code security.",
   "IA": "AI",
@@ -191,5 +191,14 @@ PU_I18N.add({
   "IA générative & prompts": "Generative AI & prompts",
   "IA & cybersécurité": "AI & cybersecurity",
   "Éthique & AI Act": "Ethics & AI Act",
+  "DNS": "DNS",
+  "Réseau pour Microsoft 365": "Network for Microsoft 365",
+  "VPN & accès distant": "VPN & remote access",
+  "VLAN & routage": "VLANs & routing",
+  "Diagnostic réseau": "Network troubleshooting",
+  "Linux en ligne de commande": "Linux command line",
+  "Supervision": "Monitoring",
+  "ITIL & GLPI": "ITIL & GLPI",
+  "Stockage & RAID": "Storage & RAID",
   "Écologie, sobriété & RSE": "Ecology, sobriety & CSR"
 });
