@@ -19,7 +19,7 @@ app_js = [x for x in scripts if x.endswith("app.js")]
 data_js = [x for x in scripts if not x.endswith("app.js")]
 def pack(files, name):
     tmp = os.path.join(DIST, "js", "_tmp.js")
-    open(tmp, "w", encoding="utf-8").write(";\n".join(open(os.path.join(ROOT, f), encoding="utf-8").read() for f in files))
+    open(tmp, "w", encoding="utf-8").write(";\n".join(open(os.path.join(ROOT, f), encoding="utf-8").read() for f in files).replace("__BUILD_DATE__", time.strftime("%Y-%m-%d")))
     subprocess.run([ESB, tmp, "--minify", "--target=es2018", "--charset=utf8", "--outfile=" + os.path.join(DIST, "js", name)], check=True)
     os.remove(tmp)
 pack(data_js, "power-up.min.js")
