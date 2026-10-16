@@ -6,7 +6,7 @@
 - feuille de style minifiée,
 - seuls les sons réellement joués sur le site public.
 Nécessite esbuild (chemin dans la variable ESBUILD, sinon « esbuild » dans le PATH)."""
-import os, re, shutil, subprocess, sys
+import json, os, re, shutil, subprocess, sys, time
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST = os.path.join(ROOT, "dist")
 ESB = os.environ.get("ESBUILD", "esbuild")
@@ -43,4 +43,16 @@ out = re.sub(r'<script src="([^"]+)"></script>\n?', sub, html).replace('href="cs
 open(os.path.join(DIST, "index.html"), "w", encoding="utf-8").write(out)
 for s in SONS_PUBLICS: shutil.copy(os.path.join(ROOT, "sons", s), os.path.join(DIST, "sons", s))
 if os.path.exists(os.path.join(ROOT, "apercu.jpg")): shutil.copy(os.path.join(ROOT, "apercu.jpg"), os.path.join(DIST, "apercu.jpg"))  # image d'aperçu du lien (Open Graph)
+# --- mode hors ligne : manifeste, icônes et service worker (la liste des fichiers à mémoriser est générée ici) ---
+for f in ("manifest.webmanifest",):
+    if os.path.exists(os.path.join(ROOT, f)): shutil.copy(os.path.join(ROOT, f), os.path.join(DIST, f))
+if os.path.isdir(os.path.join(ROOT, "icons")): shutil.copytree(os.path.join(ROOT, "icons"), os.path.join(DIST, "icons"))
+if os.path.exists(os.path.join(ROOT, "sw.js")):
+    cache = ["./"]
+    for base, _, names in os.walk(DIST):
+        for n in names:
+            rel = os.path.relpath(os.path.join(base, n), DIST).replace(os.sep, "/")
+            if rel not in ("_headers", "sw.js"): cache.append(rel)
+    sw = open(os.path.join(ROOT, "sw.js"), encoding="utf-8").read().replace("__BUILD__", time.strftime("%Y%m%d%H%M%S")).replace("__FILES__", json.dumps(sorted(cache)))
+    open(os.path.join(DIST, "sw.js"), "w", encoding="utf-8").write(sw)
 print("dist/ prêt :", len(scripts), "scripts réunis en 2 (+ dictionnaires anglais dans js/i18n/)")
