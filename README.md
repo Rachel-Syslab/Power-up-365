@@ -1,6 +1,6 @@
 # Power Up
 
-Site d'entraînement **gratuit et ludique** sur Microsoft 365, la cybersécurité, l'informatique, le développement, l'IA et le numérique responsable. Projet personnel réalisé pendant mon stage, dans le cadre de ma reconversion en TSSR (cybersécurité).
+Site d'entraînement **gratuit et ludique** sur Microsoft 365, la cybersécurité, l'informatique, le développement, l'IA et le numérique responsable. Projet personnel réalisé en vue de mon stage, dans le cadre de ma reconversion en TSSR.
 
 **Site en ligne : https://powerup365.pages.dev**
 
