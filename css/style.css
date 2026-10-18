@@ -2787,3 +2787,13 @@ html[data-theme="light"] .hero-toast code { color: #15703D; }
 .ev-link { color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
 .ev-link:hover, .ev-link:focus-visible { border-color: var(--gold); transform: translateY(-1px); }
 .ev-more { display: inline-block; margin-left: 4px; color: var(--gold); font-weight: 700; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+
+/* Veille : étoile « favori » sur chaque actu */
+.news-fav { margin-left: auto; flex: none; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border-radius: 50%; background: transparent; border: 1px solid var(--line); color: var(--muted); cursor: pointer; transition: color .15s ease, border-color .15s ease, background .15s ease; }
+.news-fav svg { fill: none; stroke: currentColor; stroke-width: 2; }
+.news-fav:hover { color: #F5C542; border-color: #F5C542; }
+.news-fav.on { color: #F5C542; border-color: #F5C542; background: color-mix(in srgb, #F5C542 14%, transparent); }
+.news-fav.on svg { fill: currentColor; }
+.news-fav:focus-visible { outline: 2px solid #F5C542; outline-offset: 2px; }
+html[data-theme="light"] .news-fav:hover, html[data-theme="light"] .news-fav.on { color: #B07A00; border-color: #B07A00; }
+@media (prefers-reduced-motion: reduce) { .news-fav { transition: none; } }
