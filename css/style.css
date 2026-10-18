@@ -1865,6 +1865,24 @@ html[data-theme="light"] .btn-next-grade { color: #FFFFFF !important; }
 .mode-card.soon[style*="--mc"] { border-style: dashed; }
 html[data-theme="light"] .mode-card[style*="--mc"] { background: color-mix(in srgb, var(--mc) 9%, #FFFFFF); }
 @media (prefers-reduced-motion: reduce) { .mode-card[style*="--mc"], .mode-card[style*="--mc"]:hover { transition: none; transform: none; } }
+/* Cartes de l'accueil dépliantes : « En savoir plus » + bouton vers l'onglet */
+.mode-fold { cursor: pointer; }
+.modes:has(.mode-fold.open) { align-items: start; }
+.mode-fold.open, .mode-fold.open:hover { transform: none; }
+.mode-more { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0; background: none; border: 0; font: inherit; font-size: 14px; font-weight: 700; color: var(--mc); cursor: pointer; }
+.mode-more svg { transition: transform .2s ease; }
+.mode-more .mm-close { display: none; }
+.mode-fold.open .mode-more .mm-open { display: none; }
+.mode-fold.open .mode-more .mm-close { display: inline; }
+.mode-fold.open .mode-more svg { transform: rotate(180deg); }
+.mode-more:focus-visible, .mode-go:focus-visible { outline: 2px solid var(--mc); outline-offset: 3px; }
+.mode-panel { margin-top: 2px; padding-top: 14px; border-top: 1px solid color-mix(in srgb, var(--mc) 35%, var(--line)); display: flex; flex-direction: column; gap: 14px; }
+.mode-panel[hidden] { display: none; }
+.mode-panel ul { margin: 0; padding-left: 18px; color: var(--text-2); display: flex; flex-direction: column; gap: 6px; }
+.mode-go { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: 12px; background: var(--mc); color: #0B1020; font-weight: 700; text-decoration: none; text-align: center; }
+.mode-go:hover { color: #0B1020; filter: brightness(1.08); }
+@media (prefers-reduced-motion: reduce) { .mode-more svg { transition: none; } }
+
 /* Mascotte de l'accueil : fond un peu plus lent */
 .mascot-panel .pt-lines { animation-duration: 9s; }
 .mascot-panel .pt-glow { animation-duration: 6s; }
