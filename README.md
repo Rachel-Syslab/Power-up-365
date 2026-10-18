@@ -55,4 +55,3 @@ Utilise le bouton « Signaler » dans le site, ou ouvre une *issue* sur ce dép�
 ## Licence
 
 Tous droits réservés (voir `LICENSE`). Le code est visible pour présenter le projet ; merci de me demander avant de le réutiliser.
-Un bloc de code comme celui-ci a un bout
