@@ -10,14 +10,14 @@ On apprend plus facilement quand c'est un jeu. Power Up transforme la révision 
 
 ## Fonctionnalités
 
-- **Entraînement** par thème et par niveau (Recrue, Héros, Super-héros, Légende), sans pression.
+- **Entraînement** par thème et par niveau (Débutant, Confirmé, Expert, Légende), sans pression.
 - **Mode classé** : plus la difficulté est haute, plus on gagne d'XP et plus une erreur coûte cher.
 - **Missions boss** inspirées de situations réelles (phishing…).
 - **Révision espacée** et mode « mes erreurs » ; page **Mes stats** personnelle (données gardées dans le navigateur).
 - **Défis entre collègues** : mêmes questions pour tous, générées de façon déterministe, sans serveur.
 - **Veille technologique** : alertes de sécurité et actualités.
 - **Français et anglais**, **mode hors ligne** (service worker).
-- Cinq formats de questions : choix unique, vrai/faux, réponses multiples, remise dans l'ordre, repérage d'indices.
+- Six formats de questions : choix unique, vrai/faux, réponses multiples, remise dans l'ordre, repérage d'indices, réponse à saisir.
 
 ## Choix techniques
 
