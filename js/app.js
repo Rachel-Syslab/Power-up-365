@@ -2498,6 +2498,19 @@
   var VEILLE_PROG_KEY = "powerup365.veille.progress";
   var veilleProg = (function () { try { return JSON.parse(window.localStorage.getItem(VEILLE_PROG_KEY) || "{}") || {}; } catch (e) { return {}; } })();
   function saveProg() { try { window.localStorage.setItem(VEILLE_PROG_KEY, JSON.stringify(veilleProg)); } catch (e) { } }
+  var VEILLE_FAV_KEY = "powerup365.veille.fav";
+  var veilleFav = (function () { try { return JSON.parse(window.localStorage.getItem(VEILLE_FAV_KEY) || "{}") || {}; } catch (e) { return {}; } })();
+  function saveFav() { try { window.localStorage.setItem(VEILLE_FAV_KEY, JSON.stringify(veilleFav)); } catch (e) { } }
+  function isFav(url) { return !!(url && veilleFav[url]); }
+  function favList() { return Object.keys(veilleFav).map(function (k) { return veilleFav[k]; }).filter(function (f) { return f && f.url; }).sort(function (a, b) { return (b.saved || 0) - (a.saved || 0); }); }
+  /* le favori garde une copie de l'actu (titre, source, date, résumé) : elle reste lisible même quand elle quitte le flux quotidien */
+  function toggleFav(url) {
+    if (!url) return false;
+    if (veilleFav[url]) { delete veilleFav[url]; saveFav(); return false; }
+    var it = veilleData().items.filter(function (x) { return x.url === url; })[0]; if (!it) return false;
+    veilleFav[url] = { url: it.url, title: it.title, source: it.source, date: it.date, category: it.category, summary: it.summary, lang: it.lang, saved: Date.now() };
+    saveFav(); return true;
+  }
   function isUnread(it) { return !veilleRead[it.url] && !veilleProg[it.url]; }
   function isInProgress(it) { return !veilleRead[it.url] && !!veilleProg[it.url]; }
   function markRead(url) { if (!url) return false; var ch = !veilleRead[url] || veilleProg[url]; veilleRead[url] = 1; if (veilleProg[url]) { delete veilleProg[url]; saveProg(); } saveRead(); return !!ch; }
@@ -2523,11 +2536,13 @@
     if (withTime) { o.hour = "2-digit"; o.minute = "2-digit"; }
     return d.toLocaleDateString("fr-FR", o);
   }
+  function favKey(url) { var h = 0, t = String(url || ""); for (var i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) | 0; return (h >>> 0).toString(36); }
   function veilleCard(it) {
     var c = VEILLE_CATS[it.category] || { label: it.category || "Actu", color: "#8EA2FF" };
-    var unread = isUnread(it), prog = isInProgress(it), u = esc(safeUrl(it.url));
+    var unread = isUnread(it), prog = isInProgress(it), fav = isFav(it.url), u = esc(safeUrl(it.url));
     return '<article class="news' + (it.category === "alerte" ? " news-alert" : "") + (unread ? " unread" : (prog ? " in-progress" : " read")) + '" style="--c:' + c.color + '">' +
-      '<div class="news-meta"><span class="level-tag">' + esc(c.label) + "</span>" + (unread ? '<span class="badge-new"><span class="dot-live" aria-hidden="true"></span>New<span class="sr-only"> (non lu)</span></span>' : (prog ? '<span class="badge-prog"><span class="prog-ico" aria-hidden="true"></span>En cours</span>' : '<span class="badge-read">Lu</span>')) + (it.lang === "en" ? '<span class="badge-lang" title="Article en anglais">EN</span>' : "") + '<span class="muted">' + esc(it.source) + " · " + esc(frDate(it.date)) + "</span></div>" +
+      '<div class="news-meta"><span class="level-tag">' + esc(c.label) + "</span>" + (unread ? '<span class="badge-new"><span class="dot-live" aria-hidden="true"></span>New<span class="sr-only"> (non lu)</span></span>' : (prog ? '<span class="badge-prog"><span class="prog-ico" aria-hidden="true"></span>En cours</span>' : '<span class="badge-read">Lu</span>')) + (it.lang === "en" ? '<span class="badge-lang" title="Article en anglais">EN</span>' : "") + '<span class="muted">' + esc(it.source) + " · " + esc(frDate(it.date)) + "</span>" +
+      '<button type="button" class="news-fav' + (fav ? " on" : "") + '" data-action="fav" data-id="' + esc(it.url) + '" data-key="fav-' + favKey(it.url) + '" aria-pressed="' + fav + '" aria-label="' + (fav ? "Retirer des favoris" : "Ajouter aux favoris") + ' : ' + esc(it.title) + '"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z" stroke-linejoin="round"/></svg></button></div>' +
       '<h3 class="news-title"><a href="' + u + '" target="_blank" rel="noopener noreferrer" data-read-url="' + esc(it.url) + '">' + esc(it.title) + "</a></h3>" +
       (it.summary ? "<p>" + esc(it.summary) + "</p>" : "") +
       '<a class="news-link" href="' + u + '" target="_blank" rel="noopener noreferrer" data-read-url="' + esc(it.url) + '">Lire la source<span class="sr-only"> : ' + esc(it.title) + " (nouvel onglet)</span> ↗</a>" + (prog ? '<button type="button" class="btn btn-ghost btn-small news-finish" data-finish-url="' + esc(it.url) + '">✓ J\'ai fini</button>' : "") + "</article>";
@@ -2540,32 +2555,35 @@
       actions: {
         cat: function (d) { V.cat = d.id; V.showAll = false; V._scrollNews = true; },
         more: function () { V.showAll = !V.showAll; V._focusKey = "news-more"; },
+        fav: function (d) { var on = toggleFav(d.id); sfx("toggle"); V._focusKey = d.key; if (!on && V.cat === "fav") { V._focusKey = null; } },
         readAll: function () { veilleData().items.forEach(function (it) { if (V.cat === "all" || it.category === V.cat) { veilleRead[it.url] = 1; delete veilleProg[it.url]; } }); saveRead(); saveProg(); }
       },
       render: function () {
         var data = veilleData(), self = this;
         var counts = { all: data.items.length };
         data.items.forEach(function (it) { counts[it.category] = (counts[it.category] || 0) + 1; });
-        var chips = [{ id: "all", label: "Toutes", color: "#8EA2FF" }].concat(Object.keys(VEILLE_CATS).filter(function (k) { return counts[k]; }).map(function (k) { return { id: k, label: VEILLE_CATS[k].label, color: VEILLE_CATS[k].color }; })).map(function (c) {
+        var favs = favList(); counts.fav = favs.length;
+        var chips = [{ id: "all", label: "Toutes", color: "#8EA2FF" }, { id: "fav", label: "Mes favoris", color: "#F5C542" }].concat(Object.keys(VEILLE_CATS).filter(function (k) { return counts[k]; }).map(function (k) { return { id: k, label: VEILLE_CATS[k].label, color: VEILLE_CATS[k].color }; })).map(function (c) {
           var sel = c.id === self.cat;
           var nu = unreadCount(c.id);
           return '<button type="button" class="choice chip-news' + (sel ? " selected" : "") + (nu ? " has-new" : "") + '" style="--c:' + c.color + '" data-action="cat" data-id="' + c.id + '" data-key="vc-' + c.id + '" aria-pressed="' + sel + '">' + (nu ? '<span class="dot-live chip-dot" aria-hidden="true"></span>' : "") + '<span class="name">' + esc(c.label) + "</span><small>" + (counts[c.id] || 0) + " actu" + ((counts[c.id] || 0) > 1 ? "s" : "") + (nu ? ' · <b class="new-count">' + nu + " non lue" + (nu > 1 ? "s" : "") + "</b>" : "") + "</small></button>";
         }).join("");
-        var list = data.items.filter(function (it) { return self.cat === "all" || it.category === self.cat; });
+        var list = self.cat === "fav" ? favs : data.items.filter(function (it) { return self.cat === "all" || it.category === self.cat; });
         var LIMIT = 6, shown = this.showAll ? list : list.slice(0, LIMIT);
         var cards = shown.map(function (it) { return veilleCard(it); }).join("");
         var moreBtn = list.length > LIMIT ? '<div class="news-more"><button type="button" class="btn btn-ghost" data-action="more" data-key="news-more" aria-expanded="' + !!this.showAll + '">' + (this.showAll ? "Réduire la liste ↑" : "Voir toutes les actus (" + list.length + ") ↓") + "</button></div>" : "";
         var nuCat = unreadCount(this.cat), catNow = this.cat, npCat = veilleData().items.filter(function (it) { return isInProgress(it) && (catNow === "all" || it.category === catNow); }).length;
-        var toolbar = '<div class="news-toolbar"><span class="muted">' + (catNow !== "all" && VEILLE_CATS[catNow] ? '<b class="tb-cat" style="color:' + VEILLE_CATS[catNow].color + '">' + esc(VEILLE_CATS[catNow].label) + "</b> · " : "") + (nuCat ? '<span class="dot-live" aria-hidden="true"></span> ' + nuCat + " actu" + (nuCat > 1 ? "s" : "") + " non lue" + (nuCat > 1 ? "s" : "") : "Tout est lu, bravo !") + (npCat ? ' · <span class="prog-ico" aria-hidden="true"></span> ' + npCat + " en cours" : "") + "</span>" + (nuCat ? '<button type="button" class="btn btn-ghost btn-small" data-action="readAll">Tout marquer comme lu</button>' : "") + "</div>";
+        var isFavView = catNow === "fav";
+        var toolbar = isFavView ? '<div class="news-toolbar"><span class="muted"><b class="tb-cat" style="color:#F5C542">Mes favoris</b> · ' + favs.length + " favori" + (favs.length > 1 ? "s" : "") + '</span><span class="muted" style="font-size:13px">Ils restent ici même quand l\'actu quitte la veille.</span></div>' : '<div class="news-toolbar"><span class="muted">' + (catNow !== "all" && VEILLE_CATS[catNow] ? '<b class="tb-cat" style="color:' + VEILLE_CATS[catNow].color + '">' + esc(VEILLE_CATS[catNow].label) + "</b> · " : "") + (nuCat ? '<span class="dot-live" aria-hidden="true"></span> ' + nuCat + " actu" + (nuCat > 1 ? "s" : "") + " non lue" + (nuCat > 1 ? "s" : "") : "Tout est lu, bravo !") + (npCat ? ' · <span class="prog-ico" aria-hidden="true"></span> ' + npCat + " en cours" : "") + "</span>" + (nuCat ? '<button type="button" class="btn btn-ghost btn-small" data-action="readAll">Tout marquer comme lu</button>' : "") + "</div>";
         var help = '<details class="upd-help"><summary class="btn btn-ghost btn-small"><span aria-hidden="true">↻</span> Mettre à jour</summary><div class="upd-pop stack" style="gap:10px">' +
           "<p>Dans le dossier du site, ouvre le dossier <code>veille</code> et double-clique sur <code>mettre-a-jour-veille.bat</code>. Le script récupère les dernières actualités des sources officielles, puis il suffit de rafraîchir cette page (F5).</p>" +
           "<p>Pour une mise à jour automatique chaque matin, lance une fois <code>activer-mise-a-jour-quotidienne.bat</code>.</p>" +
           '<p class="muted">Sources : CERT-FR, Cybermalveillance.gouv.fr, Microsoft Security Blog, Blog Microsoft 365. Les résumés viennent des sources elles-mêmes ; lis toujours l\'article original avant d\'agir.</p></div></details>';
         return '<main class="container page">' +
           '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px;align-items:end;margin-bottom:28px"><div class="stack" style="gap:10px"><span class="eyebrow" style="color:#FF8AA3">Veille technologique</span><h1 class="h-l">Ce qui bouge dans nos métiers</h1><p class="lead">Cyber, informatique, Microsoft 365, IA, lois et numérique responsable : les actus du moment, depuis des sources fiables.</p></div>' +
-          '<div class="veille-upd"><span class="upd-when"><span class="muted">Mise à jour :</span> <b>' + (data.updated ? esc(frDate(data.updated, true)) : "jamais") + '</b></span>' + help + "</div></div>" +
+          '<div class="veille-upd"><span class="upd-when"><span class="muted">Mise à jour :</span> <b>' + (data.updated ? esc(frDate(data.updated, true)) : "jamais") + '</b></span>' + (DEV_PAGES ? help : "") + "</div></div>" +
           '<div class="choices veille-chips" style="margin-bottom:28px">' + chips + "</div>" +
-          (cards ? toolbar + '<div class="news-grid">' + cards + "</div>" + moreBtn : '<div class="panel"><p style="margin:0">Aucune actualité pour le moment. Utilise le bouton « Mettre à jour » en haut.</p></div>') +
+          (cards ? toolbar + '<div class="news-grid">' + cards + "</div>" + moreBtn : (isFavView ? '<div class="panel"><p style="margin:0">Aucun favori pour l\'instant. Touche l\'étoile d\'une actu pour la retrouver ici.</p></div>' : '<div class="panel"><p style="margin:0">Aucune actualité pour le moment. Utilise le bouton « Mettre à jour » en haut.</p></div>')) +
           "</main>";
       }
     };
