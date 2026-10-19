@@ -150,7 +150,7 @@ PU_I18N.add({
   "Nouvel événement au calendrier · +10 XP": "New calendar event · +10 XP",
   "Halloween, Noël, Pâques, Patch Tuesday… Certains jours, le QG et ses gardiens ont un message pour toi. Reviens le bon jour pour les découvrir.": "Halloween, Christmas, Easter, Patch Tuesday… On some days, the HQ and its guardians have a message for you. Come back on the right day to find out.",
   "Permission refusée": "Permission denied",
-  "Tu as tenté la pire commande de Linux, rm -rf /. Sudo a refusé, et c'est heureux pour le QG.": "You tried the worst Linux command, rm -rf /. Sudo refused, and that's lucky for the HQ.",
+  "Tu as tenté la pire commande de Linux, rm -rf /. Sudo a refusé, et le QG l'a échappé belle.": "You tried the worst Linux command, rm -rf /. Sudo refused, and the HQ had a narrow escape.",
   "Sudo connaît une commande que personne ne devrait jamais lancer en root… Tape-la au clavier (ou dans le champ pseudo). Attention aux espaces !": "Sudo knows a command nobody should ever run as root… Type it on the keyboard (or in the nickname field). Mind the spaces!",
   "L'écran bleu": "The blue screen",
   "Tu as déclenché le célèbre écran bleu de la mort, version QG.": "You triggered the famous blue screen of death, HQ edition.",
