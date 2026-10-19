@@ -164,7 +164,22 @@ window.QUESTIONS.push(
   {"theme":"materiel","level":"legende","format":"order","q":"Remets dans l'ordre la chaîne de confiance d'un démarrage sécurisé Windows :","items":["Le firmware UEFI vérifie la signature du gestionnaire de démarrage (bootmgfw.efi) grâce à la base db","Le gestionnaire de démarrage vérifie puis lance winload.efi","winload.efi vérifie le noyau et les pilotes de démarrage","Le pilote antimalware à lancement anticipé (ELAM) démarre avant les autres pilotes tiers"],"e":"Chaque maillon vérifie la signature du suivant avant de lui passer la main (Secure Boot puis Trusted Boot). ELAM permet à l'antivirus d'évaluer les pilotes de démarrage avant qu'ils ne se chargent."},
   {"theme":"support","level":"recrue","format":"single","q":"Dans ITIL, quelle est la différence entre un incident et une demande de service ?","a":["Aucune : ce sont deux noms ITIL pour un même type de ticket","L'incident concerne le matériel, la demande les logiciels et les accès","L'incident est un dysfonctionnement imprévu, la demande une requête prévue","L'incident vient d'un utilisateur, la demande est validée par un manager"],"g":2,"e":"Un incident, c'est quelque chose qui ne marche pas comme prévu. Une demande de service, c'est une requête normale et prévue : créer un compte, installer un logiciel, donner un accès."},
   {"theme":"support","level":"recrue","format":"tf","q":"Avant de clôturer un ticket, on vérifie avec l'utilisateur que son problème est bien résolu.","a":["Vrai","Faux"],"g":0,"e":"Confirmer la résolution avec l'utilisateur évite de fermer un ticket alors que le problème persiste. Beaucoup de services clôturent automatiquement après quelques jours sans réponse, mais la vérification reste le bon réflexe."},
-  {"theme":"support","level":"recrue","format":"input","q":"Quel raccourci clavier ouvre l'outil de capture d'écran de Windows pour sélectionner une zone et la copier, par exemple un message d'erreur ?","placeholder":"ex. Ctrl + C","answers":["Windows+Maj+S","Win+Maj+S","Windows+Shift+S","Win+Shift+S","Touche Windows+Maj+S","Windows + Maj + S"],"e":"Windows + Maj + S lance l'Outil Capture en mode sélection : la capture part dans le presse-papiers, prête à être collée dans le ticket ou un message. Impr. écran capture tout l'écran."},
+  {
+   "theme": "support",
+   "level": "recrue",
+   "format": "input",
+   "q": "Quel raccourci clavier ouvre l'outil de capture d'écran de Windows pour sélectionner une zone et la copier, par exemple un message d'erreur ?",
+   "placeholder": "ex. Ctrl + C",
+   "answers": [
+    "Windows+Maj+S",
+    "Win+Maj+S",
+    "Windows+Shift+S",
+    "Win+Shift+S",
+    "Touche Windows+Maj+S",
+    "Windows + Maj + S"
+   ],
+   "e": "Windows + Maj + S lance l'Outil Capture en mode sélection : la capture part dans le presse-papiers, prête à être collée dans le ticket ou un message. Sous Windows 11, la touche Impr. écran ouvre aussi l'Outil Capture par défaut."
+  },
   {"theme":"support","level":"recrue","format":"single","q":"Un utilisateur appelle, très énervé, parce qu'il a perdu une heure de travail. Bon réflexe ?","a":["L'écouter sans l'interrompre, reformuler son problème et rester calme","Le rassurer en lui promettant de récupérer son travail à coup sûr","Lui passer la musique d'attente pour qu'il se détende un peu","Passer directement aux questions techniques sans commenter"],"g":0,"e":"Écouter et reformuler montre que tu as compris et fait redescendre la tension. Un utilisateur qui se sent entendu donne ensuite des informations plus claires pour le diagnostic."},
   {"theme":"support","level":"recrue","format":"single","q":"Pourquoi demander à l'utilisateur une capture d'écran du message d'erreur ?","a":["Pour garder une preuve en cas de litige avec l'utilisateur","Parce que c'est obligatoire pour ouvrir un ticket","Pour obtenir le texte exact et le code d'erreur, utiles au diagnostic","Pour l'afficher au mur des plus belles erreurs du service"],"g":2,"e":"Le texte exact et le code d'erreur permettent de chercher dans la base de connaissances ou sur le web. « Il y a un message rouge » ne suffit pas pour diagnostiquer."},
   {"theme":"support","level":"recrue","format":"single","q":"Quel outil intégré à Windows permet à un technicien d'aider un utilisateur à distance grâce à un code de sécurité temporaire ?","a":["Le Bureau à distance (mstsc)","L'Observateur d'événements","Le Gestionnaire de périphériques","Assistance rapide (Quick Assist)"],"g":3,"e":"Assistance rapide permet de voir ou de contrôler l'écran de l'utilisateur après qu'il a saisi le code fourni par le technicien et accepté le partage. Le Bureau à distance, lui, ouvre une session sur la machine plutôt que de partager l'écran de l'utilisateur."},
@@ -186,7 +201,18 @@ window.QUESTIONS.push(
   {"theme":"support","level":"super","format":"tf","q":"Avec ITIL 4, chaque changement, même standard, doit être approuvé par un CAB (Change Advisory Board).","a":["Vrai","Faux"],"g":1,"e":"Les changements standard sont pré-autorisés. ITIL 4 parle plus largement d'« autorité de changement » adaptée au risque : le CAB n'est plus un passage obligé pour tout."},
   {"theme":"support","level":"legende","format":"single","q":"Quelle pratique ITIL 4 vise à réduire la probabilité et l'impact des incidents en identifiant leurs causes réelles et potentielles ?","a":["La gestion des incidents","La gestion des niveaux de service","La gestion des mises en production","La gestion des problèmes"],"g":3,"e":"C'est la définition de la gestion des problèmes. La gestion des incidents, elle, vise à rétablir le service le plus vite possible, sans forcément traiter la cause."},
   {"theme":"support","level":"legende","format":"single","q":"Les trois types de changements définis par ITIL 4 sont…","a":["Mineur, majeur et critique","Standard, normal et urgent","Planifié, non planifié et urgent","Standard, majeur et urgent"],"g":1,"e":"ITIL 4 distingue les changements standard (pré-autorisés), normaux (évalués et autorisés au cas par cas) et urgents (à mettre en œuvre au plus vite, avec une autorisation accélérée)."},
-  {"theme":"support","level":"legende","format":"input","q":"Quelle commande Windows réinitialise le catalogue Winsock, utile quand la pile réseau est corrompue ?","placeholder":"Commande complète","answers":["netsh winsock reset"],"e":"netsh winsock reset remet le catalogue Winsock à son état par défaut ; un redémarrage est nécessaire. On la combine souvent avec netsh int ip reset pour la pile TCP/IP."},
+  {
+   "theme": "support",
+   "level": "legende",
+   "format": "input",
+   "q": "Quelle commande Windows réinitialise le catalogue Winsock, utile quand la pile réseau est corrompue ?",
+   "placeholder": "Commande complète",
+   "answers": [
+    "netsh winsock reset",
+    "netsh winsock reset catalog"
+   ],
+   "e": "netsh winsock reset remet le catalogue Winsock à son état par défaut ; un redémarrage est nécessaire. On la combine souvent avec netsh int ip reset pour la pile TCP/IP."
+  },
   {"theme":"support","level":"legende","format":"single","q":"Sous Windows, quelle commande affiche les connexions et ports en écoute avec le PID du processus associé ?","a":["netstat -e","netstat -s","netstat -ano","arp -a"],"g":2,"e":"netstat -ano liste toutes les connexions (-a) en numérique (-n) avec le PID (-o), qu'on retrouve ensuite dans le Gestionnaire des tâches. -e affiche des statistiques Ethernet et -s des statistiques par protocole."},
   {"theme":"support","level":"legende","format":"single","q":"Par défaut, où Windows enregistre-t-il les petits fichiers de vidage mémoire (minidumps) créés après un écran bleu ?","a":["C:\\ProgramData\\Microsoft\\Windows\\WER","C:\\Windows\\Minidump","C:\\Windows\\Temp\\Dumps","C:\\Windows\\System32\\LogFiles"],"g":1,"e":"Les minidumps sont dans C:\\Windows\\Minidump (le vidage complet va dans C:\\Windows\\MEMORY.DMP). Le dossier WER contient surtout les rapports de plantage d'applications."},
   {"theme":"support","level":"legende","format":"tf","q":"Dans ITIL, un incident majeur peut être clôturé (service rétabli) alors que le problème associé reste ouvert.","a":["Vrai","Faux"],"g":0,"e":"L'incident est clôturé dès que le service est rétabli, souvent grâce à un contournement. Le problème reste ouvert tant que la cause racine n'est pas identifiée et traitée."},
