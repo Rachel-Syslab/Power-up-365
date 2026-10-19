@@ -1100,9 +1100,10 @@ window.BOSS_ALTS = {
      "LLM01:2025",
      "LLM 01",
      "LLM1",
-     "LLM-01"
+     "LLM-01",
+     "LLM01:2026"
     ],
-    "e": "L'injection de prompt est LLM01, le risque classé en tête du Top 10 OWASP pour les applications LLM, dans l'édition 2023 comme dans celle de 2025. Ce référentiel sert de base aux audits de sécurité des assistants IA."
+    "e": "L'injection de prompt est LLM01, le risque classé en tête du Top 10 OWASP pour les applications LLM, dans les éditions 2023, 2025 et 2026. Ce référentiel sert de base aux audits de sécurité des assistants IA."
    }
   },
   "5": {
