@@ -72,7 +72,7 @@ PU_I18N.add({
   "Deux gardiens portent le nom d'une commande. Tape leurs deux noms au clavier (ou dans le champ pseudo sur mobile).": "Two guardians are named after a command. Type both names on the keyboard (or in the nickname field on mobile).",
   "Le pire mot de passe": "The worst password",
   "Tu as tapé un des mots de passe les plus utilisés au monde : Phishbuster a déclenché l'alarme.": "You typed one of the most used passwords in the world: Phishbuster set off the alarm.",
-  "Phishbuster monte la garde. Tape au clavier (ou dans le champ pseudo) un des pires mots de passe du monde, les six premiers chiffres, ou la première rangée de ton clavier AZERTY…": "Phishbuster is on guard. Type on the keyboard (or in the nickname field) one of the worst passwords in the world, the first six digits, or the top row of your keyboard…",
+  "Phishbuster monte la garde. Tape au clavier (ou dans le champ pseudo) un des pires mots de passe du monde…": "Phishbuster is on guard. Type on the keyboard (or in the nickname field) one of the worst passwords in the world…",
   "Lumières éteintes": "Lights out",
   "Green Byte a passé le QG en mode sobriété : moins de couleurs, moins d'animations, moins d'énergie.": "Green Byte switched the HQ to eco mode: fewer colours, fewer animations, less energy.",
   "Tout en bas de la page, une petite feuille fait pousser les économies d'énergie. Clique-la trois fois de suite.": "At the very bottom of the page, a small leaf grows energy savings. Click it three times in a row.",
