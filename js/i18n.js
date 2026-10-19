@@ -22,7 +22,7 @@
   window.PU_LANG = lang;
 
   /* dictionnaires chargés en anglais (ajouter ici les futurs lots de questions, ex. "en-questions-m365") */
-  var FILES = ["en-interface", "en-heros", "en-boss"];
+  var FILES = ["en-interface", "en-heros", "en-boss", "en-questions-m365", "en-questions-cyber", "en-questions-it", "en-questions-dev", "en-questions-ia", "en-questions-vert", "en-questions-complement"];
 
   /* ---------- normalisation (espaces, insécables) ---------- */
   function norm(s) { return s.replace(/[ \t\r  ]+/g, " ").replace(/ ?\n ?/g, "\n").trim(); }
