@@ -157,7 +157,7 @@ PU_I18N.add({
   "Chaque utilisateur de Windows l'a déjà croisé. Son sigle fait quatre lettres : tape-le au clavier.": "Every Windows user has met it. Its acronym is four letters long: type it on the keyboard.",
   "Gardien introuvable": "Guardian not found",
   "Tu as visité une adresse qui n'existe pas dans le QG : Uptime a cherché, sans succès.": "You visited an address that doesn't exist in the HQ: Uptime searched, in vain.",
-  "Dans la barre d'adresse du navigateur, change la fin de l'adresse du site pour une page qui n'existe pas (par exemple #/zzz).": "In the browser address bar, change the end of the site address to a page that doesn't exist (for example #/zzz).",
+  "Uptime surveille chaque porte du QG, même celles qui n'existent pas. Va frapper là où il n'y a rien à ouvrir…": "Uptime watches every door of the HQ, even the ones that don't exist. Go knock where there is nothing to open…",
   "Erreur 404": "Error 404",
   "Uptime a fouillé tous les serveurs du QG : cette page n'existe pas. Elle a peut-être été déplacée, ou elle n'a jamais existé. Les meilleurs admins ont tous un jour tapé une mauvaise adresse.": "Uptime searched every HQ server: this page doesn't exist. It may have been moved, or it may never have existed. All the best admins have typed a wrong address one day.",
   "Ton QG a rencontré un problème et doit redémarrer. On collecte quelques infos d'erreur, puis on le redémarre pour toi.": "Your HQ ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart it for you.",
@@ -174,6 +174,12 @@ PU_I18N.add({
   "D'autres secrets t'attendent…": "More secrets are waiting for you…",
   "Des secrets se cachent dans le QG…": "Secrets are hiding in the HQ…",
   "Indice du jour": "Hint of the day",
+  "Comment taper un secret ?": "How do I type a secret?",
+  "Sur ordinateur :": "On a computer:",
+  "tape directement au clavier, n'importe où sur le site.": "just type on your keyboard, anywhere on the site.",
+  "Sur téléphone :": "On a phone:",
+  "ouvre ton profil, appuie dans le champ « Ton pseudo » et tape le mot-secret. Pas besoin d'enregistrer, tu peux l'effacer ensuite.": "open your profile, tap the “Your nickname” field and type the secret word. No need to save, you can erase it afterwards.",
+  "Tout marquer comme vu": "Mark all as seen",
   "Tous les secrets sont trouvés · badge Chasseur de secrets obtenu !": "All secrets found · Secret Hunter badge earned!",
   "secret{0} trouvé{1} · +20 XP par secret": "secret{0} found · +20 XP per secret",
   "+20 XP par secret trouvé": "+20 XP per secret found",
@@ -283,6 +289,10 @@ PU_I18N.add({
   "Au programme": "On the menu",
   "Nouveau": "New",
   "Confidentialité": "Privacy",
+  "Laboratoire · bêta": "Lab · beta",
+  "Un vrai terminal, une console de sécurité d'analyste et une console M365, avec des données fictives. Rien n'est exécuté : tu peux tout essayer.": "A real terminal, an analyst security console and an M365 console, all with fictional data. Nothing is actually executed: try anything.",
+  "Terminal · SOC · M365": "Terminal · SOC · M365",
+  "Entrer au laboratoire": "Enter the lab",
   "S'entraîner sur ce pilier": "Train on this pillar",
   "Validé": "Done",
   "Vaincre le niveau {0} du Grand Blackout": "Defeat level {0} of the Great Blackout",
@@ -900,9 +910,12 @@ PU_I18N.add({
   "Clique un fond : ta carte à gauche change tout de suite. L'étoile ☆ met un fond en favori, il remonte en tête de liste.": "Click a background: your card on the left changes right away. The ☆ star makes a background a favourite, it moves to the top of the list.",
   "✓ Enregistré !": "✓ Saved!",
   "Ex. CyberNova": "E.g. CyberNova",
-  "Choisis un pseudo et un avatar parmi les gardiens du QG (Captain Reboot se débloque au grade maximum). Ils apparaissent dans le QG et serviront plus tard pour les défis d'équipe.": "Choose a nickname and an avatar among the HQ guardians (Captain Reboot unlocks at the maximum rank). They appear in the HQ and will be used later for team challenges.",
+  "Choisis un pseudo et un avatar parmi les gardiens du QG : ils te représentent partout sur le site.": "Choose a nickname and an avatar among the HQ guardians: they represent you everywhere on the site.",
+  "Progresser": "Progress",
+  "Ta progression": "Your progress",
+  "Ton calendrier": "Your calendar",
   "Chaleur de la cape": "Cape heat",
-  "1 · Ton pseudo": "1 · Your nickname",
+  "Ton pseudo": "Your nickname",
   "20 caractères maximum. Un pseudo plutôt que ton nom complet : c'est aussi une bonne pratique de sécurité !": "20 characters maximum. A nickname rather than your full name: it's also good security practice!",
   "Enregistrer mon héros": "Save my hero",
   "Temps de jeu": "Playing time",
@@ -1131,4 +1144,43 @@ PU_I18N.add({
   "La flèche en pixels des vieux jeux vidéo": "The pixel arrow of old video games",
   "Activer le curseur rétro 8-bit": "Turn on the retro 8-bit cursor",
   "Le mot du titre d'accueil s'électrise au survol : écoute les propositions. Choix actuel pour tout le monde : 8 · ton son d'aura, qui dure tant que la souris reste sur le mot et s'éteint en douceur. Le bouton essayé devient le son choisi sur cet appareil.": "The word in the home title crackles on hover: listen to the proposals. Current choice for everyone: 8 · your aura sound, which lasts as long as the mouse stays on the word and fades out gently. The button you try becomes the chosen sound on this device."
+});
+
+/* Entrée en feu (étape 87) */
+PU_I18N.add({
+  "5 jours de suite… ta cape est en feu !": "5 days in a row… your cape is on fire!",
+  "Le QG s'embrase pour toi. · +10 % d'XP en mode classé": "HQ is blazing for you. · +10% XP in ranked mode"
+});
+
+/* Fond de la carte : comment il a été débloqué (étape 87) */
+PU_I18N.add({
+  "Débloqué :": "Unlocked:"
+});
+
+/* Mode classé : fenêtre de confirmation du niveau */
+PU_I18N.add({
+  "Jouer en Débutant ?": "Play on Beginner?",
+  "Jouer en Confirmé ?": "Play on Intermediate?",
+  "Jouer en Expert ?": "Play on Expert?",
+  "Prêt à jouer sans filet ?": "Ready to play without a safety net?",
+  "C'est parti !": "Let's go!",
+  "Je relève le défi": "Bring it on",
+  "Bouclier permanent : l'erreur ne coûte rien.": "Permanent shield: a mistake costs nothing.",
+  "Bouclier après {0} bonnes réponses d'affilée : il encaisse ta prochaine erreur.": "Shield after {0} correct answers in a row: it absorbs your next mistake.",
+  "Aucun bouclier : chaque erreur coûte {0} XP.": "No shield: every mistake costs {0} XP.",
+  "Aucun bouclier : chaque erreur coûte {0} XP. Rétrogradation immédiate sous le seuil de ton grade.": "No shield: every mistake costs {0} XP. Immediate demotion below your rank threshold."
+});
+
+/* Entraînement : fenêtre de confirmation du niveau */
+PU_I18N.add({
+  "S'entraîner en Débutant ?": "Practise on Beginner?",
+  "S'entraîner en Confirmé ?": "Practise on Intermediate?",
+  "S'entraîner en Expert ?": "Practise on Expert?",
+  "Commencer l'entraînement ?": "Start practising?",
+  "Essayer la Légende ?": "Try Legend?",
+  "TOUS NIVEAUX": "ALL LEVELS",
+  "Toutes les difficultés mélangées, pour t'échauffer ou réviser large.": "All difficulties mixed, to warm up or revise broadly.",
+  "Version d'essai de la Légende : quelques questions de tous les piliers confondus pour te tester. Le niveau complet se débloque au grade Super technicien.": "Legend trial: a few questions from all pillars mixed together to test yourself. The full level unlocks at Super technician rank.",
+  "Questions d'essai, tous piliers confondus · tout le niveau au grade Super technicien": "Trial questions from all pillars · the whole level at Super technician rank",
+  "Sans XP : tu ne peux rien perdre.": "No XP at stake: you can't lose anything."
 });

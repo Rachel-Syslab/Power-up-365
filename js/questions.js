@@ -34,8 +34,8 @@ window.PILLARS = [
     desc: "Scripting et automatisation, web et API, Python, SQL et Git, sécurité du code.",
     subs: ["scripting", "web", "code", "devsecu"] },
   { id: "ia", label: "Intelligence artificielle", short: "IA", color: "#3FE0C5", hero: "prompta", boss: "la Grande Hallucination",
-    desc: "Comprendre, utiliser et sécuriser l'IA : fondamentaux, prompts, risques cyber, éthique et AI Act.",
-    subs: ["iabases", "prompts", "iasecu", "iaethique"] },
+    desc: "Comprendre, utiliser et sécuriser l'IA : fondamentaux, prompts, risques cyber, éthique et AI Act, et bons usages au travail.",
+    subs: ["iabases", "prompts", "iasecu", "iaethique", "iatravail"] },
   { id: "vert", label: "Numérique responsable", short: "Éco", color: "#7CC596", hero: "sylva", boss: "le Dévoreur de Go", bonus: true,
     desc: "Écologie, sobriété numérique, RSE et numérique responsable.",
     subs: ["vert"] }
@@ -83,6 +83,7 @@ window.THEMES = [
   { id: "prompts", label: "IA générative & prompts", pillar: "ia" },
   { id: "iasecu", label: "IA & cybersécurité", pillar: "ia" },
   { id: "iaethique", label: "Éthique & AI Act", pillar: "ia" },
+  { id: "iatravail", label: "IA au travail", pillar: "ia" },
   { id: "vert", label: "Écologie, sobriété & RSE", pillar: "vert" }
 ];
 
@@ -147,7 +148,7 @@ window.QUESTIONS = [
   { theme: "admin", level: "super", format: "single", q: "Quel rôle permet de réinitialiser le mot de passe des utilisateurs, sans être administrateur global ?", a: ["Administrateur du support technique", "Lecteur global", "Administrateur de facturation"], g: 0, e: "L'administrateur du support technique (helpdesk) peut réinitialiser les mots de passe des utilisateurs non-admins : c'est le principe du moindre privilège." },
   { theme: "admin", level: "super", format: "order", q: "Accueillir un nouvel utilisateur dans M365 :", items: ["Créer le compte", "Attribuer une licence", "Ajouter aux groupes et équipes", "Transmettre les accès et faire configurer la MFA"], e: "Sans licence, pas de boîte mail ni de Teams ; les groupes donnent l'accès aux ressources ; la MFA se configure dès la première connexion." },
   { theme: "admin", level: "super", format: "multi", q: "Bonnes pratiques pour les comptes administrateurs :", a: ["MFA obligatoire, idéalement résistante au phishing", "Un compte admin séparé du compte de tous les jours", "Limiter le nombre d'administrateurs globaux", "Synchroniser les comptes admin depuis l'AD local avec Entra Connect"], g: [0, 1, 2], e: "Compte dédié, MFA, peu d'admins globaux. Les comptes admin doivent rester « cloud uniquement » : synchronisés depuis l'AD local, ils tombent avec lui si l'AD est compromis." },
-  { theme: "incident", level: "super", format: "order", q: "Les grandes phases de réponse à un incident, dans l'ordre :", items: ["Préparation", "Détection et analyse", "Confinement, éradication et récupération", "Retour d'expérience"], e: "C'est le cycle classique (inspiré du NIST) : on se prépare, on détecte, on contient puis on nettoie et on restaure, et enfin on tire les leçons." },
+  { theme: "incident", level: "super", format: "order", q: "Les grandes phases de réponse à un incident, dans l'ordre :", items: ["Préparation","Détection et analyse","Confinement, éradication et récupération","Retour d'expérience"], e: "C'est le cycle classique, celui du NIST SP 800-61 rév. 2 (remplacée en 2025 par une rév. 3 alignée sur le CSF 2.0) : on se prépare, on détecte, on contient puis on nettoie et on restaure, et enfin on tire les leçons." },
 
   /* ---------------- LÉGENDE ---------------- */
   { theme: "identite", level: "legende", format: "single", q: "Pourquoi bloquer l'authentification héritée (POP, IMAP, SMTP basique) ?", a: ["Elle n'apparaît pas dans les journaux Entra", "Elle ne prend pas en charge la MFA", "Elle contourne le filtrage anti-spam d'EOP"], g: 1, e: "Ces protocoles n'acceptent qu'un mot de passe : un attaquant peut contourner ta MFA en passant par eux (password spray). Ces connexions restent pourtant visibles dans les journaux Entra (filtre « Application cliente »)." },
@@ -176,7 +177,7 @@ window.QUESTIONS = [
       [{ t: "Neutre en carbone grâce à nos arbres plantés.", c: true }],
       [{ t: "Respectueuse de la planète.", c: true }, { t: "Garantie 5 ans.", c: false }]
     ],
-    e: "« 100 % écologique » et « respectueuse de la planète » sont vagues et invérifiables. La « neutralité carbone » par compensation est une allégation souvent trompeuse, désormais encadrée par la loi. À l'inverse, « 30 % de plastique recyclé » est précis et vérifiable." },
+    e: "« 100 % écologique » et « respectueuse de la planète » sont vagues et invérifiables. La « neutralité carbone » obtenue par compensation (arbres plantés…) est interdite dans les publicités de l'UE depuis le 27 septembre 2026 (directive 2024/825). À l'inverse, « 30 % de plastique recyclé » est précis et vérifiable.", maj: { date: "2026-09-27", texte: "La directive européenne 2024/825 interdit les allégations de neutralité carbone fondées sur la compensation.", source: "EUR-Lex", url: "https://eur-lex.europa.eu/eli/dir/2024/825/oj/fra" } },
   { theme: "vert", level: "hero", format: "single", q: "Combien d'Objectifs de développement durable (ODD) l'ONU a-t-elle fixés pour 2030 ?", a: ["8", "17", "169"], g: 1, e: "Les 17 ODD couvrent la lutte contre la pauvreté, le climat, l'égalité, l'eau, l'énergie… Ne confonds pas avec les 8 Objectifs du millénaire (2000-2015) ni avec les 169 cibles qui détaillent les ODD." },
   { theme: "vert", level: "hero", format: "single", q: "Un vieux PC de l'entreprise fonctionne encore. Le meilleur choix ?", a: ["Le formater rapidement, puis le revendre à un particulier sur un site d'occasion", "Effacer les données de façon sécurisée, puis le confier à une filière de réemploi", "Le déposer en déchetterie pour que ses métaux soient recyclés au plus vite"], g: 1, e: "Donner une seconde vie au matériel évite d'en fabriquer du neuf : le réemploi passe avant le recyclage. Mais d'abord, effacement sécurisé : un formatage rapide laisse les données récupérables. Écologie et cybersécurité vont ensemble !" },
   { theme: "vert", level: "hero", format: "single", q: "Que veut dire DEEE ?", a: ["Déchets d'équipements électriques et électroniques", "Dispositif d'évaluation énergétique des équipements", "Déclaration environnementale des équipements électroniques"], g: 0, e: "Les DEEE ne vont jamais à la poubelle classique : ils suivent une filière de collecte dédiée, car ils contiennent des matières polluantes et des métaux récupérables." },
@@ -195,10 +196,13 @@ window.MISSION_PHISHER = [
     scenario: { kicker: "NOTIFICATION SUR TON TÉLÉPHONE", from: "Microsoft Authenticator", fromAddr: "3 demandes en 2 minutes", subject: "Approuver la connexion ?", body: "Tu es en pause café, tu n'essaies pas de te connecter.\nPourtant, les demandes d'approbation s'enchaînent sur ton téléphone." },
     q: "Quelle est la bonne réaction ?", a: ["J'approuve une fois pour que ça s'arrête, puis je change mon mot de passe", "Je refuse, je change mon mot de passe et je préviens le support", "Je refuse, puis je désinstalle Authenticator pour ne plus être dérangé"], g: 1,
     e: "Si quelqu'un déclenche la MFA, c'est qu'il connaît déjà ton mot de passe. Il espère que tu approuves par lassitude (« MFA fatigue »). Une seule approbation lui ouvre ton compte, et désinstaller l'appli ne lui reprend pas ton mot de passe. On refuse, on change le mot de passe et on alerte le support." },
-  { theme: "phishing", format: "single",
-    scenario: { kicker: "INSPECTION DE LIEN", from: "Service informatique", fromAddr: "it-helpdesk@notification-mail.net", subject: "Action requise : vérification de votre session", body: "Merci de vous reconnecter via le lien ci-dessous.\nLe texte affiché semble officiel… mais passe ta souris dessus avant de cliquer.", cta: "https://login.microsoftonline.com", hover: "https://login-microsoftonline.secure-verif.io/auth" },
-    q: "Vers quel domaine ce lien t'envoie-t-il vraiment ?", a: ["microsoftonline.com", "secure-verif.io", "login-microsoftonline"], g: 1,
-    e: "Le vrai domaine, c'est ce qui se trouve juste avant le premier « / » : ici secure-verif.io. Le début « login-microsoftonline » n'est qu'un déguisement. Le texte d'un lien peut afficher n'importe quoi." },
+  { theme: "phishing",
+    format: "single",
+    scenario: {"kicker":"INSPECTION DE LIEN","from":"Service informatique","fromAddr":"it-helpdesk@notification-mail.net","subject":"Action requise : vérification de votre session","body":"Merci de vous reconnecter via le lien ci-dessous.\nLe texte affiché semble officiel… mais passe ta souris dessus avant de cliquer.","cta":"https://login.microsoftonline.com","hover":"https://login-microsoftonline.secure-verif.io/auth"},
+    q: "Vers quel domaine ce lien t'envoie-t-il vraiment ?",
+    a: ["microsoftonline.com","secure-verif.io","login-microsoftonline"],
+    g: 1,
+    e: "Lis l'adresse entre « https:// » et le « / » suivant : login-microsoftonline.secure-verif.io. Le vrai domaine, c'est la fin de ce nom, juste avant le « / » : ici secure-verif.io. Le début « login-microsoftonline » n'est qu'un sous-domaine déguisé, que l'attaquant choisit librement. Et le texte d'un lien peut afficher n'importe quoi." },
   { theme: "phishing", format: "single",
     scenario: { kicker: "BOÎTE DE RÉCEPTION", from: "Julie — Fournisseur habituel", fromAddr: "julie.martin@fournisseur-habituel.fr", subject: "Julie a partagé « Facture_urgente.pdf » avec vous", body: "Bonjour, voici la facture en attente.\nPour l'ouvrir, reconnectez-vous avec votre compte Microsoft.", cta: "Ouvrir le document" },
     q: "L'adresse est la bonne. Tu fais quoi ?", a: ["Je me connecte : l'adresse exacte prouve que c'est bien elle", "Je réponds au mail pour demander si c'est bien elle", "Je la contacte par téléphone ou Teams avant d'ouvrir"], g: 2,

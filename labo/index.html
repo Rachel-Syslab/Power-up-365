@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1233">
+<meta name="robots" content="noindex">
+<title>Laboratoire · Power Up</title>
+<link rel="icon" href="../icon-192.png">
+<link rel="stylesheet" href="labo.css">
+</head>
+<body>
+<header class="site-bar"><div class="wrap"><a class="site-logo" href="../index.html#/" title="Retour au QG" aria-label="Retour au QG"><svg width="34" height="34" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M11 9.5a12 12 0 1 0 14 0" stroke="#E8ECF4" stroke-width="3" stroke-linecap="round"/><path d="M19.5 4 13 18.5h5L16.5 30 23 15.5h-5z" fill="#4C6BFF"/></svg>POWER <span>UP</span></a><nav class="site-nav" aria-label="Navigation principale"><a href="../index.html#/jouer">Jouer</a><a href="../index.html#/mission">Boss</a><a href="../index.html#/stats">Révisions</a><a href="index.html" class="on" aria-current="page">Labo<em>bêta</em></a><a href="../index.html#/collectif">Défis</a><a href="../index.html#/detente">Détente</a><a href="../index.html#/veille">Veille</a></nav></div></header>
+<div class="wrap top"><a class="pu-back" href="../index.html#/jouer" aria-label="Retour à Power Up">← Power Up</a><span class="pill" id="urlpill">Laboratoire · 0 XP</span><span class="live"><i></i>BÊTA</span></div>
+
+<main>
+<div class="wrap">
+
+<!-- MISSIONS -->
+<section class="view" id="v-missions" aria-labelledby="t-missions">
+  <div>
+    <div class="eyebrow" style="color:var(--amber)">Laboratoire · Missions</div>
+    <h1 id="t-missions">Le cockpit du QG</h1>
+    <p class="lead">Un faux poste, de vrais journaux, de vraies commandes. Rien n'est exécuté : tu peux tout essayer sans rien casser.</p>
+  </div>
+  <div id="mlist"></div>
+  <div id="mods"></div>
+  <button type="button" class="reset" id="reset">Remettre ma progression à zéro</button>
+</section>
+
+<!-- TERMINAL -->
+<section class="view" id="v-terminal" hidden aria-labelledby="t-term">
+  <div class="back">
+    <button type="button" data-go="missions" aria-label="Retour aux missions"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div style="flex:1;min-width:0"><div class="eyebrow" id="t-lvl"></div><h2 id="t-term"></h2></div>
+    <span class="xp" id="t-xp"></span>
+  </div>
+  <div id="side">
+    <div class="bubble"><div class="avatar" id="t-av" aria-hidden="true">E</div><div class="say"><b id="t-who"></b><span class="txt" id="t-say"></span><small id="t-more">Touche pour lire la suite</small></div></div>
+    <details class="goals" id="goalsbox" open><summary><span class="eyebrow" style="color:var(--amber)">Objectifs</span><span class="sub" id="gcount" style="font-size:12px"></span></summary><div id="goals"></div></details>
+    <div class="win" id="win" hidden><b>Mission réussie</b><span id="win-txt"></span><div class="row" style="margin-top:10px;gap:10px;flex-wrap:wrap"><button type="button" class="btn go2" id="next-m">Mission suivante</button></div></div>
+  </div>
+  <div id="tcol">
+    <div class="term big" id="term">
+      <div class="termbar"><i></i><i></i><i></i><span style="margin-left:8px" id="t-host"></span><button type="button" class="tb-clear" id="t-clear" aria-label="Effacer l'écran">clear</button></div>
+      <div id="log" role="log" aria-live="polite"></div>
+    </div>
+    <div class="keys" id="keys" aria-label="Touches de clavier supplémentaires"></div>
+    <button type="button" class="hintbtn" id="t-hint">Besoin d'un coup de pouce ? <span id="t-hintcost"></span></button>
+    <p class="sub" style="margin:0;font-size:12px">Tab complète · ↑ ↓ rappellent l'historique · man ou --help explique une commande · Ctrl+L efface.</p>
+  </div>
+</section>
+
+<!-- SOC : file d'incidents -->
+<section class="view socx" id="v-soc" hidden aria-labelledby="t-soc">
+  <div class="s-top">
+    <div><div class="s-crumb">Laboratoire · SOC › Investigation et réponse › Incidents et alertes</div><h1 id="t-soc">Incidents</h1></div>
+    <div class="s-kpis"><div class="s-kpi"><small>Actifs</small><b id="k-open">5</b></div><div class="s-kpi"><small>Résolus</small><b id="k-done" style="color:#4cc38a">0</b></div><div class="s-kpi"><small>XP SOC</small><b id="k-xp" style="color:var(--smid)">0</b></div></div>
+  </div>
+  <div class="s-filters" id="s-filters" role="group" aria-label="Filtres"></div>
+  <div class="s-table" id="s-table" role="table" aria-label="File d'incidents"></div>
+  <p class="s-note">Comme sur le terrain : tu ouvres un incident, tu enquêtes dans les journaux avec des requêtes, tu classes l'incident puis tu écris ta note de clôture. Aucune bonne réponse n'est suggérée.</p>
+</section>
+
+<!-- SOC : incident -->
+<section class="view socx" id="v-inc" hidden aria-labelledby="t-inc">
+  <div class="back">
+    <button type="button" data-go="soc" aria-label="Retour à la liste des incidents"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div style="flex:1;min-width:0"><div class="s-crumb" id="i-id"></div><h2 id="t-inc" style="overflow-wrap:anywhere"></h2></div>
+  </div>
+  <div class="s-meta" id="i-meta"></div>
+  <div class="s-tabs" role="tablist" id="i-tabs"></div>
+  <div id="i-body" style="display:flex;flex-direction:column;gap:12px"></div>
+</section>
+
+<!-- M365 : tableau de bord -->
+<section class="view" id="v-m365" hidden aria-labelledby="t-m365">
+  <div>
+    <div class="eyebrow">Laboratoire · Console M365 · entreprise fictive</div>
+    <h1 id="t-m365">Tableau de bord</h1>
+    <div class="grid3">
+      <div class="tile"><small>Comptes</small><b>57</b></div>
+      <div class="tile"><small>Postes</small><b>53</b></div>
+      <div class="tile"><small>Licences</small><b>60</b></div>
+    </div>
+  </div>
+  <div>
+    <div class="eyebrow">Points d'attention</div>
+    <div class="grid2" id="att"></div>
+    <p class="sub" style="margin-top:12px">Touche une carte pour traiter la situation. Chacune est un cas courant en entreprise.</p>
+  </div>
+</section>
+
+<!-- M365 : situation -->
+<section class="view" id="v-scen" hidden aria-labelledby="t-scen">
+  <div class="back">
+    <button type="button" data-go="m365" aria-label="Retour au tableau de bord"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div style="flex:1;min-width:0"><div class="eyebrow" id="s-eye" style="color:var(--amber)"></div><h2 id="t-scen"></h2></div>
+  </div>
+  <p class="lead" id="s-intro" style="margin:0"></p>
+  <div class="stack" id="s-list" style="margin-top:0"></div>
+  <div class="result" id="s-res" hidden>
+    <h2 id="sr-title"></h2>
+    <div id="sr-text" style="line-height:1.5;color:#d6daff"></div>
+    <div class="mitre" id="sr-tags"></div>
+    <div class="row" style="gap:12px;flex-wrap:wrap"><span class="xp" id="sr-xp"></span><button class="btn go2" type="button" data-go="m365">Retour au tableau de bord</button></div>
+  </div>
+</section>
+
+
+<!-- IA : assistant simulé (bêta) -->
+<section class="view" id="v-ia" hidden aria-labelledby="t-ia">
+  <div>
+    <div class="eyebrow" style="color:var(--amber)">Laboratoire · Assistant IA · bêta</div>
+    <h1 id="t-ia">L'assistant du QG</h1>
+    <p class="lead">Un assistant IA simulé te répond. Ton rôle : relire sa réponse et repérer ce qui est faux, inventé ou dangereux avant de lui faire confiance.</p>
+  </div>
+  <p class="ia-sim"><b>Simulation</b>Entraîne-toi ici sans aucun risque pour tes données.</p>
+  <div class="stack" id="ia-list"></div>
+</section>
+
+<!-- IA : mission -->
+<section class="view" id="v-iam" hidden aria-labelledby="t-iam">
+  <div class="back">
+    <button type="button" data-go="ia" aria-label="Retour aux missions IA"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div style="flex:1;min-width:0"><div class="eyebrow" id="ia-eye" style="color:var(--amber)"></div><h2 id="t-iam"></h2></div>
+    <span class="xp" id="ia-xp"></span>
+  </div>
+  <p class="lead" id="ia-intro" style="margin:0"></p>
+  <p class="ia-sim"><b>Simulation</b>Exercice simulé, sans risque.</p>
+  <div class="ia-grid">
+    <div class="ia-pane">
+      <h3 class="eyebrow">1 · Le document</h3>
+      <div class="ia-doc" id="ia-doc"></div>
+      <div class="ia-ask" id="ia-ask"></div>
+    </div>
+    <div class="ia-pane">
+      <h3 class="eyebrow">2 · La réponse de l'assistant</h3>
+      <p class="sub" style="margin:0">Touche chaque phrase qui te paraît fausse, inventée ou risquée, puis valide.</p>
+      <div class="ia-reply" id="ia-reply"></div>
+      <div class="ia-actions"><button type="button" class="btn go2" id="ia-check">Valider mon analyse</button><button type="button" class="btn" id="ia-again" hidden>Recommencer</button><span class="sub" id="ia-count"></span></div>
+      <div class="result" id="ia-res" hidden></div>
+    </div>
+  </div>
+</section>
+
+</div>
+</main>
+
+<nav class="nav" aria-label="Modules">
+  <div class="wrap">
+    <button type="button" data-tab="missions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9l3 3-3 3M13 15h3"/></svg>Missions</button>
+    <button type="button" data-tab="terminal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4zM7 10l2.500 2L7 14M12 14h4"/></svg>Terminal</button>
+    <button type="button" data-tab="soc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.500-3 8-7 10-4-2-7-5.500-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>SOC</button>
+    <button type="button" data-tab="m365"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.500"/><rect x="13" y="4" width="7" height="7" rx="1.500"/><rect x="4" y="13" width="7" height="7" rx="1.500"/><rect x="13" y="13" width="7" height="7" rx="1.500"/></svg>M365</button>
+    <button type="button" data-tab="ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.800 5.200L19 10l-5.200 1.800L12 17l-1.800-5.200L5 10l5.200-1.800z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>IA</button>
+  </div>
+</nav>
+
+<script src="labo.js"></script>
+</body>
+</html>

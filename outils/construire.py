@@ -31,6 +31,7 @@ for f in sorted(os.listdir(os.path.join(ROOT, "js", "i18n"))):
 subprocess.run([ESB, os.path.join(ROOT, "css", "style.css"), "--minify", "--charset=utf8", "--outfile=" + os.path.join(DIST, "css", "style.min.css")], check=True)
 shutil.copytree(os.path.join(ROOT, "css", "fonts"), os.path.join(DIST, "css", "fonts"))  # polices hébergées (OFL)
 if os.path.exists(os.path.join(ROOT, "_headers")): shutil.copy(os.path.join(ROOT, "_headers"), os.path.join(DIST, "_headers"))  # en-têtes de sécurité (Cloudflare Pages)
+if os.path.isdir(os.path.join(ROOT, "labo")): shutil.copytree(os.path.join(ROOT, "labo"), os.path.join(DIST, "labo"))  # laboratoire (terminal, SOC, M365) : page autonome, scripts externes
 first = True
 def sub(m):
     global first

@@ -1,7 +1,430 @@
 /* Fichier généré automatiquement par veille/mettre-a-jour-veille.ps1 - ne pas modifier à la main. */
 window.VEILLE = {
-    "updated":  "2026-10-19T09:18:32Z",
+    "updated":  "2026-10-26T15:45:59Z",
     "items":  [
+                  {
+                      "title":  "Two stable kernels for Monday",
+                      "summary":  "Greg Kroah-Hartman has announced the release of the 7.2.13 and 6.18.59 stable kernels. Each contains a number of fixes throughout the tree. Users are advised to upgrade.",
+                      "url":  "https://lwn.net/Articles/1102973/",
+                      "date":  "2026-10-26T15:45:34Z",
+                      "source":  "LWN.net (Linux)",
+                      "category":  "it",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Microsoft releases emergency .NET patches for critical Brotli flaw",
+                      "summary":  "Microsoft released emergency .NET security updates to patch a critical vulnerability known as Broccoli2Shell, also tracked as Node2Shell and HTTP2Shell. [...]",
+                      "url":  "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-net-patches-for-critical-brotli-flaw/",
+                      "date":  "2026-10-26T15:38:24Z",
+                      "source":  "BleepingComputer",
+                      "category":  "cyber",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Systemd adds support for components written in Rust",
+                      "summary":  "Christian Brauner has announced that he has merged support for writing leaf components of systemd in Rust. Rust will be used only for new leaf components, existing code is not being ported to Rust and nothing that other components depend on is written in Rust. Brauner said that…",
+                      "url":  "https://lwn.net/Articles/1102970/",
+                      "date":  "2026-10-26T15:13:59Z",
+                      "source":  "LWN.net (Linux)",
+                      "category":  "it",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "When an AI Agent Is the Incident, the Identity Record Is the Evidence",
+                      "summary":  "A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does. [...]",
+                      "url":  "https://www.bleepingcomputer.com/news/security/when-an-ai-agent-is-the-incident-the-identity-record-is-the-evidence/",
+                      "date":  "2026-10-26T14:00:10Z",
+                      "source":  "BleepingComputer",
+                      "category":  "cyber",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Chinese man extradited for role in $36 million cryptocurrency scam",
+                      "summary":  "A Chinese national was arraigned in California after being extradited from the Netherlands for his alleged involvement in a cryptocurrency investment scam that stole nearly $37 million from 174 victims in the United States. [...]",
+                      "url":  "https://www.bleepingcomputer.com/news/security/chinese-man-extradited-for-role-in-36-million-cryptocurrency-scam/",
+                      "date":  "2026-10-26T13:56:44Z",
+                      "source":  "BleepingComputer",
+                      "category":  "cyber",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Security updates for Monday",
+                      "summary":  "Security updates have been issued by AlmaLinux (ca-certificates, cockpit-machines, container-tools:4.0, expat, flute, libbase, libfonts, libformula, liblayout, libloader, libreoffice, librepository, libserializer, pentaho-libxml, pentaho-reporting-flow-engine, and sac…",
+                      "url":  "https://lwn.net/Articles/1102946/",
+                      "date":  "2026-10-26T13:12:04Z",
+                      "source":  "LWN.net (Linux)",
+                      "category":  "it",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "WordCraft, GridCraft, DeckCraft : après Adobe, Word, Excel et PowerPoint réécrits en Rust avec l’IA",
+                      "summary":  "WordCraft, GridCraft et DeckCraft : trois clones open source de Word, Excel et PowerPoint écrits en Rust avec Claude Opus 5.5. Sont-ils opérationnels ? Le post WordCraft, GridCraft, DeckCraft : après Adobe, Word, Excel et PowerPoint réécrits en Rust avec l’IA a été publié sur…",
+                      "url":  "https://www.it-connect.fr/wordcraft-gridcraft-deckcraft-suite-office-rust-claude/",
+                      "date":  "2026-10-26T12:04:51Z",
+                      "source":  "IT-Connect",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Covéa mise sur le Virtual Patching pour faire face à l’explosion des vulnérabilités",
+                      "summary":  "À la suite d’une cyberattaque majeure sur sa marque MMA en 2020, le groupe Covéa a haussé son niveau de protection. L’équipe Cyber a été triplée, les principales briques de sécurité ont été remplacées et le recours au Virtual Patching a été élargi.",
+                      "url":  "https://www.lemagit.fr/etude/Covea-mise-sur-le-Virtual-Patching-pour-faire-face-a-lexplosion-des-vulnerabilites",
+                      "date":  "2026-10-26T11:41:00Z",
+                      "source":  "LeMagIT",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Collaboratif : Rainbow se dote de fonctions d’IA hébergées en Europe",
+                      "summary":  "Alcatel-Lucent Enterprise ajoute à sa suite de collaboration et de téléphonie souveraine un agent IA, souverain lui aussi, pour la transcription, le sous-titrage, le résumé et la traduction.",
+                      "url":  "https://www.lemagit.fr/actualites/366652632/Collaboratif-Rainbow-ajoute-des-fonctions-dIA-hebergees-en-Europe",
+                      "date":  "2026-10-26T11:29:00Z",
+                      "source":  "LeMagIT",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Kali Linux 2026.3 released with 6 new tools, desktop updates",
+                      "summary":  "Kali Linux has released version 2026.3, its third release this year, featuring six new hacking tools, desktop environment improvements, refreshed build scripts, and more. [...]",
+                      "url":  "https://www.bleepingcomputer.com/news/linux/kali-linux-20263-released-with-6-new-tools-desktop-updates/",
+                      "date":  "2026-10-26T10:26:52Z",
+                      "source":  "BleepingComputer",
+                      "category":  "cyber",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Tailworm : 11 failles non corrigées dans Tailscale, dont un accès root via Tailscale SSH",
+                      "summary":  "Avec Tailworm, Erica Windisch a publié 11 failles non corrigées dans Tailscale et Headscale, dont un accès root via Tailscale SSH. Voici comment vous protéger. Le post Tailworm : 11 failles non corrigées dans Tailscale, dont un accès root via Tailscale SSH a été publié sur…",
+                      "url":  "https://www.it-connect.fr/tailworm-failles-tailscale-ssh-root-non-corrigees/",
+                      "date":  "2026-10-26T10:09:21Z",
+                      "source":  "IT-Connect",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Quad9 quitte la France : le DNS 9.9.9.9 sera coupé le 24 novembre 2026",
+                      "summary":  "Vous utilisez le DNS 9.9.9.9 ? Le 24 novembre 2026, Quad9 cessera de servir la France plutôt que d\u0027appliquer un blocage judiciaire. Voici ce que l\u0027on sait. Le post Quad9 quitte la France : le DNS 9.9.9.9 sera coupé le 24 novembre 2026 a été publié sur IT-Connect .",
+                      "url":  "https://www.it-connect.fr/quad9-quitte-la-france-blocage-dns/",
+                      "date":  "2026-10-26T07:35:50Z",
+                      "source":  "IT-Connect",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Popcorn Time : un processus oublié menaçait des millions de PC (CVE-2026-30612)",
+                      "summary":  "Un updater abandonné de Popcorn Time pouvait exécuter du code avec les droits SYSTEM. Eye Security l\u0027a neutralisé à distance sur des millions de machines. Le post Popcorn Time : un processus oublié menaçait des millions de PC (CVE-2026-30612) a été publié sur IT-Connect .",
+                      "url":  "https://www.it-connect.fr/popcorn-time-updater-cve-2026-30612/",
+                      "date":  "2026-10-26T06:29:03Z",
+                      "source":  "IT-Connect",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Le cloud Bleu est là",
+                      "summary":  "La joint-venture cloud d’Orange et Capgemini a franchi une étape décisive. Ce cloud souverain, qui propose des technologies Microsoft, passe en disponibilité générale avec plusieurs dizaines de services. Ils devraient être une centaine d’ici la fin de l’année.",
+                      "url":  "https://www.lemagit.fr/dessin/Le-cloud-Bleu-est-la",
+                      "date":  "2026-10-26T05:02:00Z",
+                      "source":  "LeMagIT",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Salesforce acquiert Braze pour aiguiser Marketing Cloud",
+                      "summary":  "Salesforce souhaite s’appuyer sur la technologie d’engagement en temps réel de Braze pour renforcer Marketing Cloud. Les analystes comprennent cette logique, mais l’intégration et l’éventuelle migration des clients constitueront un véritable test.",
+                      "url":  "https://www.lemagit.fr/actualites/366652717/Salesforce-acquiert-Braze-pour-aiguiser-Marketing-Cloud",
+                      "date":  "2026-10-26T03:31:00Z",
+                      "source":  "LeMagIT",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Pulse : les journaux d’événements de Windows facilement lisibles, avec de l’IA locale",
+                      "summary":  "Pulse est un outil gratuit et open source qui traduit les journaux d\u0027événements de Windows 10 et 11 en langage clair, avec une IA locale (Ollama, LM Studio). Le post Pulse : les journaux d’événements de Windows facilement lisibles, avec de l’IA locale a été publié sur IT-Connect…",
+                      "url":  "https://www.it-connect.fr/pulse-journaux-evenements-de-windows-facilement-lisibles-avec-ia-locale/",
+                      "date":  "2026-10-24T05:00:00Z",
+                      "source":  "IT-Connect",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Power Apps: Model-driven apps - Use row summaries in US Government clouds",
+                      "summary":  "Row summaries are expanding to supported US Government clouds, giving users in regulated environments access to AI-generated insights that help them understand model-driven app records at a glance. This release brings the row summary experience available to commercial customers…",
+                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=576279",
+                      "date":  "2026-10-23T23:10:38Z",
+                      "source":  "Feuille de route Microsoft 365",
+                      "category":  "m365",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Dynamics 365 Contact Center: Unified routing - Use overflow actions to protect customer experience for direct inward calls",
+                      "summary":  "Overflow for direct inward dialing leverages conversation orchestration to detect key direct inward dialing-related events—such as the representative being busy, offline, rejecting the call, or failing to answer—and apply administrator-defined fallback actions. Administrators…",
+                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=576607",
+                      "date":  "2026-10-23T23:10:36Z",
+                      "source":  "Feuille de route Microsoft 365",
+                      "category":  "m365",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Dynamics 365 Customer Service: Workforce engagement management - Enforce governance policies on email attachments",
+                      "summary":  "This feature extends governance capabilities to evaluate email attachments, closing a critical gap where sensitive or non-compliant information may exist outside the email body. When a user sends an email with attachments, the system automatically scans each document and applies…",
+                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=577796",
+                      "date":  "2026-10-23T23:10:35Z",
+                      "source":  "Feuille de route Microsoft 365",
+                      "category":  "m365",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Dynamics 365 Customer Service: Workforce engagement management - Manage policy strictness to enforce governance policies",
+                      "summary":  "This feature introduces policy strictness control, enabling organizations to define how rigorously each governance policy evaluates and flags potential violations in outgoing emails. Governance policies serve as real-time guardrails, ensuring communications adhere to business…",
+                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=577798",
+                      "date":  "2026-10-23T23:10:34Z",
+                      "source":  "Feuille de route Microsoft 365",
+                      "category":  "m365",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Dynamics 365 Sales: Lead management - Personalize outreach emails generated by Sales Qualification Agent",
+                      "summary":  "Define outreach scenario/goal in natural language. Choose desired call-to-action to drive next steps. Provide subject line guidance: fixed suggestion or style recommendation. Set message length and brevity targets. Specify tone rules, including name-usage limits and preferred…",
+                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=578077",
+                      "date":  "2026-10-23T22:46:12Z",
+                      "source":  "Feuille de route Microsoft 365",
+                      "category":  "m365",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Dynamics 365 Customer Service: Workforce engagement management - Enable enhanced screen recording controls for admins",
+                      "summary":  "The enhanced screen recording capability offers greater flexibility and control, enabling organizations to manage recording behavior with more precision. Key enhancements include: Access all recording settings and configurations from Customer Service admin center \u003e Quality…",
+                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=578075",
+                      "date":  "2026-10-23T22:46:11Z",
+                      "source":  "Feuille de route Microsoft 365",
+                      "category":  "m365",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Inside the LiteLLM 1.107.0 supply chain compromise: Credential theft through Python startup hooks",
+                      "summary":  "Microsoft Threat Intelligence analyzes the LiteLLM 1.107.0 compromise, including Python startup hooks, credential theft, remote code loading, detections, and mitigations.",
+                      "url":  "https://www.microsoft.com/en-us/security/blog/2026/10/23/inside-the-litellm-1-107-0-supply-chain-compromise-credential-theft-through-python-startup-hooks/",
+                      "date":  "2026-10-23T18:12:19Z",
+                      "source":  "Microsoft Security Blog",
+                      "category":  "cyber",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "LitPivot: Developing research ideas through dynamic contextualization within the literature landscape",
+                      "summary":  "",
+                      "url":  "https://huggingface.co/blog/allenai/litpivot",
+                      "date":  "2026-10-23T16:15:50Z",
+                      "source":  "Hugging Face Blog",
+                      "category":  "ia",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "PHP signale une nouvelle faille RCE (CVE-2026-115560) : appliquez le même réglage que PHP2Shell",
+                      "summary":  "CVE-2026-115560 : PHP signale une nouvelle faille RCE. Désactiver Session Upload Progress, déjà conseillé pour PHP2Shell, suffit en attendant le correctif. Le post PHP signale une nouvelle faille RCE (CVE-2026-115560) : appliquez le même réglage que PHP2Shell a été publié sur…",
+                      "url":  "https://www.it-connect.fr/php-cve-2026-115560-session-upload-progress/",
+                      "date":  "2026-10-23T14:36:35Z",
+                      "source":  "IT-Connect",
+                      "category":  "it",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Administration : l\u0027IA fait basculer le rapport de force vers les usagers",
+                      "summary":  "L\u0027IA générative rend presque gratuite la rédaction de demandes, de réclamations et de recours ; leur instruction reste humaine. Le droit français permet déjà d\u0027écarter les demandes abusives et d\u0027imposer un téléservice, mais un recours fondé reste dû quel que soit le nombre de…",
+                      "url":  "https://www.actuia.com/actualite/demandes-redigees-par-ia-le-rapport-de-force-commence-a-basculer-vers-les-usagers/",
+                      "date":  "2026-10-23T05:00:00Z",
+                      "source":  "ActuIA",
+                      "category":  "ia",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Multiples vulnérabilités dans Microsoft Edge (23 octobre 2026)",
+                      "summary":  "De multiples vulnérabilités ont été découvertes dans Microsoft Edge. Elles permettent à un attaquant de provoquer un problème de sécurité non spécifié par l\u0027éditeur.",
+                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1371/",
+                      "date":  "2026-10-23T00:00:00Z",
+                      "source":  "CERT-FR - Avis",
+                      "category":  "alerte",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Does Your Model Run on AWS Trainium? Look It Up",
+                      "summary":  "",
+                      "url":  "https://huggingface.co/blog/torch-neuronx-model-support",
+                      "date":  "2026-10-23T00:00:00Z",
+                      "source":  "Hugging Face Blog",
+                      "category":  "ia",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Vulnérabilité dans Mattermost Server (23 octobre 2026)",
+                      "summary":  "Une vulnérabilité a été découverte dans Mattermost Server. Elle permet à un attaquant de provoquer un problème de sécurité non spécifié par l\u0027éditeur.",
+                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1368/",
+                      "date":  "2026-10-23T00:00:00Z",
+                      "source":  "CERT-FR - Avis",
+                      "category":  "alerte",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Multiples vulnérabilités dans les produits SUSE (23 octobre 2026)",
+                      "summary":  "De multiples vulnérabilités ont été découvertes dans les produits SUSE. Certaines d\u0027entre elles permettent à un attaquant de provoquer une exécution de code arbitraire à distance, une élévation de privilèges et une atteinte à la confidentialité des données.",
+                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1372/",
+                      "date":  "2026-10-23T00:00:00Z",
+                      "source":  "CERT-FR - Avis",
+                      "category":  "alerte",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Multiples vulnérabilités dans les produits Tenable (23 octobre 2026)",
+                      "summary":  "De multiples vulnérabilités ont été découvertes dans les produits Tenable. Elles permettent à un attaquant de provoquer une exécution de code arbitraire à distance.",
+                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1370/",
+                      "date":  "2026-10-23T00:00:00Z",
+                      "source":  "CERT-FR - Avis",
+                      "category":  "alerte",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Turning Database Grading into RL Rewards: Post-Training Agents with ThinkingBox",
+                      "summary":  "",
+                      "url":  "https://huggingface.co/blog/microsoft/thinkingbox-training",
+                      "date":  "2026-10-22T22:24:34Z",
+                      "source":  "Hugging Face Blog",
+                      "category":  "ia",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "How bug bounty sharpens one researcher’s security skills",
+                      "summary":  "As Cybersecurity Awareness Month continues, the GitHub Bug Bounty team spotlights @r31n, diving into their research approach, favorite bug classes, and advice for aspiring hackers.",
+                      "url":  "https://github.blog/security/how-bug-bounty-sharpens-one-researchers-security-skills/",
+                      "date":  "2026-10-22T17:21:30Z",
+                      "source":  "GitHub Blog",
+                      "category":  "dev",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Cybermalveillance.gouv.fr lance une AlerteCyber concernant deux failles de sécurité critiques dans PHP",
+                      "summary":  "Cybermalveillance.gouv.fr déclenche ce jour une nouvelle AlerteCyber concernant deux failles de sécurité critiques dans le langage de programmation PHP. Il est primordial de les corriger le plus rapidement possible en mettant à jour les systèmes concernés pour réduire les…",
+                      "url":  "https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/alertecyber-failles-securite-php",
+                      "date":  "2026-10-22T15:07:21Z",
+                      "source":  "Cybermalveillance.gouv.fr",
+                      "category":  "arnaques",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Microsoft : un groupe aligné sur Pékin a détourné des applications ConnectWise avec des agents d\u0027IA",
+                      "summary":  "Microsoft attribue à Storm-0940, un groupe qu\u0027il dit aligné sur l\u0027État chinois, la compromission de ConnectWise Cloud Backup et affirme que l\u0027outil open source ARTEX, piloté par des agents d\u0027IA, a accéléré l\u0027exploitation d\u0027applications ConnectWise autorisées dans des tenants…",
+                      "url":  "https://www.actuia.com/actualite/microsoft-un-groupe-aligne-sur-pekin-a-detourne-des-applications-connectwise-avec-des-agents-dia/",
+                      "date":  "2026-10-22T13:46:00Z",
+                      "source":  "ActuIA",
+                      "category":  "ia",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Clause LLM de la GSA : ce qu\u0027elle impose aux éditeurs européens",
+                      "summary":  "La GSA, centrale d\u0027achat fédérale américaine, devait insérer au plus tard le 19 octobre 2026 la clause 552.239-7001 dans ses nouveaux appels d\u0027offres de LLM, de chatbots et d\u0027agents : pas d\u0027entraînement sur les données de l\u0027État, effacement des poids affinés et des embeddings en…",
+                      "url":  "https://www.actuia.com/actualite/clause-llm-de-la-gsa-ce-quelle-impose-aux-editeurs-europeens/",
+                      "date":  "2026-10-22T13:16:00Z",
+                      "source":  "ActuIA",
+                      "category":  "ia",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Pékin veut encadrer les agents d\u0027IA du commerce selon leur usage",
+                      "summary":  "Le 19 octobre 2026, neuf administrations chinoises ont publié un avis de 18 mesures pour le commerce. La quinzième reprend pour les agents d\u0027IA commerciaux (guide d\u0027achat, exploitation, logistique) la gouvernance par niveaux posée en mai : enregistrement, tests et rappel dans…",
+                      "url":  "https://www.actuia.com/actualite/pekin-veut-encadrer-les-agents-dia-du-commerce-selon-leur-usage/",
+                      "date":  "2026-10-22T12:46:00Z",
+                      "source":  "ActuIA",
+                      "category":  "ia",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "AI Act : la première norme harmonisée ne couvre que le système qualité",
+                      "summary":  "La norme EN 18286, référencée au JOUE le 14 octobre 2026, est la première norme harmonisée de l\u0027AI Act. Selon la Commission, elle vaut présomption de conformité pour le système qualité exigé des fournisseurs de systèmes à haut risque (article 17). Neuf des dix domaines de la…",
+                      "url":  "https://www.actuia.com/actualite/ai-act-la-premiere-norme-harmonisee-ne-couvre-que-le-systeme-qualite/",
+                      "date":  "2026-10-22T12:16:00Z",
+                      "source":  "ActuIA",
+                      "category":  "ia",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Ordre du jour de la séance plénière du 22 octobre 2026",
+                      "summary":  "La Commission nationale de l\u0027informatique et des libertés s’est réunie le jeudi 22 octobre 2026 à 9\u0026nbsp;h\u0026nbsp;30 avec l’ordre du jour suivant\u0026nbsp;:",
+                      "url":  "https://www.cnil.fr/fr/ordre-du-jour-de-la-seance-pleniere-du-22-octobre-2026",
+                      "date":  "2026-10-22T12:00:00Z",
+                      "source":  "CNIL",
+                      "category":  "lois",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "AlerteCyber : Failles de sécurité critiques dans PHP",
+                      "summary":  "Failles de sécurité critiques dans PHP Date de l’alerte : 22/10/2026 Risques Déni de service, espionnage, vol voire destruction de vos données suite à la prise de contrôle à distance des équipements vulnérables. …",
+                      "url":  "https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/alerte-cyber-failles-de-securite-critiques-dans-php-202610",
+                      "date":  "2026-10-22T11:31:45Z",
+                      "source":  "Cybermalveillance.gouv.fr",
+                      "category":  "arnaques",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "AI-driven, large-scale nation-state campaign using ARTEX enables supply chain compromise",
+                      "summary":  "Storm-0940 used ARTEX agentic AI to accelerate a ConnectWise supply chain compromise, enabling application credential abuse across Microsoft 365 environments.",
+                      "url":  "https://www.microsoft.com/en-us/security/blog/2026/10/21/storm-0940-uses-artex-agentic-ai-connectwise-supply-chain-compromise/",
+                      "date":  "2026-10-21T18:23:55Z",
+                      "source":  "Microsoft Security Blog",
+                      "category":  "cyber",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "The bridge to agent-scale Git infrastructure",
+                      "summary":  "We moved a copy of 99.99999% of GitHub\u0027s repositories to Azure. Here\u0027s how per-reference quorums will bring over the rest, and how object storage lets reads scale independently.",
+                      "url":  "https://github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure/",
+                      "date":  "2026-10-21T16:00:00Z",
+                      "source":  "GitHub Blog",
+                      "category":  "dev",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "[Màj] Multiples vulnérabilités dans PHP (21 octobre 2026)",
+                      "summary":  "**[Mise à jour du 22 octobre 2026]** Le CERT-FR a connaissance de preuves de concept pour les vulnérabilités CVE-2026-109618 et CVE-2026-109619 pour des déploiements spécifique de PHP. **[Mise à jour du 21 octobre 2026]** Les correctifs de sécurité sont disponibles sur le site…",
+                      "url":  "https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-014/",
+                      "date":  "2026-10-21T00:00:00Z",
+                      "source":  "CERT-FR - Alertes",
+                      "category":  "alerte",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "How 3 Java Champions are using GitHub Copilot for increased productivity",
+                      "summary":  "Three Java Champions share how they use GitHub Copilot to solve problems, accelerate development, and keep humans responsible for the results.",
+                      "url":  "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/",
+                      "date":  "2026-10-20T16:05:03Z",
+                      "source":  "GitHub Blog",
+                      "category":  "dev",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Journée RGPD à Poitiers : cybersécurité, IA et conformité au cœur des enjeux de protection des données",
+                      "summary":  "La CNIL organise une nouvelle Journée RGPD à Poitiers le 1er décembre 2026. Cet évènement sera l’occasion d’échanger avec les acteurs du territoire sur les actualités en matière de protection des données personnelles et les enjeux concrets auxquels sont confrontés les…",
+                      "url":  "https://www.cnil.fr/fr/journee-rgpd-2026-poitiers",
+                      "date":  "2026-10-20T12:00:00Z",
+                      "source":  "CNIL",
+                      "category":  "lois",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "How to continue a GitHub Copilot app session in VS Code",
+                      "summary":  "Learn how to move an agent session from the GitHub Copilot app into VS Code without losing the conversation, code changes, or working context.",
+                      "url":  "https://github.blog/ai-and-ml/github-copilot/how-to-continue-a-github-copilot-app-session-in-vs-code/",
+                      "date":  "2026-10-19T18:47:22Z",
+                      "source":  "GitHub Blog",
+                      "category":  "dev",
+                      "lang":  "en"
+                  },
+                  {
+                      "title":  "Agents are your newest insiders. Security must move at their speed.",
+                      "summary":  "New capabilities in Microsoft 365 E7 and Project Perception help organizations contain agent risk and adapt protection continuously.",
+                      "url":  "https://www.microsoft.com/en-us/security/blog/2026/10/19/agents-are-your-newest-insiders-security-must-move-at-their-speed/",
+                      "date":  "2026-10-19T13:00:00Z",
+                      "source":  "Microsoft Security Blog",
+                      "category":  "cyber",
+                      "lang":  "en"
+                  },
                   {
                       "title":  "Revoir le webinaire - Nouveau régime de la prospection téléphonique : comment et quand recueillir le consentement de la personne concernée ?",
                       "summary":  "La CNIL vous propose de décrypter un sujet ou une actualité en lien avec la protection des données à travers\u0026nbsp;une série de webinaires. Retrouvez ce nouvel épisode consacré à la prospection téléphonique.",
@@ -12,165 +435,12 @@ window.VEILLE = {
                       "lang":  "fr"
                   },
                   {
-                      "title":  "Microsoft: October Windows Server updates break Exchange sign-in, mail flow",
-                      "summary":  "Microsoft has confirmed that this month\u0027s Windows Server security updates are causing OWA sign-in and mail delivery issues on some Exchange Server systems. [...]",
-                      "url":  "https://www.bleepingcomputer.com/news/microsoft/microsoft-october-windows-server-updates-cause-exchange-issues/",
-                      "date":  "2026-10-19T08:58:41Z",
-                      "source":  "BleepingComputer",
+                      "title":  "Bulletin d\u0027actualité CERTFR-2026-ACT-044 (19 octobre 2026)",
+                      "summary":  "Ce bulletin d\u0027actualité du CERT-FR revient sur les vulnérabilités significatives de la semaine passée pour souligner leurs criticités. Il ne remplace pas l\u0027analyse de l\u0027ensemble des avis et alertes publiés par le CERT-FR dans le cadre d\u0027une analyse de risques pour prioriser…",
+                      "url":  "https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-044/",
+                      "date":  "2026-10-19T00:00:00Z",
+                      "source":  "CERT-FR - Actualités",
                       "category":  "cyber",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Nouveautés Proton Pass : dossiers, contrôle du remplissage automatique, mots de passe compromis…",
-                      "summary":  "Proton Pass lance les dossiers, la correspondance d\u0027URL pour le remplissage automatique et la détection locale des mots de passe compromis. Le post Nouveautés Proton Pass : dossiers, contrôle du remplissage automatique, mots de passe compromis… a été publié sur IT-Connect .",
-                      "url":  "https://www.it-connect.fr/proton-pass-dossiers-correspondance-url-mots-de-passe-compromis/",
-                      "date":  "2026-10-19T08:05:11Z",
-                      "source":  "IT-Connect",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Ni mot de passe, ni MFA : comment des centaines de tenants Microsoft 365 ont été ouverts via ConnectWise",
-                      "summary":  "Un identifiant volé chez ConnectWise a ouvert des centaines de tenants Microsoft 365, sans aucun MFA à contourner. Voici ce que les admins doivent vérifier. Le post Ni mot de passe, ni MFA : comment des centaines de tenants Microsoft 365 ont été ouverts via ConnectWise a été…",
-                      "url":  "https://www.it-connect.fr/connectwise-cloud-backup-skykick-tenants-microsoft-365-compromis/",
-                      "date":  "2026-10-19T05:06:44Z",
-                      "source":  "IT-Connect",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Débit, portée : les limites du Wifi et leurs causes",
-                      "summary":  "Chaque nouvelle norme Wifi promet des débits plus élevés et de meilleures performances. Cependant, chacune se heurte aux mêmes limites physiques. Cet article explique lesquelles.",
-                      "url":  "https://www.lemagit.fr/conseil/Debit-portee-les-limites-du-Wifi-et-leurs-causes",
-                      "date":  "2026-10-19T04:47:00Z",
-                      "source":  "LeMagIT",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Avec iResOps, Veeam bascule dans la gouvernance des données",
-                      "summary":  "Issu du rachat de Securiti.AI, le nouveau logiciel cartographie et surveille les données, pour l’heure uniquement celles de Microsoft 365. Veeam le présente comme une extension de ses solutions de sauvegarde, mais il ne nie pas qu’il pourrait aussi servir aux métiers.",
-                      "url":  "https://www.lemagit.fr/actualites/366652497/Avec-iResOps-Veeam-bascule-dans-la-gouvernance-des-donnees",
-                      "date":  "2026-10-19T04:42:00Z",
-                      "source":  "LeMagIT",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "The 7.3 kernel has been released",
-                      "summary":  "Linus Torvalds has released the 7.3 kernel, as expected. It\u0027s Sunday afternoon, and this week I somehow kept my wits together long enough to keep track of the day of the week, so the release isn\u0027t randomly delayed. Will wonders never cease? Anyway, nothing very special seems to…",
-                      "url":  "https://lwn.net/Articles/1101143/",
-                      "date":  "2026-10-18T23:45:23Z",
-                      "source":  "LWN.net (Linux)",
-                      "category":  "it",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Hackers exploit SiteGuard WAF flaw to run commands as admins",
-                      "summary":  "Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers. [...]",
-                      "url":  "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/",
-                      "date":  "2026-10-18T14:23:16Z",
-                      "source":  "BleepingComputer",
-                      "category":  "cyber",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Hackers breach Microsoft 365 tenants via ConnectWise supply-chain attack",
-                      "summary":  "ConnectWise has shut down customer access to its Cloud Backup service (formerly SkyKick Cloud Backup) after hackers accessed application identities and compromised Microsoft 365 tenants. [...]",
-                      "url":  "https://www.bleepingcomputer.com/news/security/hackers-breach-microsoft-365-tenants-via-connectwise-supply-chain-attack/",
-                      "date":  "2026-10-17T15:18:51Z",
-                      "source":  "BleepingComputer",
-                      "category":  "cyber",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Drupal patches critical RCE flaws, warns exploits may emerge soon",
-                      "summary":  "Drupal has patched two critical vulnerabilities that could allow attackers to execute code remotely on websites running any supported version of the content management system. [...]",
-                      "url":  "https://www.bleepingcomputer.com/news/security/drupal-patches-critical-rce-flaws-warns-exploits-may-emerge-soon/",
-                      "date":  "2026-10-17T14:32:48Z",
-                      "source":  "BleepingComputer",
-                      "category":  "cyber",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Dynamics 365 Project Operations: Import task - Assign generic resources to task",
-                      "summary":  "This feature gives project managers control over how resource assignments are handled when importing tasks from one project to another. For each import, project managers can choose to: Not import the team members - Each imported task will lose the assignment information. Use a…",
-                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=576297",
-                      "date":  "2026-10-16T22:00:35Z",
-                      "source":  "Feuille de route Microsoft 365",
-                      "category":  "m365",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Microsoft Viva: Copilot Analytics - Agent 365 reporting availability for Microsoft platform agents",
-                      "summary":  "Customers can now view agent insights in the Agent 365 Dashboard in Microsoft Viva Insights (Copilot Analytics) without an Agent 365 license. Customers will be able to view reporting on their Microsoft platform-built agents in one consolidated picture, along with context on who…",
-                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=575292",
-                      "date":  "2026-10-16T22:00:35Z",
-                      "source":  "Feuille de route Microsoft 365",
-                      "category":  "m365",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Dynamics 365 Project Operations: Import task - Import at a given hierarchy in the task grid",
-                      "summary":  "This feature gives project managers greater control over where imported tasks are placed within a project plan. From the task grid, a project manager can open the context menu for an existing task and select Insert task below. The standard Import Tasks pane then opens and…",
-                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=576298",
-                      "date":  "2026-10-16T22:00:35Z",
-                      "source":  "Feuille de route Microsoft 365",
-                      "category":  "m365",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Power Apps: Access updated visuals for row summaries across forms and views",
-                      "summary":  "The row summaries experience has a refreshed layout that makes AI-generated insights more prominent and easier to consume. Improved visual hierarchy (including clearer spacing, background and border treatments, status indicators, and generation labels) helps summaries stand…",
-                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=576178",
-                      "date":  "2026-10-16T22:00:35Z",
-                      "source":  "Feuille de route Microsoft 365",
-                      "category":  "m365",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Dynamics 365 Field Service: Boost technician productivity - Disable clickthrough on lookup values in forms",
-                      "summary":  "A new option in the lookup control lets you disable clickthrough on the displayed lookup value. When disabled, the lookup value renders as plain text (not a hyperlink), preventing users from unintentionally opening the related record. This applies to forms across web and mobile…",
-                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=576886",
-                      "date":  "2026-10-16T19:10:12Z",
-                      "source":  "Feuille de route Microsoft 365",
-                      "category":  "m365",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Dynamics 365 Project Operations: Optimize Project Operations - Enable flexibility when determining financial dimension defaults",
-                      "summary":  "Previously, you had limited options for how financial dimensions default. This feature adds functionality and flexibility to default financial dimension values. With this feature, you can: Create a configuration to determine how financial dimensions default based on criteria…",
-                      "url":  "https://www.microsoft.com/microsoft-365/roadmap?id=576885",
-                      "date":  "2026-10-16T19:10:11Z",
-                      "source":  "Feuille de route Microsoft 365",
-                      "category":  "m365",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Introducing GNOME OS Preview",
-                      "summary":  "The GNOME Project has provided GNOME OS for some time; until now, the project only provided a \"Nightly\" edition that was built from the latest commits and was aimed solely at GNOME developers. Adrian Vovk has now announced the release of GNOME OS Preview, which is intended for a…",
-                      "url":  "https://lwn.net/Articles/1101057/",
-                      "date":  "2026-10-16T19:05:57Z",
-                      "source":  "LWN.net (Linux)",
-                      "category":  "it",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "[$] Safe self-referential data structures in kernel Rust",
-                      "summary":  "Self-referential structures that can be used without unsafe code have posed a problem for Rust for years. There are many cases where a self-referential data structure is the elegant algorithmic choice, but implementing it in accordance with Rust\u0027s lifetime rules is all but…",
-                      "url":  "https://lwn.net/Articles/1099224/",
-                      "date":  "2026-10-16T18:30:00Z",
-                      "source":  "LWN.net (Linux)",
-                      "category":  "it",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "PwnEscape : une faille Linux permet de s’évader d’une VM KVM",
-                      "summary":  "PwnEscape (CVE-2026-99999), faille critique du noyau Linux, fait fuir la mémoire de l\u0027hôte depuis une VM, jusqu\u0027à l\u0027évasion. Voici comment se protéger. Le post PwnEscape : une faille Linux permet de s’évader d’une VM KVM a été publié sur IT-Connect .",
-                      "url":  "https://www.it-connect.fr/pwnescape-cve-2026-99999-faille-noyau-linux-evasion-vm/",
-                      "date":  "2026-10-16T16:24:02Z",
-                      "source":  "IT-Connect",
-                      "category":  "it",
                       "lang":  "fr"
                   },
                   {
@@ -181,51 +451,6 @@ window.VEILLE = {
                       "source":  "Microsoft Security Blog",
                       "category":  "cyber",
                       "lang":  "en"
-                  },
-                  {
-                      "title":  "Cloud \u0026 Cyber Security Expo Paris 2026 : les inscriptions sont ouvertes",
-                      "summary":  "Les inscriptions pour l\u0027événement Cloud \u0026 Cyber Security Expo Paris 2026 sont désormais ouvertes. Obtenez votre badge gratuitement pour y participer. Le post Cloud \u0026 Cyber Security Expo Paris 2026 : les inscriptions sont ouvertes a été publié sur IT-Connect .",
-                      "url":  "https://www.it-connect.fr/cloud-cyber-security-expo-paris-2026-les-inscriptions-sont-ouvertes/",
-                      "date":  "2026-10-16T16:00:00Z",
-                      "source":  "IT-Connect",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Backuply : une faille SQL menace 600 000 WordPress, surtout si vous restaurez votre site web",
-                      "summary":  "CVE-2026-93953 : une injection SQL dans Backuply, présent sur 600 000 sites WordPress, permet à un simple abonné de devenir administrateur. Mettez à jour. Le post Backuply : une faille SQL menace 600 000 WordPress, surtout si vous restaurez votre site web a été publié sur…",
-                      "url":  "https://www.it-connect.fr/backuply-cve-2026-93953-injection-sql-wordpress/",
-                      "date":  "2026-10-16T15:43:24Z",
-                      "source":  "IT-Connect",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Windows 11 KB5127648 : la mise à jour d’octobre 2026 perturbe Smart App Control",
-                      "summary":  "Depuis la KB5127648, Smart App Control peut rester grisé sur Windows 11. Microsoft confirme le bug et propose deux contournements, via le Registre ou une GPO. Le post Windows 11 KB5127648 : la mise à jour d’octobre 2026 perturbe Smart App Control a été publié sur IT-Connect .",
-                      "url":  "https://www.it-connect.fr/windows-11-kb5127648-smart-app-control-grise/",
-                      "date":  "2026-10-16T13:59:57Z",
-                      "source":  "IT-Connect",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Proofpoint reprend ses emplettes avec Varonis",
-                      "summary":  "Près d’un an après avoir mis la main sur Hornetsecurity, Proofpoint vient d’annoncer l’acquisition de Varonis. Objectif : construire une plateforme conçue pour protéger l’accès aux données sensibles à l’heure de l’IA agentique.",
-                      "url":  "https://www.lemagit.fr/actualites/366652495/Proofpoint-reprend-ses-emplettes-avec-Varonis",
-                      "date":  "2026-10-16T12:03:00Z",
-                      "source":  "LeMagIT",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "De la protection des données à la création de valeur en finance : des autorités européennes publient une étude et des bonnes pratiques",
-                      "summary":  "La CNIL, l’ICO et la CNPD publient leur étude conjointe «\u0026nbsp;De la protection des données à la création de valeur en finance\u0026nbsp;: évaluation des données, comptabilité, fusions-acquisitions et gouvernance\u0026nbsp;», rassemblant analyses et bonnes pratiques à destination des…",
-                      "url":  "https://www.cnil.fr/fr/protection-donnees-valeur-finance-etude-autorites-europeennes",
-                      "date":  "2026-10-16T12:00:00Z",
-                      "source":  "CNIL",
-                      "category":  "lois",
-                      "lang":  "fr"
                   },
                   {
                       "title":  "Reconstitution d’adresses électroniques professionnelles : quels sont vos droits ?",
@@ -244,168 +469,6 @@ window.VEILLE = {
                       "source":  "CNIL",
                       "category":  "lois",
                       "lang":  "fr"
-                  },
-                  {
-                      "title":  "Cyberhebdo du 16 octobre 2026 : une semaine violente, en France et au-delà",
-                      "summary":  "Chaque semaine, dans le Cyberhebdo, nous vous présentons une liste aussi exhaustive que possible des cyberattaques évoquées par la presse dans le monde entier.",
-                      "url":  "https://www.lemagit.fr/actualites/366652455/Cyberhebdo-du-16-octobre-2026-une-semaine-violente-en-France-et-au-dela",
-                      "date":  "2026-10-16T11:03:00Z",
-                      "source":  "LeMagIT",
-                      "category":  "it",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Anthropic verrouille Claude contre la distillation, ses clients paient une part",
-                      "summary":  "Anthropic affirme avoir réduit de 90 à 99 % les données captées par les distillateurs de Claude, huit mois après sa première alerte sur le sujet. L\u0027entreprise reconnaît toutefois que ces défenses imposent des changements aux développeurs, les requêtes bloquées étant désormais…",
-                      "url":  "https://www.actuia.com/actualite/anthropic-verrouille-claude-contre-la-distillation-ses-clients-paient-une-part/",
-                      "date":  "2026-10-16T08:14:25Z",
-                      "source":  "ActuIA",
-                      "category":  "ia",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Vente des renouvelables nord-américaines d\u0027EDF à KKR, un cas test pour la FERC",
-                      "summary":  "Le moniteur indépendant du marché PJM demande à la FERC de conditionner le rachat des renouvelables nord-américaines d\u0027EDF par KKR au maintien de 938 MW sur le marché. En juillet, la Commission avait refusé la même condition dans un autre dossier, ce qui fait de ce cas un test…",
-                      "url":  "https://www.actuia.com/actualite/vente-des-renouvelables-nord-americaines-dedf-a-kkr-un-cas-test-pour-la-ferc/",
-                      "date":  "2026-10-16T08:12:23Z",
-                      "source":  "ActuIA",
-                      "category":  "ia",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Un agent IA peut exécuter l\u0027outil que son modèle dit refuser",
-                      "summary":  "Une prépublication montre qu\u0027un agent peut exécuter un outil avant même de formuler un refus, révélant un décalage entre la réponse du modèle et l\u0027action réellement déclenchée par l\u0027orchestrateur. L\u0027étude documente aussi 253 bogues vérifiés dans 118 serveurs MCP, soulignant la…",
-                      "url":  "https://www.actuia.com/actualite/un-agent-ia-peut-executer-loutil-que-son-modele-dit-refuser/",
-                      "date":  "2026-10-16T06:04:00Z",
-                      "source":  "ActuIA",
-                      "category":  "ia",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "L’API Gemini 4 Argon doublera ses tarifs le 1er décembre",
-                      "summary":  "Google a ouvert le 13 octobre 2026 son modèle Gemini 4 Argon aux développeurs et aux entreprises, dans le monde entier. Le tarif affiché au lancement, 2 dollars par million de tokens en entrée et 10 d...",
-                      "url":  "https://www.actuia.com/actualite/lapi-gemini-4-argon-doublera-ses-tarifs-le-1er-decembre/",
-                      "date":  "2026-10-16T05:32:00Z",
-                      "source":  "ActuIA",
-                      "category":  "ia",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Recours rédigés par IA : la justice administrative sous pression",
-                      "summary":  "À Rennes, le contentieux administratif augmente et les dossiers s’accumulent. Le tribunal a enregistré 8 726 affaires en 2025, contre 7 643 en 2024. Dans son rapport public, le Conseil d’État alerte s...",
-                      "url":  "https://www.actuia.com/actualite/recours-rediges-par-ia-la-justice-administrative-sous-pression/",
-                      "date":  "2026-10-16T05:00:00Z",
-                      "source":  "ActuIA",
-                      "category":  "ia",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline",
-                      "summary":  "",
-                      "url":  "https://huggingface.co/blog/nvidia/scaling-indic-pretraining",
-                      "date":  "2026-10-16T01:44:47Z",
-                      "source":  "Hugging Face Blog",
-                      "category":  "ia",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Multiples vulnérabilités dans Traefik (16 octobre 2026)",
-                      "summary":  "De multiples vulnérabilités ont été découvertes dans Traefik. Elles permettent à un attaquant de provoquer une atteinte à la confidentialité des données et un contournement de la politique de sécurité.",
-                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1330/",
-                      "date":  "2026-10-16T00:00:00Z",
-                      "source":  "CERT-FR - Avis",
-                      "category":  "alerte",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Welcome Beam: a 501B open model you can own, customize, and scale",
-                      "summary":  "",
-                      "url":  "https://huggingface.co/blog/reflection-beam",
-                      "date":  "2026-10-16T00:00:00Z",
-                      "source":  "Hugging Face Blog",
-                      "category":  "ia",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Multiples vulnérabilités dans Google Chrome (16 octobre 2026)",
-                      "summary":  "De multiples vulnérabilités ont été découvertes dans Google Chrome. Elles permettent à un attaquant de provoquer un problème de sécurité non spécifié par l\u0027éditeur.",
-                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1329/",
-                      "date":  "2026-10-16T00:00:00Z",
-                      "source":  "CERT-FR - Avis",
-                      "category":  "alerte",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Multiples vulnérabilités dans Moxa AIG-302 Series (16 octobre 2026)",
-                      "summary":  "De multiples vulnérabilités ont été découvertes dans Moxa AIG-302 Series. Certaines d\u0027entre elles permettent à un attaquant de provoquer une atteinte à la confidentialité des données, une atteinte à l\u0027intégrité des données et un contournement de la politique de sécurité.",
-                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1327/",
-                      "date":  "2026-10-16T00:00:00Z",
-                      "source":  "CERT-FR - Avis",
-                      "category":  "alerte",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Multiples vulnérabilités dans Microsoft Office (16 octobre 2026)",
-                      "summary":  "De multiples vulnérabilités ont été découvertes dans Microsoft Office. Elles permettent à un attaquant de provoquer une exécution de code arbitraire à distance, une atteinte à la confidentialité des données et un contournement de la politique de sécurité.",
-                      "url":  "https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-1331/",
-                      "date":  "2026-10-16T00:00:00Z",
-                      "source":  "CERT-FR - Avis",
-                      "category":  "alerte",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Granite Switch 4.1: Chat, Decisions, and Speech from One Endpoint",
-                      "summary":  "",
-                      "url":  "https://huggingface.co/blog/ibm-granite/granite-switch-4-1",
-                      "date":  "2026-10-15T20:34:01Z",
-                      "source":  "Hugging Face Blog",
-                      "category":  "ia",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "The next developer interface is ambient intelligence",
-                      "summary":  "AI, agents, voice, and physical controls are shifting software development from operating tools to expressing intent—and helping developers stay focused on building.",
-                      "url":  "https://github.blog/news-insights/company-news/the-next-developer-interface-is-ambient-intelligence/",
-                      "date":  "2026-10-15T19:39:27Z",
-                      "source":  "GitHub Blog",
-                      "category":  "dev",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Staying Evergreen: How we automated secure access and repo hygiene in a shared org",
-                      "summary":  "Put native GitHub features to work to review outside collaborator access and archive stale repositories.",
-                      "url":  "https://github.blog/engineering/platform-security/staying-evergreen-how-we-automated-secure-access-and-repo-hygiene-in-a-shared-org/",
-                      "date":  "2026-10-15T18:00:00Z",
-                      "source":  "GitHub Blog",
-                      "category":  "dev",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "Ordre du jour de la séance plénière du 15 octobre 2026",
-                      "summary":  "La Commission nationale de l\u0027informatique et des libertés s’est réunie le jeudi 15 octobre 2026 à 9\u0026nbsp;h\u0026nbsp;30 avec l’ordre du jour suivant\u0026nbsp;:",
-                      "url":  "https://www.cnil.fr/fr/ordre-du-jour-de-la-seance-pleniere-du-15-octobre-2026",
-                      "date":  "2026-10-15T12:00:00Z",
-                      "source":  "CNIL",
-                      "category":  "lois",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "GitHub availability report: September 2026",
-                      "summary":  "In September, we experienced two incidents that resulted in degraded performance across GitHub services.",
-                      "url":  "https://github.blog/news-insights/company-news/github-availability-report-september-2026/",
-                      "date":  "2026-10-14T20:01:35Z",
-                      "source":  "GitHub Blog",
-                      "category":  "dev",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "From 2,500 requests to 24: Rebuilding star history without the stargazers",
-                      "summary":  "Our new repo star history API now provides trends without returning individual identities or requiring unbounded database work. These are the engineering tradeoffs we made.",
-                      "url":  "https://github.blog/engineering/architecture-optimization/from-2500-requests-to-24-rebuilding-star-history-without-the-stargazers/",
-                      "date":  "2026-10-14T19:11:33Z",
-                      "source":  "GitHub Blog",
-                      "category":  "dev",
-                      "lang":  "en"
                   },
                   {
                       "title":  "The hidden network: Inside the phishing infrastructure ecosystem powering global cybercrime",
@@ -428,7 +491,7 @@ window.VEILLE = {
                   {
                       "title":  "ECSC 2026 : la Team France à Bochum",
                       "summary":  "Pour aller plus loin European Cybersecurity Challenge ECSC 2026 […]",
-                      "url":  "http://cyber.sites.beta.gouv.fr/actualites/ecsc-2026-la-team-france-a-bochum/",
+                      "url":  "https://cyber.gouv.fr/actualites/ecsc-2026-la-team-france-a-bochum/",
                       "date":  "2026-10-12T07:03:00Z",
                       "source":  "ANSSI",
                       "category":  "cyber",
@@ -462,24 +525,6 @@ window.VEILLE = {
                       "lang":  "en"
                   },
                   {
-                      "title":  "3 lessons from frontier AI vulnerability research",
-                      "summary":  "Read how How Microsoft Security\u0027s FORGE Lab is scaling vulnerability research from Windows to the Linux kernel.",
-                      "url":  "https://www.microsoft.com/en-us/security/blog/2026/10/07/3-lessons-from-frontier-ai-vulnerability-research/",
-                      "date":  "2026-10-07T16:00:00Z",
-                      "source":  "Microsoft Security Blog",
-                      "category":  "cyber",
-                      "lang":  "en"
-                  },
-                  {
-                      "title":  "CISO perspectives on managing vulnerability risks in the age of AI",
-                      "summary":  "Learn how CISOs can mitigate cybersecurity risks and increase resilience in the age of AI-powered vulnerability management.",
-                      "url":  "https://www.microsoft.com/en-us/security/blog/2026/10/06/ciso-perspectives-on-managing-vulnerability-risks-in-the-age-of-ai/",
-                      "date":  "2026-10-06T16:00:00Z",
-                      "source":  "Microsoft Security Blog",
-                      "category":  "cyber",
-                      "lang":  "en"
-                  },
-                  {
                       "title":  "Bulletin d\u0027actualité CERTFR-2026-ACT-042 (05 octobre 2026)",
                       "summary":  "Ce bulletin d\u0027actualité du CERT-FR revient sur les vulnérabilités significatives de la semaine passée pour souligner leurs criticités. Il ne remplace pas l\u0027analyse de l\u0027ensemble des avis et alertes publiés par le CERT-FR dans le cadre d\u0027une analyse de risques pour prioriser…",
                       "url":  "https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-042/",
@@ -498,15 +543,6 @@ window.VEILLE = {
                       "lang":  "fr"
                   },
                   {
-                      "title":  "Insights from the 2026 Microsoft Digital Defense Report",
-                      "summary":  "Read highlights from the 2026 Microsoft Digital Defense Report, which reflects a security environment that continues to grow more interconnected.",
-                      "url":  "https://www.microsoft.com/en-us/security/blog/2026/10/01/insights-from-the-2026-microsoft-digital-defense-report/",
-                      "date":  "2026-10-01T14:00:00Z",
-                      "source":  "Microsoft Security Blog",
-                      "category":  "cyber",
-                      "lang":  "en"
-                  },
-                  {
                       "title":  "IA : des impacts insoutenables, multipliés par 7 d’ici 2030",
                       "summary":  "Rapportés aux limites planétaires, les impacts environnementaux de l’intelligence artificielle augmentent à un rythme insoutenable. L’association Green IT appelle à un sursaut des pouvoirs publics pour donner aux citoyens les moyens d’agir.",
                       "url":  "https://www.greenit.fr/2026/09/30/ia-des-impacts-insoutenables-multiplies-par-7-dici-2030/",
@@ -518,7 +554,7 @@ window.VEILLE = {
                   {
                       "title":  "Résultat de l\u0027appel à manifestation d‘intérêt – Sécurité des écosystèmes de cybersécurité",
                       "summary":  "L’ANSSI a publié le 17 juin 2026 un appel à manifestation d‘intérêt (AMI) pour le soutien à la création et […]",
-                      "url":  "http://cyber.sites.beta.gouv.fr/actualites/resultat-ami-sec/",
+                      "url":  "https://cyber.gouv.fr/actualites/resultat-ami-sec/",
                       "date":  "2026-09-30T10:00:00Z",
                       "source":  "ANSSI",
                       "category":  "cyber",
@@ -536,9 +572,18 @@ window.VEILLE = {
                   {
                       "title":  "L’ANSSI publie le rapport d’incident sur les cyberattaques ayant touché la DGFiP",
                       "summary":  "Le Premier ministre a demandé à l’Agence nationale de la sécurité des systèmes d’information (ANSSI) un audit approfondi de la […]",
-                      "url":  "http://cyber.sites.beta.gouv.fr/actualites/lanssi-publie-le-rapport-dincident-sur-les-cyberattaques-ayant-touche-la-dgfip/",
+                      "url":  "https://cyber.gouv.fr/actualites/lanssi-publie-le-rapport-dincident-sur-les-cyberattaques-ayant-touche-la-dgfip/",
                       "date":  "2026-09-29T10:00:00Z",
                       "source":  "ANSSI",
+                      "category":  "cyber",
+                      "lang":  "fr"
+                  },
+                  {
+                      "title":  "Bulletin d\u0027actualité CERTFR-2026-ACT-041 (28 septembre 2026)",
+                      "summary":  "Ce bulletin d\u0027actualité du CERT-FR revient sur les vulnérabilités significatives de la semaine passée pour souligner leurs criticités. Il ne remplace pas l\u0027analyse de l\u0027ensemble des avis et alertes publiés par le CERT-FR dans le cadre d\u0027une analyse de risques pour prioriser…",
+                      "url":  "https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-041/",
+                      "date":  "2026-09-28T00:00:00Z",
+                      "source":  "CERT-FR - Actualités",
                       "category":  "cyber",
                       "lang":  "fr"
                   },
@@ -549,15 +594,6 @@ window.VEILLE = {
                       "date":  "2026-09-28T00:00:00Z",
                       "source":  "CERT-FR - Alertes",
                       "category":  "alerte",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Bulletin d\u0027actualité CERTFR-2026-ACT-041 (28 septembre 2026)",
-                      "summary":  "Ce bulletin d\u0027actualité du CERT-FR revient sur les vulnérabilités significatives de la semaine passée pour souligner leurs criticités. Il ne remplace pas l\u0027analyse de l\u0027ensemble des avis et alertes publiés par le CERT-FR dans le cadre d\u0027une analyse de risques pour prioriser…",
-                      "url":  "https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-041/",
-                      "date":  "2026-09-28T00:00:00Z",
-                      "source":  "CERT-FR - Actualités",
-                      "category":  "cyber",
                       "lang":  "fr"
                   },
                   {
@@ -581,7 +617,7 @@ window.VEILLE = {
                   {
                       "title":  "Cyber Résilience Act : l\u0027ANSSI, l\u0027ANFR et la DGE accompagnent les fabricants dans la conformité des produits numériques",
                       "summary":  "L\u0027ANSSI, l\u0027ANFR et la DGE ont coorganisé un évènement autour du Cyber Resilient Act (CRA) afin d\u0027accompagner les fabricants dans la mise en conformité des produits numériques aux exigences du CRA",
-                      "url":  "http://cyber.sites.beta.gouv.fr/actualites/cra-lanssi-lanfr-et-la-dge-accompagnent-les-fabricants-dans-la-conformite-des-produits-numeriques/",
+                      "url":  "https://cyber.gouv.fr/actualites/cra-lanssi-lanfr-et-la-dge-accompagnent-les-fabricants-dans-la-conformite-des-produits-numeriques/",
                       "date":  "2026-09-23T10:41:00Z",
                       "source":  "ANSSI",
                       "category":  "cyber",
@@ -660,15 +696,6 @@ window.VEILLE = {
                       "lang":  "fr"
                   },
                   {
-                      "title":  "Bulletin d\u0027actualité CERTFR-2026-ACT-038 (07 septembre 2026)",
-                      "summary":  "Ce bulletin d\u0027actualité du CERT-FR revient sur les vulnérabilités significatives de la semaine passée pour souligner leurs criticités. Il ne remplace pas l\u0027analyse de l\u0027ensemble des avis et alertes publiés par le CERT-FR dans le cadre d\u0027une analyse de risques pour prioriser…",
-                      "url":  "https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-038/",
-                      "date":  "2026-09-07T00:00:00Z",
-                      "source":  "CERT-FR - Actualités",
-                      "category":  "cyber",
-                      "lang":  "fr"
-                  },
-                  {
                       "title":  "PPCC 2026: Bringing AI and your business processes together",
                       "summary":  "Every enterprise runs on business processes, but it\u0027s the people that provide judgment, manage exceptions, and often connect systems that were never designed to work together.",
                       "url":  "https://www.microsoft.com/en-us/copilot/blog/2026/09/03/ppcc-2026-bringing-ai-and-your-business-processes-together/",
@@ -702,33 +729,6 @@ window.VEILLE = {
                       "date":  "2026-08-27T15:16:34Z",
                       "source":  "Cybermalveillance.gouv.fr",
                       "category":  "arnaques",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "AlerteCyber : Faille de sécurité critique dans SPIP",
-                      "summary":  "Failles de sécurité critiques dans SPIP Risques Espionnage, vol, voire destruction de vos données suite à la prise de contrôle à distance de vos équipements concernés. Description Une faille de sécurité a été corrigée dans le système de gestion de contenu SPIP. L’exploitation de…",
-                      "url":  "https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/alertecyber-faille-de-securite-critique-dans-spip-202608",
-                      "date":  "2026-08-27T14:24:06Z",
-                      "source":  "Cybermalveillance.gouv.fr",
-                      "category":  "arnaques",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Cybermalveillance.gouv.fr lance une AlerteCyber concernant deux failles de sécurité critiques dans Microsoft SharePoint",
-                      "summary":  "Cybermalveillance.gouv.fr déclenche ce jour une nouvelle AlerteCyber concernant deux failles de sécurité critiques dans Microsoft SharePoint. Il est primordial de les corriger le plus rapidement possible en mettant à jour les systèmes concernés pour réduire les risques d’une…",
-                      "url":  "https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/alertecyber-microsoftsharepoint-0726",
-                      "date":  "2026-07-28T13:22:05Z",
-                      "source":  "Cybermalveillance.gouv.fr",
-                      "category":  "arnaques",
-                      "lang":  "fr"
-                  },
-                  {
-                      "title":  "Multiples vulnérabilités dans Microsoft Sharepoint (22 juillet 2026)",
-                      "summary":  "Le 14 juillet 2026, à l\u0027occasion de sa mise à jour mensuelle, Microsoft a publié, entre autres, des correctifs pour deux vulnérabilités critiques affectant SharePoint. Les vulnérabilités CVE-2026-50522 et CVE-2026-58644 permettent à un attaquant non authentifié d\u0027exécuter du…",
-                      "url":  "https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-008/",
-                      "date":  "2026-07-22T00:00:00Z",
-                      "source":  "CERT-FR - Alertes",
-                      "category":  "alerte",
                       "lang":  "fr"
                   },
                   {
