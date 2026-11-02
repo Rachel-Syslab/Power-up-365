@@ -1,11 +1,11 @@
 /* Power Up — mode hors ligne (service worker).
-   Ce fichier est un MODÈLE : outils/construire.py le copie dans dist/ en remplaçant 20261102142926 et ["./", "apercu.jpg", "css/fonts/OFL-Anton.txt", "css/fonts/OFL-Bangers.txt", "css/fonts/OFL-Space-Grotesk.txt", "css/fonts/anton-latin.woff", "css/fonts/bangers-latin.woff", "css/fonts/space-grotesk-latin.woff", "css/style.min.css", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "index.html", "js/app.min.js", "js/i18n/en-boss.js", "js/i18n/en-heros.js", "js/i18n/en-interface.js", "js/i18n/en-questions-complement.js", "js/i18n/en-questions-cyber.js", "js/i18n/en-questions-dev.js", "js/i18n/en-questions-ia.js", "js/i18n/en-questions-it.js", "js/i18n/en-questions-m365.js", "js/i18n/en-questions-vert.js", "js/power-up.min.js", "labo/index.html", "labo/labo.css", "labo/labo.js", "manifest.webmanifest", "sons/Bell.mp3", "sons/aura-survol.mp3"].
+   Ce fichier est un MODÈLE : outils/construire.py le copie dans dist/ en remplaçant __BUILD__ et __FILES__.
    - À l'installation : mise en cache de tous les fichiers du site.
    - Pages : réseau d'abord (toujours la dernière version en ligne), cache si pas de connexion.
    - Scripts et styles : réseau d'abord aussi ; sons, polices et icônes : cache d'abord. */
-var BUILD = "20261102142926";
+var BUILD = "__BUILD__";
 var CACHE = "powerup-" + BUILD;
-var FILES = ["./", "apercu.jpg", "css/fonts/OFL-Anton.txt", "css/fonts/OFL-Bangers.txt", "css/fonts/OFL-Space-Grotesk.txt", "css/fonts/anton-latin.woff", "css/fonts/bangers-latin.woff", "css/fonts/space-grotesk-latin.woff", "css/style.min.css", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "index.html", "js/app.min.js", "js/i18n/en-boss.js", "js/i18n/en-heros.js", "js/i18n/en-interface.js", "js/i18n/en-questions-complement.js", "js/i18n/en-questions-cyber.js", "js/i18n/en-questions-dev.js", "js/i18n/en-questions-ia.js", "js/i18n/en-questions-it.js", "js/i18n/en-questions-m365.js", "js/i18n/en-questions-vert.js", "js/power-up.min.js", "labo/index.html", "labo/labo.css", "labo/labo.js", "manifest.webmanifest", "sons/Bell.mp3", "sons/aura-survol.mp3"];
+var FILES = __FILES__;
 
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
